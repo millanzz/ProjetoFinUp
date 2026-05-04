@@ -1,0 +1,8 @@
+git init
+git remote add origin https://github.com/millanzz/ProjetoGestaoFin
+git add .
+git config --global user.name "millanzz"
+git config --global user.email "gnm2602@gmail.com"
+git commit -m "subindo projeto completo"
+git branch -M main
+git push -u origin main
