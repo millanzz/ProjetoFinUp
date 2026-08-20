@@ -4,6 +4,7 @@ import '../core/app_routes.dart';
 import '../models/lancamento_model.dart';
 import '../services/lancamento_service.dart';
 import '../widgets/grafico_barras.dart';
+import 'lancamento_form_screen.dart';
 
 /// Tela de listagem de receitas OU despesas, conforme [tipo].
 class LancamentosScreen extends StatefulWidget {
@@ -42,6 +43,20 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
     if (mounted) setState(() {});
   }
 
+  void _mostrarMensagem(String texto, {bool erro = false}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(texto),
+        backgroundColor: erro ? AppTheme.dangerRed : AppTheme.darkText,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
   Future<void> _novoLancamento() async {
     await Navigator.pushNamed(
       context,
@@ -49,6 +64,153 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
     );
     await _recarregar();
   }
+
+  // ── Menu de ações (toque no item) ─────────────────────────────
+
+  Future<void> _abrirAcoes(LancamentoModel lancamento) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: AppTheme.cardLightGradient,
+          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+          border: Border.all(color: Colors.white.withOpacity(0.8)),
+          boxShadow: AppTheme.elevatedShadow,
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 14),
+              Container(
+                width: 44,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.silverMist,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      lancamento.titulo,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.darkText,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "R\$ ${lancamento.valor.toStringAsFixed(2)} • "
+                      "${lancamento.dataFormatada}",
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppTheme.coolGray,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              Divider(
+                height: 1,
+                color: AppTheme.silverMist.withOpacity(0.5),
+              ),
+              _acaoItem(
+                icone: Icons.edit_rounded,
+                texto: "Editar lançamento",
+                cor: AppTheme.primaryBlue,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _editar(lancamento);
+                },
+              ),
+              Divider(
+                height: 1,
+                indent: 20,
+                endIndent: 20,
+                color: AppTheme.silverMist.withOpacity(0.4),
+              ),
+              _acaoItem(
+                icone: Icons.delete_outline_rounded,
+                texto: "Excluir lançamento",
+                cor: AppTheme.dangerRed,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _confirmarExclusao(lancamento);
+                },
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _acaoItem({
+    required IconData icone,
+    required String texto,
+    required Color cor,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [cor.withOpacity(0.12), cor.withOpacity(0.22)],
+                ),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: cor.withOpacity(0.2)),
+              ),
+              child: Icon(icone, color: cor, size: 18),
+            ),
+            const SizedBox(width: 14),
+            Text(
+              texto,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: cor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── Editar ────────────────────────────────────────────────────
+
+  Future<void> _editar(LancamentoModel lancamento) async {
+    final alterado = await LancamentoFormScreen.abrirEdicao(
+      context,
+      lancamento,
+    );
+
+    if (alterado == true) {
+      await _recarregar();
+    }
+  }
+
+  // ── Excluir ───────────────────────────────────────────────────
 
   Future<void> _confirmarExclusao(LancamentoModel lancamento) async {
     final confirmar = await showDialog<bool>(
@@ -97,30 +259,13 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
       await LancamentoService.remover(lancamento);
       if (mounted) {
         setState(() {});
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text("Lançamento excluído."),
-            backgroundColor: AppTheme.darkText,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
+        _mostrarMensagem("Lançamento excluído.");
       }
     } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text("Não foi possível excluir. Tente novamente."),
-            backgroundColor: AppTheme.dangerRed,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-      }
+      _mostrarMensagem(
+        "Não foi possível excluir. Tente novamente.",
+        erro: true,
+      );
     }
   }
 
@@ -234,7 +379,8 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              "${lancamentos.length} ${lancamentos.length == 1 ? 'item' : 'itens'}",
+                              "${lancamentos.length} "
+                              "${lancamentos.length == 1 ? 'item' : 'itens'}",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -250,13 +396,27 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                 const SizedBox(height: 24),
 
                 // Lista
-                const Text(
-                  "Lançamentos",
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.darkText,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Lançamentos",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.darkText,
+                      ),
+                    ),
+                    if (lancamentos.isNotEmpty)
+                      const Text(
+                        "Toque para editar",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.coolGray,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 14),
                 if (lancamentos.isEmpty)
@@ -343,6 +503,7 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
 
   Widget _itemLancamento(LancamentoModel l) {
     return InkWell(
+      onTap: () => _abrirAcoes(l),
       onLongPress: () => _confirmarExclusao(l),
       borderRadius: BorderRadius.circular(AppTheme.cardRadius),
       child: Padding(
@@ -397,6 +558,7 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             Text(
               "${_isReceita ? '+' : '-'} R\$ ${l.valor.toStringAsFixed(2)}",
               style: TextStyle(
@@ -404,6 +566,12 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                 fontWeight: FontWeight.w700,
                 color: _cor,
               ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(
+              Icons.more_vert_rounded,
+              color: AppTheme.coolGray,
+              size: 18,
             ),
           ],
         ),

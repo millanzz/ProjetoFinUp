@@ -7,20 +7,64 @@ import '../widgets/skeu_button.dart';
 import '../widgets/skeu_input.dart';
 import '../widgets/skeu_dropdown.dart';
 
-/// Formulário de novo lançamento (receita ou despesa).
+/// Formulário de lançamento (receita ou despesa).
+///
+/// Funciona em dois modos:
+/// - **Criação**: `lancamento` é `null` -> chama `LancamentoService.adicionar`
+/// - **Edição**:  `lancamento` é preenchido -> chama `LancamentoService.editar`
 class LancamentoFormScreen extends StatefulWidget {
-  final String titulo;
-  final String textoBotao;
+  final String? titulo;
+  final String? textoBotao;
   final TipoLancamento tipo;
-  final List<String> categorias;
+  final List<String>? categorias;
+
+  /// Quando informado, a tela entra em modo de edição.
+  final LancamentoModel? lancamento;
 
   const LancamentoFormScreen({
     super.key,
-    required this.titulo,
-    required this.textoBotao,
+    this.titulo,
+    this.textoBotao,
     required this.tipo,
-    required this.categorias,
+    this.categorias,
+    this.lancamento,
   });
+
+  /// Atalho para abrir a tela já em modo de edição.
+  static Future<bool?> abrirEdicao(
+    BuildContext context,
+    LancamentoModel lancamento,
+  ) {
+    return Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LancamentoFormScreen(
+          tipo: lancamento.tipo,
+          lancamento: lancamento,
+        ),
+      ),
+    );
+  }
+
+  static const List<String> categoriasReceita = [
+    "Salário",
+    "Freelance",
+    "Investimentos",
+    "Bônus",
+    "Outros",
+  ];
+
+  static const List<String> categoriasDespesa = [
+    "Alimentação",
+    "Transporte",
+    "Moradia",
+    "Saúde",
+    "Lazer",
+    "Compras",
+    "Assinaturas",
+    "Impostos",
+    "Outros",
+  ];
 
   @override
   State<LancamentoFormScreen> createState() => _LancamentoFormScreenState();
@@ -36,7 +80,55 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
   bool _carregando = false;
 
   bool get _isReceita => widget.tipo == TipoLancamento.receita;
+  bool get _isEdicao => widget.lancamento != null;
   Color get _cor => _isReceita ? AppTheme.primaryBlue : AppTheme.dangerRed;
+
+  String get _titulo {
+    if (widget.titulo != null) return widget.titulo!;
+    if (_isEdicao) return _isReceita ? "Editar Receita" : "Editar Despesa";
+    return _isReceita ? "Registrar Receita" : "Registrar Despesa";
+  }
+
+  String get _textoBotao {
+    if (widget.textoBotao != null) return widget.textoBotao!;
+    if (_isEdicao) return "Salvar alterações";
+    return _isReceita ? "Salvar Receita" : "Salvar Despesa";
+  }
+
+  /// Lista base de categorias + a categoria atual do lançamento
+  /// (caso ela tenha sido criada manualmente e não esteja na lista fixa).
+  List<String> get _categorias {
+    final base = widget.categorias ??
+        (_isReceita
+            ? LancamentoFormScreen.categoriasReceita
+            : LancamentoFormScreen.categoriasDespesa);
+
+    final atual = widget.lancamento?.categoria;
+    if (atual != null && atual.isNotEmpty && !base.contains(atual)) {
+      return [atual, ...base];
+    }
+    return base;
+  }
+
+  String get _dataFormatada =>
+      "${_data.day.toString().padLeft(2, '0')}/"
+      "${_data.month.toString().padLeft(2, '0')}/"
+      "${_data.year}";
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Em modo de edição, pré-preenche o formulário
+    final l = widget.lancamento;
+    if (l != null) {
+      _descricaoController.text = l.titulo;
+      _valorController.text = l.valor.toStringAsFixed(2).replaceAll('.', ',');
+      _categoria = l.categoria;
+      _data = l.data;
+      _parcelado = l.parcelado;
+    }
+  }
 
   @override
   void dispose() {
@@ -99,25 +191,31 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
     setState(() => _carregando = true);
 
     try {
-      await LancamentoService.adicionar(
-        LancamentoModel(
-          id: '',
-          titulo: descricao,
-          valor: valor,
-          data: _data,
-          tipo: widget.tipo,
-          categoria: _categoria,
-          parcelado: _parcelado,
-        ),
+      final dados = LancamentoModel(
+        id: widget.lancamento?.id ?? '',
+        titulo: descricao,
+        valor: valor,
+        data: _data,
+        tipo: widget.tipo,
+        categoria: _categoria,
+        parcelado: _parcelado,
       );
+
+      if (_isEdicao) {
+        await LancamentoService.editar(dados);
+      } else {
+        await LancamentoService.adicionar(dados);
+      }
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            _isReceita
-                ? "Receita registrada com sucesso!"
-                : "Despesa registrada com sucesso!",
+            _isEdicao
+                ? "Lançamento atualizado com sucesso!"
+                : (_isReceita
+                    ? "Receita registrada com sucesso!"
+                    : "Despesa registrada com sucesso!"),
           ),
           backgroundColor: AppTheme.successGreen,
           behavior: SnackBarBehavior.floating,
@@ -126,7 +224,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
           ),
         ),
       );
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     } on ApiException catch (e) {
       if (mounted) _mostrarErro(e.message);
     } catch (_) {
@@ -173,7 +271,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: Text(
-                      widget.titulo,
+                      _titulo,
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -198,9 +296,11 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                       ],
                     ),
                     child: Icon(
-                      _isReceita
-                          ? Icons.arrow_downward_rounded
-                          : Icons.arrow_upward_rounded,
+                      _isEdicao
+                          ? Icons.edit_rounded
+                          : (_isReceita
+                              ? Icons.arrow_downward_rounded
+                              : Icons.arrow_upward_rounded),
                       color: Colors.white,
                       size: 20,
                     ),
@@ -239,7 +339,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                 label: "Categoria",
                 hint: "Selecione uma categoria",
                 value: _categoria,
-                items: widget.categorias
+                items: _categorias
                     .map(
                       (c) => DropdownMenuItem(value: c, child: Text(c)),
                     )
@@ -276,14 +376,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                         border: Border.all(
                           color: AppTheme.silverMist.withOpacity(0.6),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.silverMist.withOpacity(0.35),
-                            offset: const Offset(0, 2),
-                            blurRadius: 3,
-                            spreadRadius: -1,
-                          ),
-                        ],
+                        boxShadow: AppTheme.softShadow,
                       ),
                       child: Row(
                         children: [
@@ -294,12 +387,10 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            "${_data.day.toString().padLeft(2, '0')}/"
-                            "${_data.month.toString().padLeft(2, '0')}/"
-                            "${_data.year}",
+                            _dataFormatada,
                             style: const TextStyle(
                               fontSize: 15,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                               color: AppTheme.darkText,
                             ),
                           ),
@@ -307,6 +398,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                           const Icon(
                             Icons.keyboard_arrow_down_rounded,
                             color: AppTheme.coolGray,
+                            size: 20,
                           ),
                         ],
                       ),
@@ -357,7 +449,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
               const SizedBox(height: 32),
 
               SkeuButton(
-                text: widget.textoBotao,
+                text: _textoBotao,
                 icon: Icons.check_rounded,
                 loading: _carregando,
                 variant: _isReceita

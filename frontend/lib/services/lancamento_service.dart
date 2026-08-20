@@ -6,7 +6,7 @@ import 'categoria_service.dart';
 ///
 /// Os dados ficam em um cache local sincronizado com a API, então as
 /// telas continuam lendo de forma síncrona (getReceitas, saldo, etc.)
-/// e chamam [carregar] / [adicionar] / [remover] para sincronizar.
+/// e chamam [carregar] / [adicionar] / [editar] / [remover] para sincronizar.
 class LancamentoService {
   LancamentoService._();
 
@@ -61,19 +61,19 @@ class LancamentoService {
     _carregado = true;
   }
 
-  /// Cria o lançamento no backend e insere no cache local.
-  static Future<void> adicionar(LancamentoModel lancamento) async {
-    int? categoryId;
-
-    // resolve a categoria (a despesa exige categoria no backend)
+  /// Resolve o id da categoria a partir do nome.
+  /// A despesa exige categoria no backend, por isso o fallback "Outros".
+  static Future<int?> _resolverCategoria(LancamentoModel lancamento) async {
     final nomeCategoria =
         lancamento.categoria ?? (lancamento.isReceita ? null : 'Outros');
-    if (nomeCategoria != null) {
-      categoryId = await CategoriaService.obterOuCriarId(
-        nomeCategoria,
-        lancamento.tipo,
-      );
-    }
+    if (nomeCategoria == null) return null;
+
+    return CategoriaService.obterOuCriarId(nomeCategoria, lancamento.tipo);
+  }
+
+  /// Cria o lançamento no backend e insere no cache local.
+  static Future<void> adicionar(LancamentoModel lancamento) async {
+    final categoryId = await _resolverCategoria(lancamento);
 
     final rota = lancamento.isReceita ? '/incomes' : '/expenses';
     final dados = await ApiClient.post(
@@ -88,10 +88,55 @@ class LancamentoService {
         valor: lancamento.valor,
         data: lancamento.data,
         tipo: lancamento.tipo,
-        categoria: lancamento.categoria ?? nomeCategoria,
+        categoria: lancamento.categoria ??
+            (lancamento.isReceita ? null : 'Outros'),
         parcelado: lancamento.parcelado,
       ))
       ..sort((a, b) => b.data.compareTo(a.data));
+  }
+
+  /// Atualiza o lançamento no backend (PUT /incomes/:id ou /expenses/:id)
+  /// e substitui a versão antiga no cache local.
+  ///
+  /// O [lancamento] precisa manter o mesmo `id` e o mesmo `tipo` do
+  /// registro original — só os demais campos são alterados.
+  static Future<void> editar(LancamentoModel lancamento) async {
+    if (lancamento.id.isEmpty) {
+      throw ApiException('Lançamento sem id: não é possível editar.');
+    }
+
+    final categoryId = await _resolverCategoria(lancamento);
+
+    final rota = lancamento.isReceita
+        ? '/incomes/${lancamento.id}'
+        : '/expenses/${lancamento.id}';
+
+    await ApiClient.put(
+      rota,
+      lancamento.toApiJson(categoryId: categoryId),
+    );
+
+    final atualizado = LancamentoModel(
+      id: lancamento.id,
+      titulo: lancamento.titulo,
+      valor: lancamento.valor,
+      data: lancamento.data,
+      tipo: lancamento.tipo,
+      categoria: lancamento.categoria ?? (lancamento.isReceita ? null : 'Outros'),
+      parcelado: lancamento.parcelado,
+    );
+
+    final indice = _lancamentos.indexWhere(
+      (l) => l.id == lancamento.id && l.tipo == lancamento.tipo,
+    );
+
+    if (indice >= 0) {
+      _lancamentos[indice] = atualizado;
+    } else {
+      _lancamentos.add(atualizado);
+    }
+
+    _lancamentos.sort((a, b) => b.data.compareTo(a.data));
   }
 
   /// Remove o lançamento no backend e no cache local.
