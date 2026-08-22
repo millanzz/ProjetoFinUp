@@ -5,6 +5,7 @@ import '../services/auth_service.dart';
 import '../services/api_client.dart';
 import '../services/lancamento_service.dart';
 import '../services/categoria_service.dart';
+import '../widgets/app_logo.dart';
 import '../widgets/skeu_button.dart';
 import '../widgets/skeu_input.dart';
 
@@ -84,7 +85,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (_) {
       if (mounted) {
         _mostrarErro(
-          "Não foi possível conectar ao servidor. Verifique se o back-end está rodando.",
+          "Não foi possível conectar ao servidor. "
+          "Verifique se o back-end está rodando.",
         );
       }
     } finally {
@@ -126,26 +128,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-              Center(
-                child: Container(
-                  width: 84,
-                  height: 84,
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.primaryGradient,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.4),
-                      width: 1.5,
-                    ),
-                    boxShadow: AppTheme.blueShadow,
-                  ),
-                  child: const Icon(
-                    Icons.person_add_alt_1_rounded,
-                    color: Colors.white,
-                    size: 38,
-                  ),
-                ),
-              ),
+              // Logo do app
+              const Center(child: AppLogo(size: 92)),
               const SizedBox(height: 20),
               const Text(
                 "Criar conta",
@@ -263,6 +247,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
             ],
           ),
         ),

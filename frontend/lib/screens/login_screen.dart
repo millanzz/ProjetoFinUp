@@ -5,6 +5,7 @@ import '../services/auth_service.dart';
 import '../services/api_client.dart';
 import '../services/lancamento_service.dart';
 import '../services/categoria_service.dart';
+import '../widgets/app_logo.dart';
 import '../widgets/skeu_button.dart';
 import '../widgets/skeu_input.dart';
 
@@ -71,7 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (_) {
       if (mounted) {
         _mostrarErro(
-          "Não foi possível conectar ao servidor. Verifique se o back-end está rodando.",
+          "Não foi possível conectar ao servidor. "
+          "Verifique se o back-end está rodando.",
         );
       }
     } finally {
@@ -91,27 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Logo skeuomórfico
-                Center(
-                  child: Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.primaryGradient,
-                      borderRadius: BorderRadius.circular(28),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.4),
-                        width: 1.5,
-                      ),
-                      boxShadow: AppTheme.blueShadow,
-                    ),
-                    child: const Icon(
-                      Icons.account_balance_wallet_rounded,
-                      color: Colors.white,
-                      size: 44,
-                    ),
-                  ),
-                ),
+                // Logo do app
+                const Center(child: AppLogo(size: 116)),
                 const SizedBox(height: 24),
                 const Text(
                   "Seja bem-vindo!",

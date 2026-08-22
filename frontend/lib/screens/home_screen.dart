@@ -8,6 +8,7 @@ import '../widgets/resumo_card.dart';
 import '../widgets/opcao_button.dart';
 import '../widgets/grafico_pizza.dart';
 import '../widgets/grafico_barras.dart';
+import 'main_navigation_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,9 +25,25 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) setState(() {});
   }
 
+  /// Abre uma tela empilhada (formulários) e recarrega ao voltar.
   Future<void> _abrirRota(String rota) async {
     await Navigator.pushNamed(context, rota);
     await _recarregar();
+  }
+
+  /// Troca a aba da barra inferior em vez de empilhar a tela.
+  ///
+  /// Isso mantém a barra visível e evita o caso em que a tela abria
+  /// por cima de tudo, sem botão de voltar. Se por algum motivo a Home
+  /// não estiver dentro do [MainNavigationScreen], cai no push normal
+  /// (e aí o [TelaHeader] da tela de destino mostra o botão de voltar).
+  void _irParaAba(int aba, String rotaFallback) {
+    final nav = NavegacaoPrincipal.of(context);
+    if (nav != null) {
+      nav.irParaAba(aba);
+    } else {
+      _abrirRota(rotaFallback);
+    }
   }
 
   String get _saudacao {
@@ -82,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () => _abrirRota(AppRoutes.perfil),
+                    onTap: () => _irParaAba(Abas.perfil, AppRoutes.perfil),
                     child: Container(
                       width: 48,
                       height: 48,
@@ -172,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icons.flag_rounded,
                       label: "Metas",
                       cor: AppTheme.primaryBlue,
-                      onTap: () => _abrirRota(AppRoutes.metas),
+                      onTap: () => _irParaAba(Abas.metas, AppRoutes.metas),
                     ),
                   ),
                 ],
