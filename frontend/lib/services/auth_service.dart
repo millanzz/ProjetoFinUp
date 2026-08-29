@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'api_client.dart';
 import 'categoria_service.dart';
 import 'lancamento_service.dart';
@@ -13,15 +15,34 @@ class AuthService {
   static String _nome = '';
   static String _email = '';
 
+  /// Incrementado sempre que nome/e-mail mudam.
+  ///
+  /// As telas que exibem dados do usuário devem escutar isto com um
+  /// `ValueListenableBuilder`, porque a Home fica dentro de um
+  /// `IndexedStack` com widget `const` — ou seja, não é reconstruída
+  /// sozinha quando o perfil é editado em outra aba.
+  static final ValueNotifier<int> usuarioRevisao = ValueNotifier<int>(0);
+
+  static void _notificarMudanca() => usuarioRevisao.value++;
+
   static bool isLogged() => _isLogged;
 
   static String get nome => _nome;
   static String get email => _email;
 
+  /// Primeiro nome — usado na saudação da Home.
+  static String get primeiroNome {
+    final limpo = _nome.trim();
+    if (limpo.isEmpty) return '';
+    return limpo.split(RegExp(r'\s+')).first;
+  }
+
   /// Iniciais do nome para o avatar
   static String get iniciais {
-    if (_nome.isEmpty) return '?';
-    final partes = _nome.trim().split(' ');
+    if (_nome.trim().isEmpty) return '?';
+    final partes =
+        _nome.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    if (partes.isEmpty) return '?';
     if (partes.length >= 2) {
       return '${partes.first[0]}${partes.last[0]}'.toUpperCase();
     }
@@ -39,6 +60,7 @@ class AuthService {
       _nome = (dados['name'] ?? '').toString();
       _email = (dados['email'] ?? '').toString();
       _isLogged = true;
+      _notificarMudanca();
       return true;
     } on ApiException catch (e) {
       // token expirado/inválido -> limpa e volta pro login
@@ -65,6 +87,7 @@ class AuthService {
     _nome = (dados['user']?['name'] ?? '').toString();
     _email = (dados['user']?['email'] ?? email).toString();
     _isLogged = true;
+    _notificarMudanca();
   }
 
   static Future<void> register({
@@ -82,6 +105,20 @@ class AuthService {
     await login(email: email, senha: senha);
   }
 
+  /// Recarrega nome/e-mail a partir do backend.
+  /// Útil para garantir que a tela mostre o dado atual.
+  static Future<void> recarregarPerfil() async {
+    if (!ApiClient.temToken) return;
+    try {
+      final dados = await ApiClient.get('/users/me');
+      _nome = (dados['name'] ?? _nome).toString();
+      _email = (dados['email'] ?? _email).toString();
+      _notificarMudanca();
+    } catch (_) {
+      // silencioso: mantém o que já está em memória
+    }
+  }
+
   /// Atualiza nome/email no backend.
   static Future<void> atualizarPerfil({String? nome, String? email}) async {
     await ApiClient.put('/users/me', {
@@ -90,6 +127,7 @@ class AuthService {
     });
     if (nome != null) _nome = nome;
     if (email != null) _email = email;
+    _notificarMudanca();
   }
 
   /// Troca a senha (exige a senha atual).
@@ -111,5 +149,6 @@ class AuthService {
     LancamentoService.limpar();
     CategoriaService.limpar();
     MetaService.limpar();
+    _notificarMudanca();
   }
 }

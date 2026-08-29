@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../core/app_routes.dart';
@@ -17,7 +19,70 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  Timer? _timerSaudacao;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _agendarViradaDaSaudacao();
+  }
+
+  @override
+  void dispose() {
+    _timerSaudacao?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Ao voltar do segundo plano o horário pode ter mudado de faixa
+    // (e o timer pode ter sido suspenso pelo sistema).
+    if (state == AppLifecycleState.resumed) {
+      if (mounted) setState(() {});
+      _agendarViradaDaSaudacao();
+      AuthService.recarregarPerfil();
+    }
+  }
+
+  // ── Saudação ─────────────────────────────────────────────────
+
+  /// Faixas: 5h–11h59 bom dia, 12h–17h59 boa tarde, 18h–4h59 boa noite.
+  String get _saudacao {
+    final hora = DateTime.now().hour;
+    if (hora >= 5 && hora < 12) return "Bom dia";
+    if (hora >= 12 && hora < 18) return "Boa tarde";
+    return "Boa noite";
+  }
+
+  /// Momento da próxima troca de saudação (5h, 12h ou 18h).
+  DateTime _proximaVirada() {
+    final agora = DateTime.now();
+    final hoje = DateTime(agora.year, agora.month, agora.day);
+
+    for (final hora in [5, 12, 18]) {
+      final marco = hoje.add(Duration(hours: hora));
+      if (marco.isAfter(agora)) return marco;
+    }
+    // Passou das 18h: a próxima virada é às 5h de amanhã.
+    return hoje.add(const Duration(days: 1, hours: 5));
+  }
+
+  /// Reagenda o rebuild para o instante exato da virada, em vez de
+  /// ficar checando o relógio a cada segundo.
+  void _agendarViradaDaSaudacao() {
+    _timerSaudacao?.cancel();
+    final espera = _proximaVirada().difference(DateTime.now());
+    _timerSaudacao = Timer(espera + const Duration(seconds: 1), () {
+      if (mounted) setState(() {});
+      _agendarViradaDaSaudacao();
+    });
+  }
+
+  // ── Navegação ────────────────────────────────────────────────
+
   Future<void> _recarregar() async {
     try {
       await LancamentoService.carregar(force: true);
@@ -32,11 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// Troca a aba da barra inferior em vez de empilhar a tela.
-  ///
-  /// Isso mantém a barra visível e evita o caso em que a tela abria
-  /// por cima de tudo, sem botão de voltar. Se por algum motivo a Home
-  /// não estiver dentro do [MainNavigationScreen], cai no push normal
-  /// (e aí o [TelaHeader] da tela de destino mostra o botão de voltar).
   void _irParaAba(int aba, String rotaFallback) {
     final nav = NavegacaoPrincipal.of(context);
     if (nav != null) {
@@ -44,13 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       _abrirRota(rotaFallback);
     }
-  }
-
-  String get _saudacao {
-    final hora = DateTime.now().hour;
-    if (hora < 12) return "Bom dia";
-    if (hora < 18) return "Boa tarde";
-    return "Boa noite";
   }
 
   @override
@@ -71,60 +124,75 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              // Header — escuta AuthService para refletir edições
+              // feitas na aba Perfil.
+              ValueListenableBuilder<int>(
+                valueListenable: AuthService.usuarioRevisao,
+                builder: (context, _, __) {
+                  final primeiroNome = AuthService.primeiroNome;
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Dashboard",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w800,
-                          color: AppTheme.darkText,
-                          letterSpacing: -0.5,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "FinUp",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w800,
+                                color: AppTheme.darkText,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              primeiroNome.isEmpty
+                                  ? "$_saudacao!"
+                                  : "$_saudacao, $primeiroNome!",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppTheme.mediumText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        "$_saudacao, ${AuthService.nome.split(' ').first}!",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.mediumText,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () => _irParaAba(Abas.perfil, AppRoutes.perfil),
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        gradient: AppTheme.primaryGradient,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.4),
-                          width: 1.5,
-                        ),
-                        boxShadow: AppTheme.blueShadow,
-                      ),
-                      child: Center(
-                        child: Text(
-                          AuthService.iniciais,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
+                      const SizedBox(width: 12),
+                      GestureDetector(
+                        onTap: () => _irParaAba(Abas.perfil, AppRoutes.perfil),
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            gradient: AppTheme.primaryGradient,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.4),
+                              width: 1.5,
+                            ),
+                            boxShadow: AppTheme.blueShadow,
+                          ),
+                          child: Center(
+                            child: Text(
+                              AuthService.iniciais,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 24),
 
