@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import '../core/app_theme.dart';
 
-/// Campo de texto skeuomórfico com efeito "afundado" (inset).
+import '../core/app_theme.dart';
+import '../core/neu.dart';
+
+/// Campo de texto realmente "cavado" na superfície: sombra interna
+/// desenhada com CustomPainter em vez de uma borda escura simulada.
 class SkeuInput extends StatefulWidget {
   final String label;
   final String? hint;
@@ -32,89 +35,141 @@ class SkeuInput extends StatefulWidget {
 
 class _SkeuInputState extends State<SkeuInput> {
   late bool _obscured;
+  final FocusNode _focus = FocusNode();
+  bool _focado = false;
 
   @override
   void initState() {
     super.initState();
     _obscured = widget.obscureText;
+    _focus.addListener(() {
+      if (mounted) setState(() => _focado = _focus.hasFocus);
+    });
+  }
+
+  @override
+  void dispose() {
+    _focus.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final br = BorderRadius.circular(AppTheme.inputRadius);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          padding: const EdgeInsets.only(left: 6, bottom: 9),
           child: Text(
             widget.label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.darkText,
+              fontWeight: FontWeight.w700,
+              color: _focado ? AppTheme.primaryBlue : AppTheme.darkText,
+              shadows: const [
+                Shadow(color: Colors.white, offset: Offset(0, 1)),
+              ],
             ),
           ),
         ),
-        Container(
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
           decoration: BoxDecoration(
-            color: const Color(0xfff8fafc),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: AppTheme.silverMist.withOpacity(0.6),
-              width: 1,
-            ),
+            borderRadius: br,
             boxShadow: [
-              // sombra interna simulada (parte de cima escura)
-              BoxShadow(
-                color: AppTheme.silverMist.withOpacity(0.35),
-                offset: const Offset(0, 2),
-                blurRadius: 3,
-                spreadRadius: -1,
-              ),
+              // Realce branco na borda de baixo: a "quina" do sulco.
               BoxShadow(
                 color: Colors.white.withOpacity(0.9),
-                offset: const Offset(0, -1),
+                offset: const Offset(-1, -1),
                 blurRadius: 2,
               ),
+              BoxShadow(
+                color: Colors.white.withOpacity(0.75),
+                offset: const Offset(2, 3),
+                blurRadius: 4,
+              ),
+              if (_focado)
+                BoxShadow(
+                  color: AppTheme.primaryBlue.withOpacity(0.28),
+                  blurRadius: 14,
+                  spreadRadius: 1,
+                ),
             ],
           ),
-          child: TextFormField(
-            controller: widget.controller,
-            keyboardType: widget.keyboardType,
-            obscureText: _obscured,
-            validator: widget.validator,
-            maxLines: widget.obscureText ? 1 : widget.maxLines,
-            onChanged: widget.onChanged,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: AppTheme.darkText,
-            ),
-            decoration: InputDecoration(
-              hintText: widget.hint,
-              hintStyle: const TextStyle(
-                color: AppTheme.coolGray,
-                fontWeight: FontWeight.w400,
-              ),
-              prefixIcon: widget.prefixIcon,
-              suffixIcon: widget.obscureText
-                  ? IconButton(
-                      onPressed: () =>
-                          setState(() => _obscured = !_obscured),
-                      icon: Icon(
-                        _obscured
-                            ? Icons.visibility_off_rounded
-                            : Icons.visibility_rounded,
-                        color: AppTheme.coolGray,
-                        size: 20,
+          child: ClipRRect(
+            borderRadius: br,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: AppTheme.concaveGradient,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: CustomPaint(
+                      painter: NeuInnerShadowPainter(
+                        borderRadius: br,
+                        shadows: neuInnerShadows(
+                          depth: 4.5,
+                          intensity: _focado ? 1.15 : 1.0,
+                        ),
                       ),
-                    )
-                  : null,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 15,
-              ),
+                    ),
+                  ),
+                ),
+                Positioned.fill(child: NeuTexture(opacity: 0.03)),
+                TextFormField(
+                  controller: widget.controller,
+                  focusNode: _focus,
+                  keyboardType: widget.keyboardType,
+                  obscureText: _obscured,
+                  validator: widget.validator,
+                  maxLines: widget.obscureText ? 1 : widget.maxLines,
+                  onChanged: widget.onChanged,
+                  cursorColor: AppTheme.primaryBlue,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.darkText,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: widget.hint,
+                    hintStyle: const TextStyle(
+                      color: AppTheme.coolGray,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    prefixIcon: widget.prefixIcon,
+                    suffixIcon: widget.obscureText
+                        ? IconButton(
+                            icon: Icon(
+                              _obscured
+                                  ? Icons.visibility_off_rounded
+                                  : Icons.visibility_rounded,
+                              color: AppTheme.coolGray,
+                              size: 20,
+                            ),
+                            onPressed: () =>
+                                setState(() => _obscured = !_obscured),
+                          )
+                        : null,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                    filled: false,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 17,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

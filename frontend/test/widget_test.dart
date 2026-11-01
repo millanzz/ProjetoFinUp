@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gestao_financeira/main.dart';
+import 'package:FinUp/main.dart';
 
 void main() {
   testWidgets('App abre na tela de login', (WidgetTester tester) async {
