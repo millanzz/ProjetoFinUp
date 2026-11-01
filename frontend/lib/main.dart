@@ -32,7 +32,7 @@ class FinanceiroApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gestão Financeira',
+      title: 'FinUp',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       initialRoute: logado ? AppRoutes.home : AppRoutes.login,
