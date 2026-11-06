@@ -1,221 +1,307 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-/// Tema skeuomórfico/neumórfico do FinUp KOI.
+/// Tons das superfícies coloridas (gradiente + halo da própria cor).
+enum FinTone { primary, coral, green }
+
+/// Paleta do FinUp KOI · Fusão.
 ///
-/// Regra de ouro do relevo: a luz vem do **canto superior esquerdo**.
-/// Portanto todo elemento elevado tem DUAS sombras:
-///   • clara (branca) deslocada para cima/esquerda  → (-d, -d)
-///   • escura (azul-acinzentada) para baixo/direita → ( d,  d)
-///
-/// Todos os nomes antigos foram mantidos para não quebrar as telas já
-/// existentes — apenas os valores foram recalibrados.
+/// Os valores vêm 1:1 das coleções de variáveis "FinUp Claro" e
+/// "FinUp Escuro" do Figma. Acesse com `context.fin`.
+@immutable
+class FinColors extends ThemeExtension<FinColors> {
+  final bool isDark;
+  final Color bg, surface, inset, outlineVar, outline;
+  final Color text, textVar, primary, onPrimary;
+  final Color income, expense, done;
+  final Color shadowDark, shadowLight;
+  final Color invSurface, onInvSurface, invPrimary, scrim;
+
+  /// Gradientes: luz vindo do canto superior esquerdo.
+  final List<Color> gPrimary, gCoral, gGreen, gConvex, gConcave;
+
+  const FinColors({
+    required this.isDark,
+    required this.bg,
+    required this.surface,
+    required this.inset,
+    required this.outlineVar,
+    required this.outline,
+    required this.text,
+    required this.textVar,
+    required this.primary,
+    required this.onPrimary,
+    required this.income,
+    required this.expense,
+    required this.done,
+    required this.shadowDark,
+    required this.shadowLight,
+    required this.invSurface,
+    required this.onInvSurface,
+    required this.invPrimary,
+    required this.scrim,
+    required this.gPrimary,
+    required this.gCoral,
+    required this.gGreen,
+    required this.gConvex,
+    required this.gConcave,
+  });
+
+  static const light = FinColors(
+    isDark: false,
+    bg: Color(0xffE3EBF6),
+    surface: Color(0xffF4F8FD),
+    inset: Color(0xffD9E3F0),
+    outlineVar: Color(0xffCBD5E1),
+    outline: Color(0xff94A3B8),
+    text: Color(0xff1E293B),
+    textVar: Color(0xff55657D),
+    primary: Color(0xff2F6FE4),
+    onPrimary: Color(0xffFFFFFF),
+    income: Color(0xff1F5FD1),
+    expense: Color(0xffB5583A),
+    done: Color(0xff15803D),
+    shadowDark: Color(0xffA7B6CD),
+    shadowLight: Color(0xffFFFFFF),
+    invSurface: Color(0xff1E293B),
+    onInvSurface: Color(0xffF1F4FA),
+    invPrimary: Color(0xff9FBDFF),
+    scrim: Color(0xff0B1220),
+    gPrimary: [Color(0xff6EA8F8), Color(0xff3478EE), Color(0xff1A45C4)],
+    gCoral: [Color(0xffF7A68B), Color(0xffE3785A), Color(0xffC05A3E)],
+    gGreen: [Color(0xff86EFAC), Color(0xff22C55E), Color(0xff15803D)],
+    gConvex: [Color(0xffFAFCFF), Color(0xffDAE4F1)],
+    gConcave: [Color(0xffD3DDEB), Color(0xffF7FAFE)],
+  );
+
+  static const dark = FinColors(
+    isDark: true,
+    bg: Color(0xff151D2E),
+    surface: Color(0xff1C273C),
+    inset: Color(0xff111827),
+    outlineVar: Color(0xff2A3650),
+    outline: Color(0xff6F7C98),
+    text: Color(0xffE8EDF7),
+    textVar: Color(0xffA9B4C9),
+    primary: Color(0xff8FB0FF),
+    onPrimary: Color(0xffFFFFFF),
+    income: Color(0xff8DB8FF),
+    expense: Color(0xffFFB199),
+    done: Color(0xff6EE7A0),
+    shadowDark: Color(0xff05080F),
+    shadowLight: Color(0xff2B3B5E),
+    invSurface: Color(0xffE3E8F3),
+    onInvSurface: Color(0xff1B2336),
+    invPrimary: Color(0xff2F6FE4),
+    scrim: Color(0xff000000),
+    gPrimary: [Color(0xff6F9EF2), Color(0xff2F64D6), Color(0xff17389A)],
+    gCoral: [Color(0xffEE9F84), Color(0xffD06E52), Color(0xffA84F36)],
+    gGreen: [Color(0xff6ED897), Color(0xff1FA24F), Color(0xff12673A)],
+    gConvex: [Color(0xff27334F), Color(0xff161F32)],
+    gConcave: [Color(0xff10172A), Color(0xff222D46)],
+  );
+
+  List<Color> tone(FinTone t) => switch (t) {
+        FinTone.primary => gPrimary,
+        FinTone.coral => gCoral,
+        FinTone.green => gGreen,
+      };
+
+  /// Cor do halo de cada tom (mesma nos dois temas).
+  static Color glowOf(FinTone t) => switch (t) {
+        FinTone.primary => const Color(0xff3B82F6),
+        FinTone.coral => const Color(0xffF08A6C),
+        FinTone.green => const Color(0xff22C55E),
+      };
+
+  @override
+  FinColors copyWith() => this;
+
+  @override
+  FinColors lerp(ThemeExtension<FinColors>? other, double t) {
+    if (other is! FinColors) return this;
+    return t < 0.5 ? this : other;
+  }
+}
+
+extension FinContext on BuildContext {
+  FinColors get fin => Theme.of(this).extension<FinColors>()!;
+}
+
+/// Escala tipográfica Material 3 em Roboto (estilos "FinUp/…" do Figma).
+class FinType {
+  FinType._();
+
+  static TextStyle _s(double size, double lh, FontWeight w, double ls) =>
+      GoogleFonts.roboto(
+        fontSize: size,
+        height: lh / size,
+        fontWeight: w,
+        letterSpacing: ls,
+      );
+
+  static final displayS = _s(36, 44, FontWeight.w700, -0.8);
+  static final headlineL = _s(32, 40, FontWeight.w500, -0.4);
+  static final headlineS = _s(24, 32, FontWeight.w500, -0.2);
+  static final titleL = _s(22, 28, FontWeight.w500, 0);
+  static final titleM = _s(16, 24, FontWeight.w500, 0.1);
+  static final titleS = _s(14, 20, FontWeight.w500, 0.1);
+  static final bodyL = _s(16, 24, FontWeight.w400, 0.2);
+  static final bodyM = _s(14, 20, FontWeight.w400, 0.2);
+  static final bodyS = _s(12, 16, FontWeight.w400, 0.3);
+  static final labelL = _s(14, 20, FontWeight.w500, 0.1);
+  static final labelM = _s(12, 16, FontWeight.w500, 0.4);
+  static final labelS = _s(11, 16, FontWeight.w500, 0.4);
+}
+
+/// Efeitos de relevo. Luz no canto superior esquerdo:
+/// sombra escura (+d,+d), realce claro (−d,−d) e linha de contato.
+class FinFx {
+  FinFx._();
+
+  static BoxShadow _ds(Color c, double a, double x, double y, double blur,
+          [double spread = 0]) =>
+      BoxShadow(
+        color: c.withValues(alpha: a.clamp(0.0, 1.0)),
+        offset: Offset(x, y),
+        blurRadius: blur,
+        spreadRadius: spread,
+      );
+
+  static List<BoxShadow> raised(FinColors c, double d) => c.isDark
+      ? [
+          _ds(Colors.black, 0.55, d, d, d * 2.2),
+          _ds(c.shadowLight, 0.55, -d * 0.7, -d * 0.7, d * 1.8),
+          _ds(Colors.black, 0.35, 0, d * 0.35, d * 0.6, -d * 0.2),
+        ]
+      : [
+          _ds(c.shadowDark, 0.6, d, d, d * 2.2),
+          _ds(Colors.white, 0.95, -d * 0.85, -d * 0.85, d * 2),
+          _ds(c.shadowDark, 0.3, 0, d * 0.35, d * 0.6, -d * 0.2),
+        ];
+
+  /// Halo da própria cor para superfícies coloridas.
+  static List<BoxShadow> glow(FinColors c, Color col, double d) => c.isDark
+      ? [
+          _ds(col, 0.4, 0, d, d * 2.4, -d * 0.35),
+          _ds(Colors.black, 0.5, d * 0.5, d * 0.6, d * 2),
+        ]
+      : [
+          _ds(col, 0.45, 0, d, d * 2.4, -d * 0.35),
+          _ds(c.shadowDark, 0.45, d * 0.5, d * 0.6, d * 2),
+          _ds(Colors.white, 0.85, -d * 0.6, -d * 0.6, d * 1.6),
+        ];
+
+  /// Sombras internas das superfícies côncavas.
+  static List<BoxShadow> inset(FinColors c, double d) => c.isDark
+      ? [
+          _ds(Colors.black, 0.7, d, d, d * 1.8),
+          _ds(c.shadowLight, 0.45, -d * 0.9, -d * 0.9, d * 1.6),
+        ]
+      : [
+          _ds(c.shadowDark, 0.75, d, d, d * 1.8),
+          _ds(Colors.white, 0.9, -d * 0.9, -d * 0.9, d * 1.6),
+        ];
+
+  /// Bisel da borda (branco em cima/esquerda, escuro embaixo/direita).
+  static LinearGradient bevel(FinColors c, [double o = 1]) => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        stops: const [0, 0.5, 1],
+        colors: c.isDark
+            ? [
+                Colors.white.withValues(alpha: 0.14 * o),
+                Colors.white.withValues(alpha: 0.03 * o),
+                Colors.black.withValues(alpha: 0.5 * o),
+              ]
+            : [
+                Colors.white.withValues(alpha: 0.95 * o),
+                Colors.white.withValues(alpha: 0.2 * o),
+                c.shadowDark.withValues(alpha: 0.45 * o),
+              ],
+      );
+
+  /// Verniz no topo das superfícies.
+  static LinearGradient gloss(double a, [double end = 0.45]) => LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        stops: [0, end, 1],
+        colors: [
+          Colors.white.withValues(alpha: a),
+          Colors.white.withValues(alpha: 0),
+          Colors.white.withValues(alpha: 0),
+        ],
+      );
+
+  static LinearGradient diag(List<Color> cols) => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: cols,
+        stops: cols.length == 3 ? const [0, 0.45, 1] : null,
+      );
+
+  /// Sombra de texto sobre superfícies coloridas.
+  static List<Shadow> textOnColor(double a) => [
+        Shadow(
+          color: const Color(0xff0A1F55).withValues(alpha: a),
+          offset: const Offset(0, 1.5),
+          blurRadius: 3,
+        ),
+      ];
+
+  /// Texto "gravado" (realce branco embaixo) — só no tema claro.
+  static List<Shadow>? emboss(FinColors c) => c.isDark
+      ? null
+      : [
+          Shadow(
+            color: Colors.white.withValues(alpha: 0.9),
+            offset: const Offset(0, 1),
+          ),
+        ];
+}
+
 class AppTheme {
   AppTheme._();
 
-  // ── Paleta base ────────────────────────────────────────────────
-  // O fundo NÃO pode ser branco puro: sem um cinza-azulado de base o
-  // realce branco não aparece e o relevo "some".
-  static const Color background = Color(0xffe3ebf6);
-  static const Color surface = Color(0xffe9f0f9);
-  static const Color surfaceHigh = Color(0xfff6f9fd);
-  static const Color surfaceLow = Color(0xffd5e0ef);
-  static const Color pureWhite = Color(0xffffffff);
+  static ThemeData get light => _build(FinColors.light, Brightness.light);
+  static ThemeData get dark => _build(FinColors.dark, Brightness.dark);
 
-  static const Color primaryBlue = Color(0xff3b82f6);
-  static const Color skyBlue = Color(0xff60a5fa);
-  static const Color deepBlue = Color(0xff1d4ed8);
-  static const Color iceBlue = Color(0xffe0ecff);
-
-  static const Color silverMist = Color(0xffcbd5e1);
-  static const Color coolGray = Color(0xff94a3b8);
-
-  static const Color darkText = Color(0xff1e293b);
-  static const Color mediumText = Color(0xff64748b);
-
-  static const Color dangerRed = Color(0xffef4444);
-  static const Color successGreen = Color(0xff22c55e);
-  static const Color warningYellow = Color(0xfffbbf24);
-
-  /// Cor da sombra projetada. Não é preto: é o fundo escurecido e
-  /// dessaturado, o que mantém a sombra "limpa" sobre azul-claro.
-  static const Color shadowDark = Color(0xffa7b6cd);
-  static const Color shadowLight = Color(0xffffffff);
-
-  // ── Medidas ────────────────────────────────────────────────────
-  static const double cardRadius = 26;
-  static const double buttonRadius = 18;
-  static const double inputRadius = 16;
-
-  /// Profundidade padrão do relevo (em px de deslocamento).
-  static const double depthSm = 4;
-  static const double depthMd = 8;
-  static const double depthLg = 12;
-
-  // ── Gradientes ─────────────────────────────────────────────────
-  static const LinearGradient primaryGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xff7cb6ff), Color(0xff3b82f6), Color(0xff1a45c4)],
-    stops: [0.0, 0.45, 1.0],
-  );
-
-  static const LinearGradient dangerGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xffffa5a5), Color(0xffef4444), Color(0xffb91c1c)],
-    stops: [0.0, 0.45, 1.0],
-  );
-
-  static const LinearGradient successGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xff86efac), Color(0xff22c55e), Color(0xff15803d)],
-    stops: [0.0, 0.45, 1.0],
-  );
-
-  /// Gradiente claro dos cards — agora com amplitude maior
-  /// (antes ia de #fff a #f1f5f9, quase invisível).
-  static const LinearGradient cardLightGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xfff8fbff), Color(0xffdbe5f2)],
-  );
-
-  /// Superfície estufada (parece que "sai" da tela).
-  static const LinearGradient convexGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xfffafcff), Color(0xffdae4f1)],
-  );
-
-  /// Superfície afundada (parece uma "cuia").
-  static const LinearGradient concaveGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xffd9e3f0), Color(0xfffafcff)],
-  );
-
-  /// Verniz aplicado sobre o topo das superfícies (efeito de vidro).
-  static LinearGradient get glossGradient => LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Colors.white.withOpacity(0.85),
-          Colors.white.withOpacity(0.12),
-          Colors.white.withOpacity(0.0),
-        ],
-        stops: const [0.0, 0.45, 1.0],
-      );
-
-  /// Bisel da borda: branco em cima/esquerda, escuro embaixo/direita.
-  static LinearGradient get bevelGradient => LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.white.withOpacity(0.95),
-          Colors.white.withOpacity(0.25),
-          shadowDark.withOpacity(0.35),
-        ],
-        stops: const [0.0, 0.5, 1.0],
-      );
-
-  // ── Sombras ────────────────────────────────────────────────────
-
-  /// Trava a opacidade em 0–1. `Color.withOpacity` tem assert e explode
-  /// em runtime se receber valor fora da faixa (ex.: 0.95 * intensity
-  /// com intensity = 1.15).
-  static double _op(double v) => v.clamp(0.0, 1.0);
-
-  /// Relevo elevado padrão. [depth] controla o quanto o elemento
-  /// "sobe" da tela; [intensity] controla o contraste da sombra.
-  static List<BoxShadow> neuRaised({
-    double depth = depthMd,
-    double intensity = 1.0,
-  }) =>
-      [
-        BoxShadow(
-          color: shadowDark.withOpacity(_op(0.60 * intensity)),
-          offset: Offset(depth, depth),
-          blurRadius: depth * 2.2,
-        ),
-        BoxShadow(
-          color: shadowLight.withOpacity(_op(0.95 * intensity)),
-          offset: Offset(-depth * 0.85, -depth * 0.85),
-          blurRadius: depth * 2.0,
-        ),
-        // Contato: linha fina e escura logo abaixo do objeto. É o que
-        // faz o olho acreditar que ele está apoiado sobre a tela.
-        BoxShadow(
-          color: shadowDark.withOpacity(_op(0.30 * intensity)),
-          offset: Offset(0, depth * 0.35),
-          blurRadius: depth * 0.6,
-          spreadRadius: -depth * 0.2,
-        ),
-      ];
-
-  /// Sombra externa reduzida para o estado pressionado.
-  static List<BoxShadow> neuPressed({double depth = depthMd}) => [
-        BoxShadow(
-          color: shadowDark.withOpacity(0.35),
-          offset: Offset(depth * 0.2, depth * 0.2),
-          blurRadius: depth * 0.6,
-        ),
-      ];
-
-  /// Elemento flutuando bem acima da tela (FAB, modais).
-  static List<BoxShadow> get neuFloating => [
-        BoxShadow(
-          color: shadowDark.withOpacity(0.70),
-          offset: const Offset(14, 18),
-          blurRadius: 34,
-          spreadRadius: -6,
-        ),
-        BoxShadow(
-          color: shadowLight.withOpacity(0.95),
-          offset: const Offset(-10, -10),
-          blurRadius: 24,
-        ),
-      ];
-
-  /// Halo colorido para superfícies com gradiente (azul, vermelho…).
-  static List<BoxShadow> glow(Color color, {double depth = depthLg}) => [
-        BoxShadow(
-          color: color.withOpacity(0.45),
-          offset: Offset(0, depth),
-          blurRadius: depth * 2.4,
-          spreadRadius: -depth * 0.35,
-        ),
-        BoxShadow(
-          color: shadowDark.withOpacity(0.45),
-          offset: Offset(depth * 0.5, depth * 0.6),
-          blurRadius: depth * 2.0,
-        ),
-        BoxShadow(
-          color: shadowLight.withOpacity(0.85),
-          offset: Offset(-depth * 0.6, -depth * 0.6),
-          blurRadius: depth * 1.6,
-        ),
-      ];
-
-  // ── Aliases legados (mantidos para não quebrar telas antigas) ───
-  static List<BoxShadow> get softShadow => neuRaised(depth: depthSm);
-  static List<BoxShadow> get elevatedShadow => neuRaised(depth: depthMd);
-  static List<BoxShadow> get blueShadow => glow(primaryBlue, depth: depthMd);
-  static List<BoxShadow> get insetShadow => neuPressed();
-
-  // ── ThemeData ──────────────────────────────────────────────────
-  static ThemeData get theme => ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: background,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryBlue,
-          surface: background,
-        ),
-        splashFactory: InkRipple.splashFactory,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          foregroundColor: darkText,
-        ),
-      );
+  static ThemeData _build(FinColors c, Brightness b) {
+    final base = ThemeData(
+      useMaterial3: true,
+      brightness: b,
+      scaffoldBackgroundColor: c.bg,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: c.primary,
+        brightness: b,
+        primary: c.primary,
+        surface: c.surface,
+        onSurface: c.text,
+        error: c.expense,
+      ),
+      splashFactory: InkRipple.splashFactory,
+      extensions: [c],
+    );
+    return base.copyWith(
+      textTheme: GoogleFonts.robotoTextTheme(base.textTheme).apply(
+        bodyColor: c.text,
+        displayColor: c.text,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: c.primary,
+        selectionColor: c.primary.withValues(alpha: 0.3),
+        selectionHandleColor: c.primary,
+      ),
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: c.surface,
+        headerBackgroundColor: c.primary,
+        headerForegroundColor: Colors.white,
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: c.text,
+      ),
+    );
+  }
 }

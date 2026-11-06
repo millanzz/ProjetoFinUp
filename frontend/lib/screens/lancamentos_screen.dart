@@ -1,577 +1,212 @@
 import 'package:flutter/material.dart';
+
 import '../core/app_theme.dart';
-import '../core/app_routes.dart';
+import '../core/formatters.dart';
 import '../models/lancamento_model.dart';
 import '../services/lancamento_service.dart';
-import '../widgets/grafico_barras.dart';
-import 'lancamento_form_screen.dart';
+import '../widgets/fin_controls.dart';
+import '../widgets/fin_feedback.dart';
+import '../widgets/fin_layout.dart';
+import '../widgets/fin_surface.dart';
+import '../widgets/lancamento_acoes.dart';
 
-/// Tela de listagem de receitas OU despesas, conforme [tipo].
+/// Entradas OU Despesas, conforme [tipo], filtradas por mês.
 class LancamentosScreen extends StatefulWidget {
   final TipoLancamento tipo;
-  final String titulo;
 
-  const LancamentosScreen({
-    super.key,
-    required this.tipo,
-    required this.titulo,
-  });
+  const LancamentosScreen({super.key, required this.tipo});
 
   @override
   State<LancamentosScreen> createState() => _LancamentosScreenState();
 }
 
 class _LancamentosScreenState extends State<LancamentosScreen> {
+  /// Mês exibido; `null` = todos os meses.
+  DateTime? _mes = DateTime(DateTime.now().year, DateTime.now().month);
+
   bool get _isReceita => widget.tipo == TipoLancamento.receita;
-
-  List<LancamentoModel> get _lancamentos => _isReceita
-      ? LancamentoService.getReceitas()
-      : LancamentoService.getDespesas();
-
-  double get _total =>
-      _isReceita ? LancamentoService.totalReceitas : LancamentoService.totalDespesas;
-
-  Color get _cor => _isReceita ? AppTheme.primaryBlue : AppTheme.dangerRed;
-
-  LinearGradient get _gradient =>
-      _isReceita ? AppTheme.primaryGradient : AppTheme.dangerGradient;
+  FinTone get _tone => _isReceita ? FinTone.primary : FinTone.coral;
 
   Future<void> _recarregar() async {
     try {
       await LancamentoService.carregar(force: true);
     } catch (_) {}
-    if (mounted) setState(() {});
   }
 
-  void _mostrarMensagem(String texto, {bool erro = false}) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(texto),
-        backgroundColor: erro ? AppTheme.dangerRed : AppTheme.darkText,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
+  Future<void> _escolherMes() async {
+    final agora = DateTime.now();
+    final opcoes = <DateTime>{
+      for (var i = 0; i < 12; i++) DateTime(agora.year, agora.month - i),
+      for (final l in LancamentoService.getAll()) DateTime(l.data.year, l.data.month),
+    }.toList()
+      ..sort((a, b) => b.compareTo(a));
 
-  Future<void> _novoLancamento() async {
-    await Navigator.pushNamed(
-      context,
-      _isReceita ? AppRoutes.novaReceita : AppRoutes.novaDespesa,
-    );
-    await _recarregar();
-  }
-
-  // ── Menu de ações (toque no item) ─────────────────────────────
-
-  Future<void> _abrirAcoes(LancamentoModel lancamento) async {
-    await showModalBottomSheet<void>(
+    final escolhido = await showFinSheet<Object>(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: AppTheme.cardLightGradient,
-          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-          border: Border.all(color: Colors.white.withOpacity(0.8)),
-          boxShadow: AppTheme.elevatedShadow,
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 14),
-              Container(
-                width: 44,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppTheme.silverMist,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      lancamento.titulo,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.darkText,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "R\$ ${lancamento.valor.toStringAsFixed(2)} • "
-                      "${lancamento.dataFormatada}",
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppTheme.coolGray,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
-              Divider(
-                height: 1,
-                color: AppTheme.silverMist.withOpacity(0.5),
-              ),
-              _acaoItem(
-                icone: Icons.edit_rounded,
-                texto: "Editar lançamento",
-                cor: AppTheme.primaryBlue,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _editar(lancamento);
-                },
-              ),
-              Divider(
-                height: 1,
-                indent: 20,
-                endIndent: 20,
-                color: AppTheme.silverMist.withOpacity(0.4),
-              ),
-              _acaoItem(
-                icone: Icons.delete_outline_rounded,
-                texto: "Excluir lançamento",
-                cor: AppTheme.dangerRed,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _confirmarExclusao(lancamento);
-                },
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _acaoItem({
-    required IconData icone,
-    required String texto,
-    required Color cor,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Row(
+      builder: (ctx, _) {
+        final c = ctx.fin;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [cor.withOpacity(0.12), cor.withOpacity(0.22)],
-                ),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: cor.withOpacity(0.2)),
-              ),
-              child: Icon(icone, color: cor, size: 18),
-            ),
-            const SizedBox(width: 14),
             Text(
-              texto,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: cor,
-              ),
+              'Escolha o mês',
+              style: FinType.titleL.copyWith(color: c.text, shadows: FinFx.emboss(c)),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 10,
+              runSpacing: 12,
+              children: [
+                FinChip(
+                  label: 'Tudo',
+                  selected: _mes == null,
+                  onTap: () => Navigator.pop(ctx, 'tudo'),
+                ),
+                for (final m in opcoes)
+                  FinChip(
+                    label: Fmt.mesAno(m),
+                    selected: _mes != null && Fmt.mesmoMes(_mes!, m),
+                    onTap: () => Navigator.pop(ctx, m),
+                  ),
+              ],
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
+    if (escolhido == null) return;
+    setState(() => _mes = escolhido is DateTime ? escolhido : null);
   }
 
-  // ── Editar ────────────────────────────────────────────────────
-
-  Future<void> _editar(LancamentoModel lancamento) async {
-    final alterado = await LancamentoFormScreen.abrirEdicao(
-      context,
-      lancamento,
-    );
-
-    if (alterado == true) {
-      await _recarregar();
+  List<MapEntry<String, double>> _porCategoria(List<LancamentoModel> l) {
+    final m = <String, double>{};
+    for (final x in l) {
+      final k = x.categoria ?? 'Outros';
+      m[k] = (m[k] ?? 0) + x.valor;
     }
-  }
-
-  // ── Excluir ───────────────────────────────────────────────────
-
-  Future<void> _confirmarExclusao(LancamentoModel lancamento) async {
-    final confirmar = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: const Text(
-          "Excluir lançamento",
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: AppTheme.darkText,
-          ),
-        ),
-        content: Text(
-          'Deseja excluir "${lancamento.titulo}" '
-          '(R\$ ${lancamento.valor.toStringAsFixed(2)})?',
-          style: const TextStyle(color: AppTheme.mediumText),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text(
-              "Cancelar",
-              style: TextStyle(color: AppTheme.coolGray),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
-              "Excluir",
-              style: TextStyle(
-                color: AppTheme.dangerRed,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmar != true) return;
-
-    try {
-      await LancamentoService.remover(lancamento);
-      if (mounted) {
-        setState(() {});
-        _mostrarMensagem("Lançamento excluído.");
-      }
-    } catch (_) {
-      _mostrarMensagem(
-        "Não foi possível excluir. Tente novamente.",
-        erro: true,
-      );
-    }
+    return m.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
   }
 
   @override
   Widget build(BuildContext context) {
-    final lancamentos = _lancamentos;
-
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      floatingActionButton: GestureDetector(
-        onTap: _novoLancamento,
-        child: Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            gradient: _gradient,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.4),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: _cor.withOpacity(0.45),
-                offset: const Offset(0, 8),
-                blurRadius: 16,
-                spreadRadius: -2,
-              ),
-            ],
-          ),
-          child: const Icon(Icons.add_rounded, color: Colors.white, size: 30),
-        ),
-      ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          color: _cor,
-          onRefresh: _recarregar,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.titulo,
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w800,
-                    color: AppTheme.darkText,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Resumo
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(22),
-                  decoration: BoxDecoration(
-                    gradient: _gradient,
-                    borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _cor.withOpacity(0.4),
-                        offset: const Offset(0, 8),
-                        blurRadius: 20,
-                        spreadRadius: -4,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _isReceita ? "Total de entradas" : "Total de saídas",
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                "R\$ ${_total.toStringAsFixed(2)}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -1,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              "${lancamentos.length} "
-                              "${lancamentos.length == 1 ? 'item' : 'itens'}",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Lista
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Lançamentos",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.darkText,
-                      ),
-                    ),
-                    if (lancamentos.isNotEmpty)
-                      const Text(
-                        "Toque para editar",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppTheme.coolGray,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                if (lancamentos.isEmpty)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.cardLightGradient,
-                      borderRadius:
-                          BorderRadius.circular(AppTheme.cardRadius),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                      boxShadow: AppTheme.softShadow,
-                    ),
-                    child: Column(
-                      children: [
-                        Icon(
-                          _isReceita
-                              ? Icons.savings_outlined
-                              : Icons.receipt_long_outlined,
-                          color: AppTheme.coolGray,
-                          size: 40,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          _isReceita
-                              ? "Nenhuma receita registrada ainda.\nToque em + para adicionar."
-                              : "Nenhuma despesa registrada ainda.\nToque em + para adicionar.",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: AppTheme.coolGray,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            height: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                else
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.cardLightGradient,
-                      borderRadius:
-                          BorderRadius.circular(AppTheme.cardRadius),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                      boxShadow: AppTheme.elevatedShadow,
-                    ),
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < lancamentos.length; i++) ...[
-                          _itemLancamento(lancamentos[i]),
-                          if (i < lancamentos.length - 1)
-                            Divider(
-                              height: 1,
-                              indent: 20,
-                              endIndent: 20,
-                              color: AppTheme.silverMist.withOpacity(0.4),
-                            ),
-                        ],
-                      ],
-                    ),
-                  ),
-
-                // Gráfico por categoria
-                GraficoBarras(
-                  titulo: _isReceita
-                      ? "Receitas por categoria"
-                      : "Despesas por categoria",
-                  lancamentos: lancamentos,
-                  corBarra: _cor,
-                ),
-                const SizedBox(height: 80),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return ListenableBuilder(
+      listenable: LancamentoService.revisao,
+      builder: (context, _) => _build(context),
     );
   }
 
-  Widget _itemLancamento(LancamentoModel l) {
-    return InkWell(
-      onTap: () => _abrirAcoes(l),
-      onLongPress: () => _confirmarExclusao(l),
-      borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-        child: Row(
+  Widget _build(BuildContext context) {
+    final c = context.fin;
+    final todos = _isReceita ? LancamentoService.getReceitas() : LancamentoService.getDespesas();
+    final lista = _mes == null
+        ? todos
+        : todos.where((l) => Fmt.mesmoMes(l.data, _mes!)).toList();
+    final total = lista.fold<double>(0, (s, l) => s + l.valor);
+    final periodo = _mes == null ? 'no total' : 'em ${Fmt.meses[_mes!.month - 1]}';
+
+    return FinScaffold(
+      safeBottom: false,
+      floatingActionButton: FinFab(
+        label: _isReceita ? 'Nova receita' : 'Nova despesa',
+        tone: _tone,
+        onTap: () => LancamentoAcoes.novo(context, widget.tipo, acimaDoFab: true),
+      ),
+      body: RefreshIndicator(
+        color: c.primary,
+        backgroundColor: c.surface,
+        onRefresh: _recarregar,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(bottom: 110),
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    _cor.withOpacity(0.12),
-                    _cor.withOpacity(0.22),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: _cor.withOpacity(0.2)),
-              ),
-              child: Icon(
-                _isReceita
-                    ? Icons.arrow_downward_rounded
-                    : Icons.arrow_upward_rounded,
-                color: _cor,
-                size: 18,
-              ),
+            FinTopBar(
+              title: _isReceita ? 'Entradas' : 'Despesas',
+              actions: [MonthChip(mes: _mes, onTap: _escolherMes)],
             ),
-            const SizedBox(width: 14),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    l.titulo,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.darkText,
+                  FinGradCard(
+                    tone: _tone,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          _isReceita ? 'Total recebido $periodo' : 'Total gasto $periodo',
+                          style: FinType.bodyM.copyWith(
+                            color: const Color(0xffEEF4FF),
+                            shadows: FinFx.textOnColor(0.45),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            Fmt.brl(total),
+                            style: FinType.displayS.copyWith(
+                              color: Colors.white,
+                              shadows: FinFx.textOnColor(0.3),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${lista.length} ${lista.length == 1 ? 'lançamento' : 'lançamentos'}',
+                          style: FinType.bodyS.copyWith(
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    "${l.categoria ?? 'Sem categoria'} • ${l.dataFormatada}"
-                    "${l.parcelado ? ' • Parcelado' : ''}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.coolGray,
-                      fontWeight: FontWeight.w500,
+                  const SizedBox(height: 24),
+                  if (lista.isEmpty)
+                    EmptyCard(
+                      icon: _isReceita ? Icons.savings : Icons.receipt_long,
+                      texto: _isReceita
+                          ? 'Nenhuma receita neste período.\nToque em “Nova receita” para adicionar.'
+                          : 'Nenhuma despesa neste período.\nToque em “Nova despesa” para adicionar.',
+                    )
+                  else ...[
+                    const SectionHead(title: 'Por categoria'),
+                    const SizedBox(height: 10),
+                    ListCard(
+                      inset: 66,
+                      rows: [
+                        for (final e in _porCategoria(lista))
+                          CatRow(
+                            categoria: e.key,
+                            valor: e.value,
+                            total: total,
+                            tone: _tone,
+                          ),
+                      ],
                     ),
-                  ),
+                    const SizedBox(height: 24),
+                    SectionHead(
+                      title: 'Lançamentos',
+                      trailing: Text(
+                        'Toque e segure para editar',
+                        style: FinType.bodyS.copyWith(color: c.textVar),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ListCard(
+                      rows: [
+                        for (final l in lista)
+                          LancRow(
+                            lancamento: l,
+                            onTap: () => LancamentoAcoes.menu(context, l),
+                            onLongPress: () => LancamentoAcoes.menu(context, l),
+                          ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              "${_isReceita ? '+' : '-'} R\$ ${l.valor.toStringAsFixed(2)}",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: _cor,
-              ),
-            ),
-            const SizedBox(width: 4),
-            const Icon(
-              Icons.more_vert_rounded,
-              color: AppTheme.coolGray,
-              size: 18,
             ),
           ],
         ),

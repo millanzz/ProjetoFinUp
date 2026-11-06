@@ -13,5 +13,10 @@
 class ApiConfig {
   ApiConfig._();
 
-  static const String baseUrl = 'http://10.0.2.2:3000';
+  /// Pode ser trocado sem editar o código:
+  /// `flutter run --dart-define=API_URL=http://localhost:3000`
+  static const String baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://10.0.2.2:3000',
+  );
 }

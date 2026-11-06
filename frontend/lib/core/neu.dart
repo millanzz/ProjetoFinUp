@@ -5,32 +5,15 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import 'app_theme.dart';
-
-/// Formato do relevo de uma superfície.
-enum NeuShape {
-  /// Superfície plana, apenas elevada.
-  flat,
-
-  /// Estufada — parece um botão que sai da tela.
-  convex,
-
-  /// Afundada como uma cuia (gradiente invertido).
-  concave,
-
-  /// Cavada na tela: sombra INTERNA de verdade (inputs, trilhos, slots).
-  pressed,
-}
-
 // ═══════════════════════════════════════════════════════════════════
 // 1. Sombra interna real
 // ═══════════════════════════════════════════════════════════════════
 
 /// Pinta sombras internas dentro de um retângulo arredondado.
 ///
-/// O Flutter não tem `inset box-shadow` nativo. A técnica aqui é
-/// desenhar um "buraco" (retângulo gigante MENOS a forma deslocada) e
-/// borrar a borda desse buraco dentro do clip da própria forma.
+/// O Flutter não tem `inset box-shadow` nativo: desenhamos um "buraco"
+/// (retângulo gigante MENOS a forma deslocada) com blur, recortado pela
+/// própria forma.
 class NeuInnerShadowPainter extends CustomPainter {
   final BorderRadius borderRadius;
   final List<BoxShadow> shadows;
@@ -53,21 +36,16 @@ class NeuInnerShadowPainter extends CustomPainter {
         ..color = shadow.color
         ..maskFilter = MaskFilter.blur(
           BlurStyle.normal,
-          shadow.blurRadius <= 0 ? 0.01 : shadow.blurRadius,
+          shadow.blurRadius <= 0 ? 0.01 : shadow.blurRadius * 0.57,
         );
 
-      final outer = Path()..addRect(rect.inflate(size.longestSide));
-      final inner = Path()
-        ..addRRect(
-          rrect
-              .shift(shadow.offset)
-              .deflate(shadow.spreadRadius),
-        );
+      // Retângulo grande com um "furo" na forma deslocada (evenOdd).
+      final hole = Path()
+        ..fillType = PathFillType.evenOdd
+        ..addRect(rect.inflate(size.longestSide))
+        ..addRRect(rrect.shift(shadow.offset).deflate(shadow.spreadRadius));
 
-      canvas.drawPath(
-        Path.combine(PathOperation.difference, outer, inner),
-        paint,
-      );
+      canvas.drawPath(hole, paint);
     }
 
     canvas.restore();
@@ -78,79 +56,46 @@ class NeuInnerShadowPainter extends CustomPainter {
       old.borderRadius != borderRadius || old.shadows != shadows;
 }
 
-/// Conjunto padrão de sombras internas (luz no canto superior esquerdo).
-///
-/// As opacidades são travadas em 0–1: `intensity` acima de 1 estouraria
-/// o assert de `Color.withOpacity` (dart:ui/painting.dart).
-List<BoxShadow> neuInnerShadows({double depth = 5, double intensity = 1.0}) => [
-      BoxShadow(
-        color: AppTheme.shadowDark.withOpacity(
-          (0.75 * intensity).clamp(0.0, 1.0),
-        ),
-        offset: Offset(depth, depth),
-        blurRadius: depth * 1.8,
-      ),
-      BoxShadow(
-        color: Colors.white.withOpacity(
-          (0.90 * intensity).clamp(0.0, 1.0),
-        ),
-        offset: Offset(-depth * 0.9, -depth * 0.9),
-        blurRadius: depth * 1.6,
-      ),
-    ];
-
 // ═══════════════════════════════════════════════════════════════════
-// 2. Bisel da borda
+// 2. Bisel / contorno em gradiente
 // ═══════════════════════════════════════════════════════════════════
 
-/// Traça uma borda de 1–2px com gradiente: branca no topo-esquerda,
-/// escura na base-direita. É o detalhe que dá a sensação de espessura.
 class NeuBevelPainter extends CustomPainter {
   final BorderRadius borderRadius;
+  final Gradient gradient;
   final double width;
-  final double opacity;
 
   const NeuBevelPainter({
     required this.borderRadius,
+    required this.gradient,
     this.width = 1.4,
-    this.opacity = 1.0,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
     final rrect = borderRadius.toRRect(rect).deflate(width / 2);
-
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = width
-      ..shader = LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.white.withOpacity((0.95 * opacity).clamp(0.0, 1.0)),
-          Colors.white.withOpacity((0.20 * opacity).clamp(0.0, 1.0)),
-          AppTheme.shadowDark.withOpacity((0.40 * opacity).clamp(0.0, 1.0)),
-        ],
-        stops: const [0.0, 0.5, 1.0],
-      ).createShader(rect);
-
-    canvas.drawRRect(rrect, paint);
+    canvas.drawRRect(
+      rrect,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width
+        ..shader = gradient.createShader(rect),
+    );
   }
 
   @override
   bool shouldRepaint(NeuBevelPainter old) =>
       old.borderRadius != borderRadius ||
-      old.width != width ||
-      old.opacity != opacity;
+      old.gradient != gradient ||
+      old.width != width;
 }
 
 // ═══════════════════════════════════════════════════════════════════
 // 3. Textura de grão
 // ═══════════════════════════════════════════════════════════════════
 
-/// Gera (uma única vez) uma imagem de ruído 128x128 usada como textura
-/// repetida. Sem isso as superfícies ficam "plásticas" demais.
+/// Gera (uma única vez) uma imagem de ruído 128x128 usada como textura.
 class NeuNoise {
   NeuNoise._();
 
@@ -174,7 +119,7 @@ class NeuNoise {
     final pixels = Uint8List(side * side * 4);
 
     for (var i = 0; i < side * side; i++) {
-      final v = 118 + rnd.nextInt(74); // 118..191
+      final v = 96 + rnd.nextInt(64);
       final o = i * 4;
       pixels[o] = v;
       pixels[o + 1] = v;
@@ -197,26 +142,20 @@ class NeuNoise {
 class _NeuNoisePainter extends CustomPainter {
   final ui.Image image;
   final double opacity;
-  final double scale;
 
-  const _NeuNoisePainter({
-    required this.image,
-    required this.opacity,
-    required this.scale,
-  });
+  const _NeuNoisePainter({required this.image, required this.opacity});
 
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
-    final matrix = Matrix4.identity()..scale(scale, scale);
+    final matrix = Matrix4.identity()..scaleByDouble(0.5, 0.5, 1, 1);
 
-    // A camada inteira e composta em "overlay" sobre o card, com alfa
-    // baixo: o grao modula a luz existente em vez de sujar a cor.
+    // Composto em "overlay": o grão modula a luz sem sujar a cor.
     canvas.saveLayer(
       rect,
       Paint()
         ..blendMode = BlendMode.overlay
-        ..color = Colors.white.withOpacity(opacity.clamp(0.0, 1.0)),
+        ..color = Colors.white.withValues(alpha: opacity.clamp(0.0, 1.0)),
     );
     canvas.drawRect(
       rect,
@@ -233,16 +172,15 @@ class _NeuNoisePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_NeuNoisePainter old) =>
-      old.image != image || old.opacity != opacity || old.scale != scale;
+      old.image != image || old.opacity != opacity;
 }
 
 /// Camada de grão para sobrepor uma superfície.
-/// Use opacidades baixas (0.02–0.06); acima disso vira sujeira.
+/// [opacity] segue a opacidade do preenchimento de ruído no Figma.
 class NeuTexture extends StatefulWidget {
   final double opacity;
-  final double scale;
 
-  const NeuTexture({super.key, this.opacity = 0.035, this.scale = 1.0});
+  const NeuTexture({super.key, this.opacity = 0.35});
 
   @override
   State<NeuTexture> createState() => _NeuTextureState();
@@ -268,13 +206,13 @@ class _NeuTextureState extends State<NeuTexture> {
     if (img == null) return const SizedBox.shrink();
 
     return IgnorePointer(
-      child: CustomPaint(
-        painter: _NeuNoisePainter(
-          image: img,
-          opacity: widget.opacity,
-          scale: widget.scale,
+      child: RepaintBoundary(
+        child: CustomPaint(
+          // Ruído em overlay com alfa reduzido: o Figma aplica a textura
+          // em meia escala, o que a deixa mais suave do que o alfa sugere.
+          painter: _NeuNoisePainter(image: img, opacity: widget.opacity * 0.22),
+          size: Size.infinite,
         ),
-        size: Size.infinite,
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../models/lancamento_model.dart';
 import 'api_client.dart';
 import 'categoria_service.dart';
@@ -12,6 +14,11 @@ class LancamentoService {
 
   static List<LancamentoModel> _lancamentos = [];
   static bool _carregado = false;
+
+  /// Incrementado a cada mudança no cache. As abas (que ficam vivas num
+  /// IndexedStack) escutam isto para se redesenhar.
+  static final ValueNotifier<int> revisao = ValueNotifier<int>(0);
+  static void _notificar() => revisao.value++;
 
   // ── Leitura (síncrona, a partir do cache) ─────────────────────
 
@@ -59,6 +66,7 @@ class LancamentoService {
       ..sort((a, b) => b.data.compareTo(a.data));
 
     _carregado = true;
+    _notificar();
   }
 
   /// Resolve o id da categoria a partir do nome.
@@ -72,7 +80,7 @@ class LancamentoService {
   }
 
   /// Cria o lançamento no backend e insere no cache local.
-  static Future<void> adicionar(LancamentoModel lancamento) async {
+  static Future<LancamentoModel> adicionar(LancamentoModel lancamento) async {
     final categoryId = await _resolverCategoria(lancamento);
 
     final rota = lancamento.isReceita ? '/incomes' : '/expenses';
@@ -81,18 +89,22 @@ class LancamentoService {
       lancamento.toApiJson(categoryId: categoryId),
     );
 
+    final criado = LancamentoModel(
+      id: dados['id'].toString(),
+      titulo: lancamento.titulo,
+      valor: lancamento.valor,
+      data: lancamento.data,
+      tipo: lancamento.tipo,
+      categoria: lancamento.categoria ??
+          (lancamento.isReceita ? null : 'Outros'),
+      parcelado: lancamento.parcelado,
+    );
+
     _lancamentos
-      ..add(LancamentoModel(
-        id: dados['id'].toString(),
-        titulo: lancamento.titulo,
-        valor: lancamento.valor,
-        data: lancamento.data,
-        tipo: lancamento.tipo,
-        categoria: lancamento.categoria ??
-            (lancamento.isReceita ? null : 'Outros'),
-        parcelado: lancamento.parcelado,
-      ))
+      ..add(criado)
       ..sort((a, b) => b.data.compareTo(a.data));
+    _notificar();
+    return criado;
   }
 
   /// Atualiza o lançamento no backend (PUT /incomes/:id ou /expenses/:id)
@@ -137,6 +149,7 @@ class LancamentoService {
     }
 
     _lancamentos.sort((a, b) => b.data.compareTo(a.data));
+    _notificar();
   }
 
   /// Remove o lançamento no backend e no cache local.
@@ -150,10 +163,12 @@ class LancamentoService {
     _lancamentos.removeWhere(
       (l) => l.id == lancamento.id && l.tipo == lancamento.tipo,
     );
+    _notificar();
   }
 
   static void limpar() {
     _lancamentos = [];
     _carregado = false;
+    _notificar();
   }
 }
