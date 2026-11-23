@@ -1,0 +1,7 @@
+[Unit]
+Description=Backup do banco do FinUp
+
+[Service]
+Type=oneshot
+User=finup
+ExecStart=/usr/local/bin/finup-backup

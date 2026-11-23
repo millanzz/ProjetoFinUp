@@ -1,8 +1,11 @@
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
-// caminho absoluto para o arquivo do banco (na raiz da pasta backend)
-const dbPath = path.join(__dirname, '..', '..', 'database.db');
+// Arquivo do banco: DB_PATH no .env (em produção, fora da pasta do código,
+// para sobreviver às atualizações) ou backend/database.db por padrão.
+const dbPath = process.env.DB_PATH
+  ? path.resolve(process.env.DB_PATH)
+  : path.join(__dirname, '..', '..', 'database.db');
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {

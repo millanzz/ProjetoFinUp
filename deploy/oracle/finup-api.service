@@ -1,0 +1,23 @@
+[Unit]
+Description=FinUp API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=finup
+Group=finup
+WorkingDirectory=/opt/finup/backend
+EnvironmentFile=/etc/finup/finup.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=3
+
+# Proteções: o processo só escreve na pasta do banco
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/finup
+
+[Install]
+WantedBy=multi-user.target

@@ -180,4 +180,6 @@ O app em **build de produção** só aceita endereço `https://`:
 flutter build apk --release --dart-define=API_URL=https://api.seudominio.com.br
 ```
 
+**Hospedagem grátis pronta:** o passo a passo para a Oracle Cloud Free (servidor 24 h, HTTPS automático com Caddy e Let's Encrypt, banco em `DB_PATH` fora do código e backup diário) está em [`../deploy/oracle/LEIA-ME.md`](../deploy/oracle/LEIA-ME.md).
+
 Antes de publicar, preencha `PRIVACIDADE_CONTATO` no `.env` (aparece na Política de Privacidade) e use um `JWT_SECRET` longo e aleatório.
