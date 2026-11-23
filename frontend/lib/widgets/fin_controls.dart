@@ -180,6 +180,7 @@ class FinField extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final TextCapitalization textCapitalization;
   final List<String>? autofillHints;
+  final List<TextInputFormatter>? inputFormatters;
 
   const FinField({
     super.key,
@@ -194,6 +195,7 @@ class FinField extends StatefulWidget {
     this.onSubmitted,
     this.textCapitalization = TextCapitalization.none,
     this.autofillHints,
+    this.inputFormatters,
   });
 
   @override
@@ -236,12 +238,15 @@ class _FinFieldState extends State<FinField> {
               ]
             : const [],
       ),
+      // Altura mínima (e não fixa) de 58: com a fonte do sistema ampliada o
+      // campo cresce em vez de cortar o texto (DEF-12).
       child: FinSurface.pressed(
-        height: 58,
         borderRadius: BorderRadius.circular(16),
-        padding: EdgeInsets.only(left: widget.icon != null ? 14 : 18, right: 16),
+        padding: EdgeInsets.fromLTRB(widget.icon != null ? 14 : 18, 9, 16, 9),
         onTap: () => _focus.requestFocus(),
-        child: Row(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 40),
+          child: Row(
           children: [
             if (widget.icon != null) ...[
               Icon(widget.icon, size: 22, color: cor),
@@ -268,6 +273,7 @@ class _FinFieldState extends State<FinField> {
                     onSubmitted: widget.onSubmitted,
                     textCapitalization: widget.textCapitalization,
                     autofillHints: widget.autofillHints,
+                    inputFormatters: widget.inputFormatters,
                     style: FinType.bodyL.copyWith(color: c.text),
                     cursorColor: c.primary,
                     decoration: InputDecoration(
@@ -294,6 +300,7 @@ class _FinFieldState extends State<FinField> {
                 ),
               ),
           ],
+        ),
         ),
       ),
     );
@@ -331,12 +338,14 @@ class FinPickerField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.fin;
+    // Altura mínima (e não fixa): com fonte ampliada o campo cresce (DEF-12)
     return FinSurface.pressed(
-      height: 58,
       borderRadius: BorderRadius.circular(16),
-      padding: const EdgeInsets.only(left: 14, right: 16),
+      padding: const EdgeInsets.fromLTRB(14, 9, 16, 9),
       onTap: onTap,
-      child: Row(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 40),
+        child: Row(
         children: [
           Icon(icon, size: 22, color: c.textVar),
           const SizedBox(width: 12),
@@ -354,6 +363,7 @@ class FinPickerField extends StatelessWidget {
           ),
           Icon(Icons.expand_more, size: 22, color: c.textVar),
         ],
+      ),
       ),
     );
   }

@@ -151,12 +151,17 @@ class CatRow extends StatelessWidget {
   final double total;
   final FinTone tone;
 
+  /// Texto da porcentagem (ex.: "47%", "<1%"). Quando nulo, é calculado
+  /// direto de valor ÷ total.
+  final String? percentual;
+
   const CatRow({
     super.key,
     required this.categoria,
     required this.valor,
     required this.total,
     required this.tone,
+    this.percentual,
   });
 
   @override
@@ -183,7 +188,7 @@ class CatRow extends StatelessWidget {
                         style: FinType.bodyL.copyWith(color: c.text),
                       ),
                     ),
-                    Text('${(frac * 100).round()}%',
+                    Text(percentual ?? '${(frac * 100).round()}%',
                         style: FinType.labelM.copyWith(color: c.textVar)),
                     const SizedBox(width: 8),
                     Text(Fmt.brl(valor), style: FinType.titleS.copyWith(color: c.text)),
@@ -196,6 +201,41 @@ class CatRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Card "por categoria": soma os lançamentos de cada categoria e mostra
+/// quanto cada uma representa do total do período (as % fecham 100%).
+class CategoriasCard extends StatelessWidget {
+  final List<LancamentoModel> lancamentos;
+  final FinTone tone;
+
+  const CategoriasCard({super.key, required this.lancamentos, required this.tone});
+
+  @override
+  Widget build(BuildContext context) {
+    final somas = <String, double>{};
+    for (final l in lancamentos) {
+      final k = l.categoria ?? 'Outros';
+      somas[k] = (somas[k] ?? 0) + l.valor;
+    }
+    final itens = somas.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final total = itens.fold<double>(0, (s, e) => s + e.value);
+    final pct = Fmt.percentuais([for (final e in itens) e.value]);
+
+    return ListCard(
+      inset: 66,
+      rows: [
+        for (var i = 0; i < itens.length; i++)
+          CatRow(
+            categoria: itens[i].key,
+            valor: itens[i].value,
+            total: total,
+            tone: tone,
+            percentual: pct[i],
+          ),
+      ],
     );
   }
 }
@@ -219,9 +259,14 @@ class LancRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.fin;
     final l = lancamento;
-    final sub = subtitulo ??
-        '${l.categoria ?? 'Sem categoria'} · ${Fmt.dataCurta(l.data)}'
-            '${l.parcelado ? ' · Parcelado' : ''}';
+    // "Parcela 3/12" para parcelas; "Parcelado" para registros antigos
+    // que só tinham a marcação, sem as parcelas geradas.
+    // Com data na linha, usa a forma curta "1/10" para caber.
+    final parcela = l.isParcela
+        ? (subtitulo == null ? '${l.parcelaNumero}/${l.parcelaTotal}' : l.rotuloParcela)
+        : (l.parcelado ? 'Parcelado' : null);
+    final base = subtitulo ?? '${l.categoria ?? 'Sem categoria'} · ${Fmt.dataCurta(l.data)}';
+    final sub = parcela == null ? base : '$base · $parcela';
 
     return InkWell(
       onTap: onTap,

@@ -23,7 +23,8 @@ class SaldoCard extends StatelessWidget {
     final saidas = lancamentosDoMes
         .where((l) => !l.isReceita)
         .fold<double>(0, (s, l) => s + l.valor);
-    final saldo = entradas - saidas;
+    // Arredonda para centavos: evita resíduo de ponto flutuante e "−R$ 0,00" (DEF-01/02)
+    final saldo = Fmt.centavos(entradas - saidas);
 
     final diasNoMes = DateTime(mes.year, mes.month + 1, 0).day;
     final pontos = <double>[];
@@ -66,11 +67,14 @@ class SaldoCard extends StatelessWidget {
                 child: const Icon(Icons.account_balance_wallet, size: 18, color: Colors.white),
               ),
               const SizedBox(width: 10),
-              Text(
-                'Saldo de ${Fmt.meses[mes.month - 1]}',
-                style: FinType.bodyM.copyWith(
-                  color: const Color(0xffEEF4FF),
-                  shadows: FinFx.textOnColor(0.45),
+              // Flexible: com fonte grande o texto quebra em vez de estourar (DEF-12)
+              Flexible(
+                child: Text(
+                  'Saldo de ${Fmt.meses[mes.month - 1]}',
+                  style: FinType.bodyM.copyWith(
+                    color: const Color(0xffEEF4FF),
+                    shadows: FinFx.textOnColor(0.45),
+                  ),
                 ),
               ),
             ],
@@ -157,9 +161,12 @@ class _Caixa extends StatelessWidget {
             children: [
               Icon(icon, size: 14, color: iconColor),
               const SizedBox(width: 4),
-              Text(
-                label,
-                style: FinType.bodyS.copyWith(color: Colors.white.withValues(alpha: 0.85)),
+              Flexible(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  style: FinType.bodyS.copyWith(color: Colors.white.withValues(alpha: 0.85)),
+                ),
               ),
             ],
           ),

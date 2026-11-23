@@ -64,117 +64,133 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
       grupos.putIfAbsent(DateTime(l.data.year, l.data.month, l.data.day), () => []).add(l);
     }
 
+    final dias = grupos.entries.toList();
+    final cabecalho = <Widget>[
+      const FinTopBar(title: 'Histórico'),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(18, 2, 18, 18),
+        clipBehavior: Clip.none,
+        child: Row(
+          children: [
+            for (var i = 0; i < _filtros.length; i++) ...[
+              FinChip(
+                label: _filtros[i],
+                selected: _filtro == i,
+                onTap: () => setState(() => _filtro = i),
+              ),
+              if (i < _filtros.length - 1) const SizedBox(width: 8),
+            ],
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FinSurface.convex(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _Resumo(
+                      label: 'Entradas',
+                      valor: '+ ${Fmt.brl(entradas)}',
+                      cor: c.income,
+                      icon: Icons.arrow_downward,
+                      tone: FinTone.primary,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(width: 1, height: 40, color: c.outlineVar),
+                      Container(
+                        width: 1,
+                        height: 40,
+                        color: c.isDark
+                            ? const Color(0xff2B3B5E).withValues(alpha: 0.9)
+                            : Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: _Resumo(
+                      label: 'Saídas',
+                      valor: '− ${Fmt.brl(saidas)}',
+                      cor: c.expense,
+                      icon: Icons.arrow_upward,
+                      tone: FinTone.coral,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                '${lista.length} ${lista.length == 1 ? 'lançamento' : 'lançamentos'}',
+                style: FinType.titleM.copyWith(color: c.text, shadows: FinFx.emboss(c)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+
     return FinScaffold(
       safeBottom: false,
       body: RefreshIndicator(
         color: c.primary,
         backgroundColor: c.surface,
         onRefresh: _recarregar,
-        child: ListView(
+        // Lista sob demanda (ListView.builder): só monta os grupos de dias que
+        // aparecem na tela. Antes, com o filtro "Tudo", todos os lançamentos eram
+        // montados de uma vez e a tela travava com milhares de itens (DEF-08).
+        child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(bottom: 28),
-          children: [
-            const FinTopBar(title: 'Histórico'),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(18, 2, 18, 18),
-              clipBehavior: Clip.none,
-              child: Row(
-                children: [
-                  for (var i = 0; i < _filtros.length; i++) ...[
-                    FinChip(
-                      label: _filtros[i],
-                      selected: _filtro == i,
-                      onTap: () => setState(() => _filtro = i),
-                    ),
-                    if (i < _filtros.length - 1) const SizedBox(width: 8),
-                  ],
-                ],
-              ),
-            ),
-            Padding(
+          itemCount: cabecalho.length + (lista.isEmpty ? 1 : dias.length),
+          itemBuilder: (context, i) {
+            if (i < cabecalho.length) return cabecalho[i];
+            if (lista.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+                child: EmptyCard(
+                  icon: Icons.history,
+                  texto: 'Nenhum lançamento neste período.',
+                ),
+              );
+            }
+            final e = dias[i - cabecalho.length];
+            return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  FinSurface.convex(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _Resumo(
-                            label: 'Entradas',
-                            valor: '+ ${Fmt.brl(entradas)}',
-                            cor: c.income,
-                            icon: Icons.arrow_downward,
-                            tone: FinTone.primary,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Container(width: 1, height: 40, color: c.outlineVar),
-                            Container(
-                              width: 1,
-                              height: 40,
-                              color: c.isDark
-                                  ? const Color(0xff2B3B5E).withValues(alpha: 0.9)
-                                  : Colors.white.withValues(alpha: 0.9),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: _Resumo(
-                            label: 'Saídas',
-                            valor: '− ${Fmt.brl(saidas)}',
-                            cor: c.expense,
-                            icon: Icons.arrow_upward,
-                            tone: FinTone.coral,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      '${lista.length} ${lista.length == 1 ? 'lançamento' : 'lançamentos'}',
-                      style: FinType.titleM.copyWith(color: c.text, shadows: FinFx.emboss(c)),
-                    ),
+                  Text(
+                    Fmt.diaPorExtenso(e.key),
+                    style: FinType.labelL.copyWith(color: c.textVar),
                   ),
-                  if (lista.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: EmptyCard(
-                        icon: Icons.history,
-                        texto: 'Nenhum lançamento neste período.',
-                      ),
-                    )
-                  else
-                    for (final e in grupos.entries) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        Fmt.diaPorExtenso(e.key),
-                        style: FinType.labelL.copyWith(color: c.textVar),
-                      ),
-                      const SizedBox(height: 8),
-                      ListCard(
-                        rows: [
-                          for (final l in e.value)
-                            LancRow(
-                              lancamento: l,
-                              subtitulo: l.categoria ?? 'Sem categoria',
-                              onTap: () => LancamentoAcoes.menu(context, l),
-                              onLongPress: () => LancamentoAcoes.menu(context, l),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
+                  const SizedBox(height: 8),
+                  ListCard(
+                    rows: [
+                      for (final l in e.value)
+                        LancRow(
+                          lancamento: l,
+                          subtitulo: l.categoria ?? 'Sem categoria',
+                          onTap: () => LancamentoAcoes.menu(context, l),
+                          onLongPress: () => LancamentoAcoes.menu(context, l),
+                        ),
                     ],
+                  ),
+                  const SizedBox(height: 8),
                 ],
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

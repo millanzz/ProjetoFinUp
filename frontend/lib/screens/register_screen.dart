@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../core/app_routes.dart';
@@ -23,10 +24,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   bool _aceitouTermos = false;
+  // Abre a Política de Privacidade (termos de uso e tratamento de dados)
+  late final _linkTermos = TapGestureRecognizer()
+    ..onTap = () => Navigator.pushNamed(context, AppRoutes.privacidade);
   bool _carregando = false;
 
   @override
   void dispose() {
+    _linkTermos.dispose();
     _nomeController.dispose();
     _emailController.dispose();
     _senhaController.dispose();
@@ -157,6 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   const TextSpan(text: 'Li e aceito os '),
                                   TextSpan(
                                     text: 'termos de uso',
+                                    recognizer: _linkTermos,
                                     style: FinType.labelL.copyWith(
                                       color: c.primary,
                                       fontWeight: FontWeight.w700,
@@ -178,8 +184,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: _cadastrar,
                     ),
                     const SizedBox(height: 14),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text('Já tem conta?', style: FinType.bodyM.copyWith(color: c.textVar)),
                         FinButton.text(

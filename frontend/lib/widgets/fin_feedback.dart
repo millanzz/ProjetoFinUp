@@ -27,7 +27,7 @@ void showFinSnack(
         padding: EdgeInsets.zero,
         // Com FAB na tela, a snackbar fica 14px acima dele (como no Figma).
         margin: EdgeInsets.fromLTRB(18, 0, 18, acimaDoFab ? 90 : 14),
-        duration: Duration(seconds: acao != null ? 5 : 3),
+        duration: Duration(seconds: acao != null ? 8 : 3),
         content: Container(
           constraints: const BoxConstraints(minHeight: 52),
           padding: const EdgeInsets.fromLTRB(16, 4, 8, 4),

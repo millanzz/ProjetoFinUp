@@ -92,15 +92,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   void _irParaAba(int aba) => NavegacaoPrincipal.of(context)?.irParaAba(aba);
 
-  List<MapEntry<String, double>> _porCategoria(List<LancamentoModel> l) {
-    final m = <String, double>{};
-    for (final x in l) {
-      final k = x.categoria ?? 'Outros';
-      m[k] = (m[k] ?? 0) + x.valor;
-    }
-    return m.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -122,8 +113,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         .toList();
     final despesas = doMes.where((l) => !l.isReceita).toList();
     final receitas = doMes.where((l) => l.isReceita).toList();
-    final totalD = despesas.fold<double>(0, (s, l) => s + l.valor);
-    final totalR = receitas.fold<double>(0, (s, l) => s + l.valor);
 
     final metas = MetaService.metas;
     final metaDestaque = metas.isEmpty
@@ -223,18 +212,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       texto: 'Nenhuma despesa neste mês.',
                     )
                   else
-                    ListCard(
-                      inset: 66,
-                      rows: [
-                        for (final e in _porCategoria(despesas))
-                          CatRow(
-                            categoria: e.key,
-                            valor: e.value,
-                            total: totalD,
-                            tone: FinTone.coral,
-                          ),
-                      ],
-                    ),
+                    CategoriasCard(lancamentos: despesas, tone: FinTone.coral),
                   const SizedBox(height: 24),
                   SectionHead(
                     title: 'De onde veio',
@@ -248,18 +226,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       texto: 'Nenhuma entrada neste mês.',
                     )
                   else
-                    ListCard(
-                      inset: 66,
-                      rows: [
-                        for (final e in _porCategoria(receitas))
-                          CatRow(
-                            categoria: e.key,
-                            valor: e.value,
-                            total: totalR,
-                            tone: FinTone.primary,
-                          ),
-                      ],
-                    ),
+                    CategoriasCard(lancamentos: receitas, tone: FinTone.primary),
                   const SizedBox(height: 24),
                   SectionHead(
                     title: 'Metas',

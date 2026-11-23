@@ -78,15 +78,6 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
     setState(() => _mes = escolhido is DateTime ? escolhido : null);
   }
 
-  List<MapEntry<String, double>> _porCategoria(List<LancamentoModel> l) {
-    final m = <String, double>{};
-    for (final x in l) {
-      final k = x.categoria ?? 'Outros';
-      m[k] = (m[k] ?? 0) + x.valor;
-    }
-    return m.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -173,18 +164,7 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                   else ...[
                     const SectionHead(title: 'Por categoria'),
                     const SizedBox(height: 10),
-                    ListCard(
-                      inset: 66,
-                      rows: [
-                        for (final e in _porCategoria(lista))
-                          CatRow(
-                            categoria: e.key,
-                            valor: e.value,
-                            total: total,
-                            tone: _tone,
-                          ),
-                      ],
-                    ),
+                    CategoriasCard(lancamentos: lista, tone: _tone),
                     const SizedBox(height: 24),
                     SectionHead(
                       title: 'Lançamentos',

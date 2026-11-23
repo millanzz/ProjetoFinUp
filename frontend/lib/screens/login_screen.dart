@@ -9,6 +9,7 @@ import '../services/lancamento_service.dart';
 import '../widgets/fin_controls.dart';
 import '../widgets/fin_feedback.dart';
 import '../widgets/fin_surface.dart';
+import 'esqueci_senha_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,6 +28,20 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _senhaController.dispose();
     super.dispose();
+  }
+
+  /// Abre "Esqueci minha senha"; ao concluir, preenche o e-mail aqui.
+  Future<void> _esqueciSenha() async {
+    final email = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EsqueciSenhaScreen(emailInicial: _emailController.text.trim()),
+      ),
+    );
+    if (email == null || !mounted) return;
+    _emailController.text = email;
+    _senhaController.clear();
+    showFinSnack(context, 'Senha redefinida. Entre com a nova senha.');
   }
 
   Future<void> _fazerLogin() async {
@@ -139,10 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.centerRight,
                 child: FinButton.text(
                   label: 'Esqueci minha senha',
-                  onPressed: () => showFinSnack(
-                    context,
-                    'Recuperação de senha ainda não está disponível.',
-                  ),
+                  onPressed: _carregando ? null : _esqueciSenha,
                 ),
               ),
               const SizedBox(height: 18),
@@ -154,8 +166,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _fazerLogin,
               ),
               const SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(
                     'Ainda não tem conta?',

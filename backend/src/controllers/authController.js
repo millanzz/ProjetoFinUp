@@ -1,24 +1,37 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { emitirToken } = require('../utils/token');
 const db = require('../database/db');
+const { normalizeEmail, erroInterno } = require('../utils/validators');
 
 // POST /auth/login
 exports.login = (req, res) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
+  const email = normalizeEmail(req.body.email);
 
   if (!email || !password) {
     return res.status(400).json({
       error: 'Email e password são obrigatórios'
     });
   }
+  // Senha que não é texto (ex.: número) derrubava o bcrypt com erro 500 (DEF-03).
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ error: 'Email e password devem ser texto' });
+  }
 
   db.get(
-    `SELECT * FROM users WHERE email = ?`,
+    `SELECT * FROM users WHERE lower(email) = ?`,
     [email],
     async (err, user) => {
-      if (err) return res.status(500).json({ error: err.message });
+      if (err) return erroInterno(res, err);
       if (!user) {
         return res.status(401).json({ error: 'Email ou senha inválidos' });
+      }
+
+      if (!process.env.JWT_SECRET) {
+        console.error('JWT_SECRET não definido no .env');
+        return res.status(500).json({
+          error: 'Servidor sem JWT_SECRET configurado. Veja o .env.example.'
+        });
       }
 
       try {
@@ -27,11 +40,7 @@ exports.login = (req, res) => {
           return res.status(401).json({ error: 'Email ou senha inválidos' });
         }
 
-        const token = jwt.sign(
-          { id: user.id, email: user.email },
-          process.env.JWT_SECRET,
-          { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-        );
+        const token = emitirToken(user);
 
         res.json({
           token,
@@ -42,7 +51,7 @@ exports.login = (req, res) => {
           }
         });
       } catch (e) {
-        res.status(500).json({ error: e.message });
+        erroInterno(res, e);
       }
     }
   );

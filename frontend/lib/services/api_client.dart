@@ -76,12 +76,19 @@ class ApiClient {
             body: jsonEncode(body ?? {}),
           ));
 
-  static Future<dynamic> delete(String path) =>
-      _executar(() => http.delete(_uri(path), headers: _headers));
+  static Future<dynamic> delete(String path, [Map<String, dynamic>? body]) =>
+      _executar(() => http.delete(
+            _uri(path),
+            headers: _headers,
+            body: body == null ? null : jsonEncode(body),
+          ));
 
   static Future<dynamic> _executar(
     Future<http.Response> Function() requisicao,
   ) async {
+    if (!ApiConfig.conexaoSegura) {
+      throw ApiException('Conexão insegura: este aplicativo precisa de um servidor HTTPS.');
+    }
     http.Response resposta;
 
     try {

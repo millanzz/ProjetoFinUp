@@ -1,4 +1,5 @@
 const db = require('../database/db');
+const { isValidMonth, erroInterno } = require('../utils/validators');
 
 /**
  * GET /dashboard
@@ -12,24 +13,28 @@ exports.summary = (req, res) => {
   const userId = req.userId;
   const { month } = req.query;
 
+  if (month !== undefined && !isValidMonth(month)) {
+    return res.status(400).json({ error: 'month deve estar no formato AAAA-MM' });
+  }
+
   // filtro de mês opcional (strftime('%Y-%m', date))
   const monthFilter = month ? ` AND strftime('%Y-%m', date) = ?` : '';
   const monthParams = month ? [month] : [];
 
   const queries = {
     totalIncomes: {
-      sql: `SELECT COALESCE(SUM(amount), 0) AS total FROM incomes
+      sql: `SELECT ROUND(COALESCE(SUM(amount), 0), 2) AS total FROM incomes
             WHERE user_id = ?${monthFilter}`,
       params: [userId, ...monthParams]
     },
     totalExpenses: {
-      sql: `SELECT COALESCE(SUM(amount), 0) AS total FROM expenses
+      sql: `SELECT ROUND(COALESCE(SUM(amount), 0), 2) AS total FROM expenses
             WHERE user_id = ?${monthFilter}`,
       params: [userId, ...monthParams]
     },
     expensesByCategory: {
       sql: `SELECT COALESCE(c.name, 'Sem categoria') AS category,
-                   SUM(e.amount) AS total
+                   ROUND(SUM(e.amount), 2) AS total
             FROM expenses e
             LEFT JOIN categories c ON c.id = e.category_id
             WHERE e.user_id = ?${monthFilter.replace('date', 'e.date')}
@@ -39,7 +44,7 @@ exports.summary = (req, res) => {
     },
     incomesByCategory: {
       sql: `SELECT COALESCE(c.name, 'Sem categoria') AS category,
-                   SUM(i.amount) AS total
+                   ROUND(SUM(i.amount), 2) AS total
             FROM incomes i
             LEFT JOIN categories c ON c.id = i.category_id
             WHERE i.user_id = ?${monthFilter.replace('date', 'i.date')}
@@ -48,7 +53,7 @@ exports.summary = (req, res) => {
       params: [userId, ...monthParams]
     },
     monthly: {
-      sql: `SELECT month, SUM(incomes) AS incomes, SUM(expenses) AS expenses
+      sql: `SELECT month, ROUND(SUM(incomes), 2) AS incomes, ROUND(SUM(expenses), 2) AS expenses
             FROM (
               SELECT strftime('%Y-%m', date) AS month, amount AS incomes, 0 AS expenses
               FROM incomes WHERE user_id = ?
@@ -70,7 +75,7 @@ exports.summary = (req, res) => {
   const fail = (err) => {
     if (!responded) {
       responded = true;
-      res.status(500).json({ error: err.message });
+      erroInterno(res, err);
     }
   };
 
@@ -96,7 +101,9 @@ exports.summary = (req, res) => {
     if (responded) return;
     responded = true;
     res.json({
-      balance: result.totalIncomes - result.totalExpenses,
+      // Somas e saldo arredondados para centavos (DEF-01): antes 0,10 + 0,20 − 0,30
+      // dava 5,55e-17 em vez de 0.
+      balance: Math.round((result.totalIncomes - result.totalExpenses) * 100) / 100 || 0,
       total_incomes: result.totalIncomes,
       total_expenses: result.totalExpenses,
       expenses_by_category: result.expensesByCategory,

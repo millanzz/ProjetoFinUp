@@ -5,6 +5,7 @@ import '../core/formatters.dart';
 import '../models/lancamento_model.dart';
 import '../screens/lancamento_form_screen.dart';
 import '../services/lancamento_service.dart';
+import 'fin_controls.dart';
 import 'fin_feedback.dart';
 import 'fin_surface.dart';
 
@@ -25,14 +26,16 @@ class LancamentoAcoes {
     );
     if (criado is! LancamentoModel || !context.mounted) return;
 
+    final tipoTexto = criado.isReceita ? 'Receita salva' : 'Despesa salva';
     showFinSnack(
       context,
-      criado.isReceita ? 'Receita salva' : 'Despesa salva',
+      criado.isParcela ? '$tipoTexto em ${criado.parcelaTotal}x' : tipoTexto,
       acao: 'Desfazer',
       acimaDoFab: acimaDoFab,
       onAcao: () async {
         try {
-          await LancamentoService.remover(criado);
+          // Desfazer um parcelamento remove todas as parcelas.
+          await LancamentoService.removerParcelamento(criado);
         } catch (_) {
           if (context.mounted) {
             showFinSnack(context, 'Não foi possível desfazer.', erro: true);
@@ -50,6 +53,8 @@ class LancamentoAcoes {
   }
 
   static Future<void> excluir(BuildContext context, LancamentoModel l) async {
+    if (l.isParcela) return _excluirParcela(context, l);
+
     final confirmar = await finConfirm(
       context,
       titulo: 'Excluir lançamento',
@@ -61,6 +66,47 @@ class LancamentoAcoes {
     try {
       await LancamentoService.remover(l);
       if (context.mounted) showFinSnack(context, 'Lançamento excluído');
+    } catch (_) {
+      if (context.mounted) {
+        showFinSnack(context, 'Não foi possível excluir. Tente novamente.', erro: true);
+      }
+    }
+  }
+
+  /// Parcela: pergunta se exclui só ela ou o parcelamento inteiro.
+  static Future<void> _excluirParcela(BuildContext context, LancamentoModel l) async {
+    final escolha = await showFinDialog<String>(
+      context: context,
+      titulo: 'Excluir parcela',
+      conteudo: (ctx, _) => Text(
+        '"${l.titulo}" é a ${l.rotuloParcela!.toLowerCase()} '
+        '(${Fmt.brl(l.valor)}). O que deseja excluir?',
+        style: FinType.bodyM.copyWith(color: ctx.fin.textVar),
+      ),
+      acoes: (ctx, _) => [
+        FinButton.text(label: 'Cancelar', onPressed: () => Navigator.pop(ctx)),
+        FinButton.text(
+          label: 'Só esta',
+          danger: true,
+          onPressed: () => Navigator.pop(ctx, 'uma'),
+        ),
+        FinButton.text(
+          label: 'Todas as ${l.parcelaTotal}',
+          danger: true,
+          onPressed: () => Navigator.pop(ctx, 'todas'),
+        ),
+      ],
+    );
+    if (escolha == null || !context.mounted) return;
+
+    try {
+      if (escolha == 'todas') {
+        final n = await LancamentoService.removerParcelamento(l);
+        if (context.mounted) showFinSnack(context, '$n parcelas excluídas');
+      } else {
+        await LancamentoService.remover(l);
+        if (context.mounted) showFinSnack(context, 'Parcela excluída');
+      }
     } catch (_) {
       if (context.mounted) {
         showFinSnack(context, 'Não foi possível excluir. Tente novamente.', erro: true);

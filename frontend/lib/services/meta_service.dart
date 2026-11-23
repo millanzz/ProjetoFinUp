@@ -38,11 +38,10 @@ class MetaService {
     await carregar();
   }
 
-  /// Soma um aporte ao progresso atual da meta.
+  /// Soma um aporte à meta. A soma é feita no servidor, então dois
+  /// aportes ao mesmo tempo não se sobrescrevem.
   static Future<void> aportar(MetaModel meta, double valor) async {
-    await ApiClient.patch('/goals/${meta.id}', {
-      'current_amount': meta.valorAtual + valor,
-    });
+    await ApiClient.post('/goals/${meta.id}/aportes', {'amount': valor});
     await carregar();
   }
 

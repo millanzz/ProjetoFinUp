@@ -6,6 +6,7 @@ import '../screens/login_screen.dart';
 import '../screens/main_navigation_screen.dart';
 import '../screens/metas_screen.dart';
 import '../screens/perfil_screen.dart';
+import '../screens/politica_privacidade_screen.dart';
 import '../screens/register_screen.dart';
 
 class AppRoutes {
@@ -18,6 +19,7 @@ class AppRoutes {
   static const String novaDespesa = '/nova-despesa';
   static const String perfil = '/perfil';
   static const String metas = '/metas';
+  static const String privacidade = '/privacidade';
 
   static Map<String, WidgetBuilder> get routes => {
         login: (_) => const LoginScreen(),
@@ -29,5 +31,6 @@ class AppRoutes {
             const LancamentoFormScreen(tipo: TipoLancamento.despesa),
         perfil: (_) => const PerfilScreen(),
         metas: (_) => const MetasScreen(),
+        privacidade: (_) => const PoliticaPrivacidadeScreen(),
       };
 }

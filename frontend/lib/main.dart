@@ -48,6 +48,14 @@ class FinanceiroApp extends StatelessWidget {
         supportedLocales: const [Locale('pt', 'BR')],
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         initialRoute: logado ? AppRoutes.home : AppRoutes.login,
+        // Na Web o endereço (#/home, #/login…) virava a rota inicial e ignorava
+        // a sessão (DEF-11). A tela inicial passa a depender só de estar logado.
+        onGenerateInitialRoutes: (_) => [
+          MaterialPageRoute<void>(
+            settings: RouteSettings(name: logado ? AppRoutes.home : AppRoutes.login),
+            builder: AppRoutes.routes[logado ? AppRoutes.home : AppRoutes.login]!,
+          ),
+        ],
         routes: AppRoutes.routes,
       ),
     );

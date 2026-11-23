@@ -168,6 +168,67 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
   // ── Sair ─────────────────────────────────────────────────────
 
+  // ── Excluir conta (LGPD; exigida pelas lojas de aplicativos) ───────
+
+  Future<void> _abrirExcluirConta() async {
+    final senhaController = TextEditingController();
+    var excluindo = false;
+
+    final ok = await showFinDialog<bool>(
+      context: context,
+      titulo: 'Excluir conta',
+      conteudo: (ctx, _) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Sua conta e TODOS os seus dados (lançamentos, categorias e metas) '
+            'serão apagados para sempre. Esta ação não pode ser desfeita.',
+            style: FinType.bodyM.copyWith(color: ctx.fin.textVar),
+          ),
+          const SizedBox(height: 14),
+          FinField(
+            label: 'Senha atual',
+            controller: senhaController,
+            icon: Icons.lock,
+            obscure: true,
+          ),
+        ],
+      ),
+      acoes: (ctx, setD) => [
+        FinButton.text(
+          label: 'Cancelar',
+          onPressed: excluindo ? null : () => Navigator.pop(ctx),
+        ),
+        FinButton.text(
+          label: 'Excluir',
+          danger: true,
+          onPressed: excluindo
+              ? null
+              : () async {
+                  if (senhaController.text.isEmpty) {
+                    showFinSnack(context, 'Informe sua senha para confirmar.', erro: true);
+                    return;
+                  }
+                  setD(() => excluindo = true);
+                  try {
+                    await AuthService.excluirConta(senhaController.text);
+                    if (ctx.mounted) Navigator.pop(ctx, true);
+                  } on ApiException catch (e) {
+                    setD(() => excluindo = false);
+                    if (mounted) showFinSnack(context, e.message, erro: true);
+                  } catch (_) {
+                    setD(() => excluindo = false);
+                    if (mounted) showFinSnack(context, 'Não foi possível excluir a conta.', erro: true);
+                  }
+                },
+        ),
+      ],
+    );
+    if (ok != true || !mounted) return;
+    showFinSnack(context, 'Conta excluída');
+    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
+  }
+
   Future<void> _confirmarSaida() async {
     final sair = await finConfirm(
       context,
@@ -176,7 +237,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
       confirmar: 'Sair',
     );
     if (!sair || !mounted) return;
-    AuthService.logout();
+    await AuthService.logout();
+    if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
   }
 
@@ -277,6 +339,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
                           subtitulo: 'Versão 1.0',
                           onTap: _abrirSobre,
                         ),
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.privacy_tip, Color(0xff9FB4FF), Color(0xff4F6BD8)),
+                          titulo: 'Política de privacidade',
+                          subtitulo: 'Como tratamos seus dados',
+                          onTap: () => Navigator.pushNamed(context, AppRoutes.privacidade),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 22),
@@ -289,6 +358,14 @@ class _PerfilScreenState extends State<PerfilScreen> {
                           titulo: 'Sair da conta',
                           perigo: true,
                           onTap: _confirmarSaida,
+                        ),
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.delete_forever, Color(0xffF7A68B), Color(0xffC2410C)),
+                          titulo: 'Excluir conta',
+                          subtitulo: 'Apaga a conta e todos os dados',
+                          perigo: true,
+                          onTap: _abrirExcluirConta,
                         ),
                       ],
                     ),

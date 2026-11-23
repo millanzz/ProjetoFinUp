@@ -43,14 +43,23 @@ class CategoriaService {
     final existente = cache[nome];
     if (existente != null) return existente;
 
-    final dados = await ApiClient.post('/categories', {
-      'name': nome,
-      'type': tipo == TipoLancamento.receita ? 'income' : 'expense',
-    });
-
-    final id = dados['id'] as int;
-    cache[nome] = id;
-    return id;
+    try {
+      final dados = await ApiClient.post('/categories', {
+        'name': nome,
+        'type': tipo == TipoLancamento.receita ? 'income' : 'expense',
+      });
+      final id = dados['id'] as int;
+      cache[nome] = id;
+      return id;
+    } on ApiException catch (e) {
+      // 409: a categoria já existe no servidor (criada em outro aparelho, por
+      // exemplo). Recarrega a lista e usa a que já existe.
+      if (e.statusCode != 409) rethrow;
+      await carregar(force: true);
+      final id = (tipo == TipoLancamento.receita ? _receitas : _despesas)[nome];
+      if (id == null) rethrow;
+      return id;
+    }
   }
 
   static void limpar() {

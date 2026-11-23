@@ -68,8 +68,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
-    // Sincroniza em segundo plano; as abas escutam LancamentoService.revisao.
-    LancamentoService.carregar(force: true).catchError((_) {});
+    // Sincroniza em segundo plano só se o cache estiver velho (DEF-09);
+    // as abas escutam LancamentoService.revisao e puxar para baixo força a recarga.
+    LancamentoService.carregarSeDesatualizado().catchError((_) {});
   }
 
   @override

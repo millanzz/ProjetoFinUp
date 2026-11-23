@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Necessária para o app instalado (release) falar com a API (DEF-10).
+         Antes ela existia só nos manifestos de debug e profile. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="FinUp"
         android:name="${applicationName}"

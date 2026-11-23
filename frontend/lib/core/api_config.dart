@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Configuração central da API.
 ///
 /// IMPORTANTE — ajuste o [baseUrl] conforme onde o app está rodando:
@@ -19,4 +21,11 @@ class ApiConfig {
     'API_URL',
     defaultValue: 'http://10.0.2.2:3000',
   );
+
+  /// Produção exige HTTPS. Em build release, só endereços https:// são aceitos
+  /// (o ApiClient recusa enviar senha e token por HTTP). Em debug/testes, HTTP
+  /// continua liberado para o servidor local.
+  ///
+  /// Build de produção:  flutter build apk --release --dart-define=API_URL=https://api.seudominio.com.br
+  static bool get conexaoSegura => !kReleaseMode || baseUrl.startsWith('https://');
 }

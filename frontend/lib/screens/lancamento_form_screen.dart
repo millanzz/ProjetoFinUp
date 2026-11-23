@@ -42,6 +42,10 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
   String? _categoria;
   DateTime _data = DateTime.now();
   bool _parcelado = false;
+  int _parcelas = 2;
+
+  static const _minParcelas = 2;
+  static const _maxParcelas = 48;
   bool _carregando = false;
 
   bool get _isReceita => widget.tipo == TipoLancamento.receita;
@@ -78,7 +82,14 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
       _data = l.data;
       _parcelado = l.parcelado;
     }
+    // Atualiza a prévia "12x de R$ ..." enquanto o valor é digitado.
+    _valorController.addListener(() {
+      if (_parcelado && mounted) setState(() {});
+    });
   }
+
+  /// Editando uma parcela de um parcelamento.
+  bool get _editandoParcela => widget.lancamento?.isParcela ?? false;
 
   @override
   void dispose() {
@@ -114,10 +125,17 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
       return;
     }
 
+    final parcelar = !_isEdicao && _parcelado;
+    if (parcelar && valor < _parcelas * 0.01) {
+      showFinSnack(context, 'Valor pequeno demais para $_parcelas parcelas.', erro: true);
+      return;
+    }
+
     FocusScope.of(context).unfocus();
     setState(() => _carregando = true);
 
     try {
+      final original = widget.lancamento;
       final dados = LancamentoModel(
         id: widget.lancamento?.id ?? '',
         titulo: descricao,
@@ -126,13 +144,19 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
         tipo: widget.tipo,
         categoria: _categoria,
         parcelado: _parcelado,
+        parcelaGrupo: original?.parcelaGrupo,
+        parcelaNumero: original?.parcelaNumero,
+        parcelaTotal: original?.parcelaTotal,
       );
 
       if (_isEdicao) {
         await LancamentoService.editar(dados);
         if (mounted) Navigator.pop(context, true);
       } else {
-        final criado = await LancamentoService.adicionar(dados);
+        final criado = await LancamentoService.adicionar(
+          dados,
+          parcelas: parcelar ? _parcelas : null,
+        );
         if (mounted) Navigator.pop(context, criado);
       }
     } on ApiException catch (e) {
@@ -144,6 +168,155 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
     } finally {
       if (mounted) setState(() => _carregando = false);
     }
+  }
+
+  /// Card "Compra parcelada": no cadastro tem o interruptor e o número de
+  /// parcelas; editando uma parcela, só informa qual é ela.
+  Widget _cardParcelamento(BuildContext context) {
+    final c = context.fin;
+    final l = widget.lancamento;
+
+    if (_editandoParcela) {
+      return FinSurface.convex(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(Icons.repeat, size: 22, color: c.textVar),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Parcela ${l!.parcelaNumero} de ${l.parcelaTotal}',
+                    style: FinType.bodyL.copyWith(color: c.text, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    'As alterações valem só para esta parcela',
+                    style: FinType.bodyM.copyWith(color: c.textVar),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    // Lançamento já salvo sem parcelamento: não dá para parcelar depois.
+    if (_isEdicao) return const SizedBox.shrink();
+
+    final valor = Fmt.parseValor(_valorController.text) ?? 0;
+    final ultimoMes = DateTime(_data.year, _data.month + _parcelas - 1);
+
+    return FinSurface.convex(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => setState(() => _parcelado = !_parcelado),
+            child: Row(
+              children: [
+                Icon(Icons.repeat, size: 22, color: c.textVar),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _isReceita ? 'Receita parcelada' : 'Compra parcelada',
+                        style: FinType.bodyL.copyWith(color: c.text, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        'Divide o valor em parcelas mensais',
+                        style: FinType.bodyM.copyWith(color: c.textVar),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FinSwitch(
+                  value: _parcelado,
+                  onChanged: (v) => setState(() => _parcelado = v),
+                ),
+              ],
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topCenter,
+            child: !_parcelado
+                ? const SizedBox(width: double.infinity)
+                : Padding(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Groove(inset: 0),
+                        const SizedBox(height: 14),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Número de parcelas',
+                                style: FinType.bodyM.copyWith(color: c.textVar),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: _parcelas > _minParcelas ? 1 : 0.4,
+                              child: FinIconButton(
+                                icon: Icons.remove,
+                                tooltip: 'Menos parcelas',
+                                onTap: _parcelas > _minParcelas
+                                    ? () => setState(() => _parcelas--)
+                                    : null,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 56,
+                              child: Text(
+                                '${_parcelas}x',
+                                textAlign: TextAlign.center,
+                                style: FinType.titleL.copyWith(
+                                  color: c.text,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: _parcelas < _maxParcelas ? 1 : 0.4,
+                              child: FinIconButton(
+                                icon: Icons.add,
+                                tooltip: 'Mais parcelas',
+                                onTap: _parcelas < _maxParcelas
+                                    ? () => setState(() => _parcelas++)
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          valor > 0
+                              ? '${Fmt.resumoParcelas(valor, _parcelas)} · '
+                                  '${Fmt.mesAno(_data)} a ${Fmt.mesAno(ultimoMes)}'
+                              : 'Digite o valor total da compra',
+                          style: FinType.bodyM.copyWith(
+                            color: valor > 0
+                                ? (_isReceita ? c.income : c.expense)
+                                : c.textVar,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -175,7 +348,12 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
                     child: Column(
                       children: [
-                        Text('Valor', style: FinType.labelL.copyWith(color: c.textVar)),
+                        Text(
+                          _editandoParcela
+                              ? 'Valor desta parcela'
+                              : (_parcelado && !_isEdicao ? 'Valor total' : 'Valor'),
+                          style: FinType.labelL.copyWith(color: c.textVar),
+                        ),
                         const SizedBox(height: 2),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -244,39 +422,7 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
                     onTap: _selecionarData,
                   ),
                   const SizedBox(height: 18),
-                  FinSurface.convex(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    onTap: () => setState(() => _parcelado = !_parcelado),
-                    child: Row(
-                      children: [
-                        Icon(Icons.repeat, size: 22, color: c.textVar),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _isReceita ? 'Receita parcelada' : 'Compra parcelada',
-                                style: FinType.bodyL.copyWith(
-                                  color: c.text,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                'Divide o valor em parcelas mensais',
-                                style: FinType.bodyM.copyWith(color: c.textVar),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        FinSwitch(
-                          value: _parcelado,
-                          onChanged: (v) => setState(() => _parcelado = v),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _cardParcelamento(context),
                   const SizedBox(height: 26),
                   FinButton(
                     label: _textoBotao,
