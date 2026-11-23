@@ -1,0 +1,16 @@
+2026-11-23 10:11:41 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+41409a1
+redesign-fusao-tema-escuro
+exit dart projeto: 0
+dart estrito: 78 issues found. (ran in 2.2s)
+exit eslint: 0
+total: 44
+[
+  [ 'consistent-return', 25 ],
+  [ 'security/detect-object-injection', 8 ],
+  [ 'complexity', 6 ],
+  [ 'max-lines-per-function', 3 ],
+  [ 'security/detect-non-literal-fs-filename', 2 ]
+]

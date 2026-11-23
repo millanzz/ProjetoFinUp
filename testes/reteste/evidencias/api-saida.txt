@@ -1,0 +1,40 @@
+▶ Funcionalidades para produção
+  ✔ PRIV-01 política pública em HTML e JSON, sem login (53.4025ms)
+  ✔ CONTA-01 excluir conta exige a senha atual (sem senha 400, errada 401) (232.4616ms)
+  ✔ CONTA-02 excluir conta apaga todos os dados do usuário e só dele (392.0664ms)
+  ✔ CONTA-03 token de conta excluída deixa de funcionar (401, nunca 500) (189.46ms)
+  ✔ CONTA-04 depois de excluir, o login falha e o e-mail pode ser usado de novo (246.1105ms)
+  ✔ SESS-01 trocar a senha encerra os outros tokens e devolve um novo (1358.2569ms)
+  ✔ SESS-02 redefinir a senha pelo código encerra as sessões abertas (1414.7553ms)
+  ✔ HTTPS-01 com TLS_CERT/TLS_KEY a API atende em HTTPS (TLS) e envia HSTS (130.6869ms)
+  ✔ HTTPS-02 em produção sem TLS nem proxy HTTPS a API se recusa a subir (0.9909ms)
+  ✔ HTTPS-03 em produção atrás de proxy: HTTP é recusado e HTTPS é aceito (3.237ms)
+✔ Funcionalidades para produção (4031.6869ms)
+▶ Paginação das listas
+  ✔ PAG-01 GET /expenses devolve no máximo 500 por padrão e informa o total e a próxima página (16.3526ms)
+  ✔ PAG-02 percorrer as páginas traz cada lançamento uma vez, do mais recente ao mais antigo (52.0895ms)
+  ✔ PAG-03 os totais vêm de todo o período, não só da página (4.118ms)
+  ✔ PAG-04 filtro por tipo e por mês (com virada de ano) (9.208ms)
+  ✔ PAG-05 limit=0 devolve só os totais (2.9049ms)
+  ✔ PAG-06 parâmetros inválidos recebem 400 (11.2264ms)
+  ✔ PAG-07 GET /lancamentos/meses lista os meses com dados (2.222ms)
+  ✔ PAG-08 um usuário não vê os lançamentos do outro (128.2851ms)
+✔ Paginação das listas (582.05ms)
+▶ Verificação das correções sem bateria própria
+  ✔ DEF-14a login: depois de 10 senhas erradas a 11ª tentativa recebe 429 (615.2321ms)
+  ✔ DEF-14b o bloqueio é por e-mail: outra conta continua entrando normalmente (183.4806ms)
+  ✔ DEF-14c logins certos não contam para o limite (20 seguidos passam) (1189.039ms)
+  ✔ DEF-14d pedir código de recuperação: o 11º pedido do mesmo IP recebe 429 (15.2369ms)
+  ✔ DEF-14e redefinir senha: a 21ª tentativa para o mesmo e-mail recebe 429 (35.4291ms)
+  ✔ DEF-17 nome com HTML chega escapado no e-mail de recuperação (181.9019ms)
+  ✔ REG-01 quando o cadastro responde, as 14 categorias padrão já estão gravadas (sem repetir) (603.8452ms)
+  ✔ OBS-16 a API não anuncia X-Powered-By: Express (1.5004ms)
+✔ Verificação das correções sem bateria própria (3046.0212ms)
+ℹ tests 26
+ℹ suites 3
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4550.6705

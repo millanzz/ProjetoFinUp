@@ -1,0 +1,7 @@
+2026-11-23 09:49:48 -0300
+exit api: 0
+exit app: 0
+exit telas: 0
+exit paginacao-telas: 0
+exit apk-internet: 0
+exit web: 0

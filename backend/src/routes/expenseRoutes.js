@@ -9,6 +9,7 @@ router.use(auth);
 router.post('/', expenseController.create);
 router.get('/', expenseController.list);
 router.put('/:id', expenseController.update);
+router.delete('/grupo/:grupo', expenseController.removeGrupo); // todas as parcelas
 router.delete('/:id', expenseController.remove);
 
 module.exports = router;

@@ -1,0 +1,99 @@
+{
+  "usuarios": 10,
+  "duracao_s": 61,
+  "medido_em": "2026-11-23T01:54:06.003Z",
+  "geral": {
+    "requisicoes": 3364,
+    "falhas": 0,
+    "taxa_falha_pct": 0,
+    "media_ms": 10.7,
+    "mediana_ms": 10,
+    "p95_ms": 21.3,
+    "min_ms": 1.5,
+    "max_ms": 125.4,
+    "throughput_rps": 55.1
+  },
+  "sem_login": {
+    "requisicoes": 3354,
+    "falhas": 0,
+    "taxa_falha_pct": 0,
+    "media_ms": 10.5,
+    "mediana_ms": 10,
+    "p95_ms": 21,
+    "min_ms": 1.5,
+    "max_ms": 46.2
+  },
+  "por_rota": {
+    "POST /auth/login": {
+      "requisicoes": 10,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 73.1,
+      "mediana_ms": 64,
+      "p95_ms": 125.4,
+      "min_ms": 60.4,
+      "max_ms": 125.4
+    },
+    "GET /incomes": {
+      "requisicoes": 559,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 9.3,
+      "mediana_ms": 8.6,
+      "p95_ms": 17.6,
+      "min_ms": 3.1,
+      "max_ms": 33.7
+    },
+    "GET /expenses": {
+      "requisicoes": 559,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 14.4,
+      "mediana_ms": 12.1,
+      "p95_ms": 26.5,
+      "min_ms": 9,
+      "max_ms": 46.2
+    },
+    "GET /goals": {
+      "requisicoes": 559,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 5.5,
+      "mediana_ms": 3.7,
+      "p95_ms": 13.8,
+      "min_ms": 1.5,
+      "max_ms": 25.6
+    },
+    "GET /dashboard": {
+      "requisicoes": 559,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 9.2,
+      "mediana_ms": 9.9,
+      "p95_ms": 18.5,
+      "min_ms": 3.3,
+      "max_ms": 31.9
+    },
+    "POST /expenses": {
+      "requisicoes": 559,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 13.7,
+      "mediana_ms": 12.8,
+      "p95_ms": 23.6,
+      "min_ms": 6.4,
+      "max_ms": 34.2
+    },
+    "DELETE /expenses/:id": {
+      "requisicoes": 559,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 11.2,
+      "mediana_ms": 9.5,
+      "p95_ms": 19.3,
+      "min_ms": 5,
+      "max_ms": 34.4
+    }
+  },
+  "tipos_de_erro": {}
+}

@@ -1,0 +1,6 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/reteste/paginacao_ui_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: UI-PAG-01 Histórico "Tudo": totais do período inteiro e rolagem carrega as páginas seguintes
+00:14 +1: UI-PAG-02 Despesas → mês antigo: lista e total do mês vêm da API
+00:22 +2: (tearDownAll)
+00:22 +2: All tests passed!

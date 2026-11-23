@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Relatório de Desempenho e Carga — FinUp</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1f2937; font-size: 10.5pt; line-height: 1.45; }
+  h1 { font-size: 20pt; color: #0e1b3d; margin: 0 0 4px; }
+  h2 { font-size: 13.5pt; color: #0e1b3d; border-bottom: 2px solid #2f6fe4; padding-bottom: 3px; margin: 20px 0 8px; }
+  h3 { font-size: 11pt; color: #0e1b3d; margin: 14px 0 4px; }
+  .sub { color: #4b5563; margin: 0 0 12px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.5pt; }
+  th { background: #0e1b3d; color: #fff; text-align: left; padding: 5px 7px; }
+  td { border-bottom: 1px solid #dbe2ee; padding: 4px 7px; }
+  td.n, th.n { text-align: right; }
+  tr.destaque td { background: #eef2fa; font-weight: 600; }
+  .q { background: #f4f6fb; border-left: 4px solid #2f6fe4; padding: 8px 12px; margin: 8px 0; page-break-inside: avoid; }
+  .q b.p { color: #2f6fe4; }
+  .ok { color: #15803d; font-weight: 600; }
+  .ruim { color: #b45309; font-weight: 600; }
+  img { width: 100%; margin: 4px 0; }
+  .duas { display: flex; gap: 10px; }
+  .duas img { width: 50%; }
+  .figura { page-break-inside: avoid; }
+  .nota { color: #4b5563; font-size: 9pt; }
+  .quebra { page-break-before: always; }
+  ul { margin: 4px 0 6px 18px; padding: 0; }
+</style>
+</head>
+<body>
+
+<h1>Relatório de Desempenho e Carga — FinUp</h1>
+<p class="sub">PIM · Qualidade de Software · Teste executado em 09/11/2026<br>
+<b>Integrantes:</b> Gustavo Nascimento Millan · Lucas Valério Banhara Copeski · Lucas Theodoro Ribas · Lucas Zezi Razzante · Paulo Henrique do Santos Xavier · Rebeca Mendes de Souza · Thiago Silva Rodrigues</p>
+
+<h2>1. Objetivo e método</h2>
+<p>Medir como a API do FinUp se comporta com <b>10, 50 e 100 usuários usando o sistema ao mesmo tempo</b> e responder às perguntas da atividade com os dados gerados. O FinUp é um aplicativo (Android, iOS, Web e Windows); quem recebe todos os acessos é a <b>API REST</b> (Node.js + Express + SQLite). Por isso a carga foi aplicada nela.</p>
+<table>
+  <tr><th style="width:28%">Item</th><th>Detalhe</th></tr>
+  <tr><td>Usuários virtuais</td><td>10, 50 e 100, um cenário de cada vez, <b>60 segundos</b> cada; chegada distribuída nos 2 primeiros segundos</td></tr>
+  <tr><td>Caminho de cada usuário</td><td>Login uma vez; depois, em ciclo: <i>GET /incomes, GET /expenses, GET /goals, GET /dashboard, POST /expenses</i> (nova despesa) e <i>DELETE /expenses/:id</i>, com <b>1 s de pausa</b> entre ciclos — o mesmo que o app pede ao abrir e ao lançar uma despesa</td></tr>
+  <tr><td>Dados</td><td>Banco SQLite com 51 contas e 51.000 lançamentos (1.000 por conta), gerados com semente fixa; os 100 usuários se distribuem entre as 51 contas</td></tr>
+  <tr><td>Falha</td><td>Erro de rede, tempo esgotado (15 s) ou código HTTP diferente do esperado (200, 201 ou 204)</td></tr>
+  <tr><td>Ambiente</td><td>Windows 11 · Intel i5-9400F (6 núcleos) · 16 GB · Node.js 24.11 · API e gerador de carga na mesma máquina</td></tr>
+  <tr><td>Ferramenta</td><td>Script próprio em Node.js (<i>carga.js</i>) que registra rota, status e tempo de cada requisição; gráficos em matplotlib</td></tr>
+</table>
+
+<h2>2. Resultados comparativos</h2>
+<table>
+  <tr><th>Usuários</th><th class="n">Requisições</th><th class="n">Falhas</th><th class="n">Tempo médio</th><th class="n">Mediana</th><th class="n">p95</th><th class="n">Máximo</th><th class="n">Throughput</th></tr>
+  <tr><td>10</td><td class="n">3.172</td><td class="n">0 (0%)</td><td class="n">19,5 ms</td><td class="n">16,7 ms</td><td class="n">47,8 ms</td><td class="n">185,7 ms</td><td class="n">52,3 req/s</td></tr>
+  <tr><td>50</td><td class="n">7.940</td><td class="n">0 (0%)</td><td class="n">212,3 ms</td><td class="n">207,6 ms</td><td class="n">374,2 ms</td><td class="n">560,5 ms</td><td class="n">128,7 req/s</td></tr>
+  <tr class="destaque"><td>100</td><td class="n">8.152</td><td class="n">0 (0%)</td><td class="n">582,8 ms</td><td class="n">586,3 ms</td><td class="n">919,4 ms</td><td class="n">1.465,4 ms</td><td class="n">129,4 req/s</td></tr>
+</table>
+<p class="nota">p95 = 95% das requisições terminaram em até esse tempo. Valores incluem o login. Dados brutos: <i>carga-10/50/100-usuarios.json</i>.</p>
+
+<div class="duas figura">
+  <img src="evidencias-ciclo1/grafico-tempo.png" alt="Tempo médio e p95 por número de usuários">
+  <img src="evidencias-ciclo1/grafico-throughput.png" alt="Throughput medido e demanda por número de usuários">
+</div>
+
+<h2>3. Respostas às perguntas</h2>
+
+<div class="q"><b class="p">1. Qual foi o tempo médio de resposta das requisições?</b><br>
+<b>19,5 ms</b> com 10 usuários, <b>212,3 ms</b> com 50 e <b>582,8 ms</b> com 100. Para comparação, uma requisição sozinha, sem concorrência, leva de 1 a 10 ms nessas rotas (teste de volume, cenário de 1.000 lançamentos).</div>
+
+<div class="q"><b class="p">2. Houve alguma falha? Se sim, quantas?</b><br>
+<span class="ok">Não.</span> As <b>19.264 requisições</b> dos três cenários terminaram com o código esperado: 0 erros de rede, 0 tempos esgotados e 0 respostas de erro. O sistema <b>fica mais lento sob carga, mas não quebra</b>.</div>
+
+<div class="q"><b class="p">3. Qual foi o throughput?</b><br>
+<b>52,3 req/s</b> (10 usuários), <b>128,7 req/s</b> (50) e <b>129,4 req/s</b> (100). De 50 para 100 usuários o throughput praticamente não muda (+0,5%): a API atingiu sua <b>capacidade máxima, de cerca de 130 requisições por segundo</b>.</div>
+
+<div class="q"><b class="p">4. Como o sistema se comportou com 10 usuários simultâneos?</b><br>
+<span class="ok">Muito bem.</span> Tempo médio de 19,5 ms, p95 de 47,8 ms e nenhuma rota acima de 100 ms no p95 (exceto o login, 186 ms, por causa da criptografia da senha). O throughput (52,3 req/s) acompanhou a demanda dos usuários (cerca de 54 req/s): <b>não houve fila</b>. Todos os critérios ficaram dentro da meta de 500 ms.</div>
+
+<div class="q"><b class="p">5. Foi identificado algum gargalo ou lentidão?</b><br>
+<b>Sim, três:</b>
+<ul>
+  <li><b>Fila única no banco.</b> A API usa <b>uma só conexão</b> com o SQLite. Com 100 usuários, até rotas leves esperam a vez: <i>GET /goals</i>, que sozinho leva cerca de 2 ms, levou em média 467 ms. É por isso que o throughput para em ~130 req/s.</li>
+  <li><b>Rotas mais pesadas</b> (tempo médio com 100 usuários): <i>POST /expenses</i> 785 ms (gravações esperam as leituras), <i>GET /dashboard</i> 638 ms (5 consultas que percorrem as tabelas inteiras, sem índice) e <i>GET /expenses</i> 582 ms (devolve a lista inteira, sem paginação).</li>
+  <li><b>No aplicativo</b> (teste de volume, mesmo relatório): o Histórico com o filtro “Tudo” levou 2,2 s com 1.000 lançamentos e 37 s com 10.000; cada troca de aba baixa todos os lançamentos de novo (1,8 s com 10.000).</li>
+</ul></div>
+
+<div class="q"><b class="p">6. Comparação entre 10, 50 e 100 usuários</b><br>
+Ver a tabela da seção 2, os gráficos e a análise crítica a seguir.</div>
+
+<div class="figura">
+<h3>Tempo médio por rota</h3>
+<img src="evidencias-ciclo1/grafico-rotas.png" alt="Tempo médio por rota com 10, 50 e 100 usuários" style="width:82%">
+</div>
+
+<h2 class="quebra">4. Análise crítica</h2>
+<ul>
+  <li><b>De 10 para 50 usuários</b>, a demanda cresceu 5 vezes, mas o throughput só 2,5 vezes (52 → 129 req/s) e o tempo médio <b>11 vezes</b> (19 → 212 ms). A API passou do ponto de saturação nesse intervalo. Pela capacidade medida (~130 req/s) e pelo pedido de cada usuário (~6 req/s), o limite fica em torno de <b>20 a 25 usuários ativos ao mesmo tempo</b>.</li>
+  <li><b>De 50 para 100 usuários</b>, o throughput ficou igual (+0,5%) e o tempo médio quase triplicou (212 → 583 ms). Quando os pedidos dobram e a capacidade não aumenta, o que dobra é a fila.</li>
+  <li><b>Meta de 500 ms (p95).</b> Com 10 usuários (48 ms) e 50 usuários (374 ms) a meta foi atendida. Com 100 usuários ela foi <span class="ruim">ultrapassada (919 ms)</span>, e a resposta mais lenta chegou a 1,5 s.</li>
+  <li><b>Robustez.</b> O resultado positivo é a ausência total de falhas: mesmo saturada, a API respondeu tudo corretamente, sem perder ou recusar requisições.</li>
+  <li><b>Coerência com os outros testes.</b> As causas apontadas aqui são as mesmas registradas no teste de volume e na análise estática: falta de índices (DEF-06), resumo lento com acessos simultâneos (DEF-07), recarga completa no app (DEF-09) e conexão única com o banco (DEF-16).</li>
+</ul>
+
+<div class="figura">
+<h3>Volume atendido e falhas</h3>
+<img src="evidencias-ciclo1/grafico-falhas.png" alt="Requisições concluídas e falhas por cenário" style="width:75%">
+</div>
+
+<h2>5. Melhorias recomendadas</h2>
+<table>
+  <tr><th style="width:40%">Melhoria</th><th>Efeito esperado</th></tr>
+  <tr><td>Índices <i>(user_id, date)</i> em receitas e despesas</td><td>Consultas do resumo e das listas deixam de percorrer a tabela inteira</td></tr>
+  <tr><td>Resumo em uma única consulta (ou com cache por mês)</td><td>Reduz o custo do <i>GET /dashboard</i>, a rota de leitura mais lenta</td></tr>
+  <tr><td>Paginação e filtro por mês nas listas; app sem recarregar tudo a cada aba</td><td>Menos dados por requisição e muito menos requisições por usuário</td></tr>
+  <tr><td>SQLite em modo WAL e gravações fora da fila de leitura</td><td>Leituras e gravações deixam de esperar umas pelas outras</td></tr>
+  <tr><td>Rodar a API em mais de um processo (cluster/PM2) ou, em produção, usar um banco cliente-servidor</td><td>Aumenta a capacidade além de ~130 req/s</td></tr>
+</table>
+
+<h2>6. Limitações do teste</h2>
+<ul>
+  <li>O gerador de carga e a API rodaram <b>na mesma máquina</b>, então disputam o processador; em servidores separados a capacidade tende a ser um pouco maior.</li>
+  <li>Rede local (sem latência de internet) e cenários de 60 s; não foram feitos testes de longa duração.</li>
+  <li>Os 100 usuários virtuais usaram 51 contas (até 2 usuários por conta).</li>
+</ul>
+
+<h2>7. Conclusão</h2>
+<p>Com <b>10 usuários</b>, o FinUp responde em ~20 ms e atende a todas as metas. A API <b>satura em cerca de 130 requisições por segundo</b>, o que corresponde a uns 20 a 25 usuários ativos ao mesmo tempo. Acima disso o tempo cresce rapidamente: média de 212 ms com 50 usuários e de 583 ms com 100, quando o p95 passa da meta de 500 ms. Em nenhum cenário houve falha. O gargalo principal é a <b>fila única de acesso ao banco</b>, agravada pela falta de índices e pelas listas sem paginação. As melhorias da seção 5 atacam diretamente essas causas e podem ser verificadas repetindo este mesmo teste.</p>
+<p class="nota">Evidências e scripts: <i>testes/05-desempenho/carga/</i> (carga.js, executar-carga.sh, graficos-carga.py, evidencias/). Para repetir: <i>bash testes/05-desempenho/carga/executar-carga.sh</i>.</p>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+Package  Current  Wanted   Latest  Location             Depended by
+dotenv    16.6.1  16.6.1  18.0.10  node_modules/dotenv  backend

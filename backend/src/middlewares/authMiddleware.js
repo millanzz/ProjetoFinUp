@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const db = require('../database/db');
+const { erroInterno } = require('../utils/validators');
 
 /**
  * Middleware que valida o JWT enviado no header Authorization.
@@ -24,8 +26,17 @@ module.exports = (req, res, next) => {
       return res.status(401).json({ error: 'Token inválido ou expirado' });
     }
 
-    req.userId = decoded.id;
-    req.userEmail = decoded.email;
-    next();
+    // O token só vale se a conta ainda existe e se ele foi emitido depois da
+    // última troca/redefinição de senha (sessões encerradas).
+    db.get(`SELECT sessoes_desde FROM users WHERE id = ?`, [decoded.id], (dbErr, user) => {
+      if (dbErr) return erroInterno(res, dbErr);
+      if (!user) return res.status(401).json({ error: 'Sessão inválida: a conta não existe mais' });
+      if ((decoded.iat || 0) < user.sessoes_desde) {
+        return res.status(401).json({ error: 'Sessão encerrada. Entre novamente.' });
+      }
+      req.userId = decoded.id;
+      req.userEmail = decoded.email;
+      next();
+    });
   });
 };

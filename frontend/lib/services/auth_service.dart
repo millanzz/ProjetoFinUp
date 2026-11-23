@@ -135,20 +135,54 @@ class AuthService {
     required String senhaAtual,
     required String novaSenha,
   }) async {
-    await ApiClient.put('/users/me/password', {
+    final dados = await ApiClient.put('/users/me/password', {
       'current_password': senhaAtual,
+      'new_password': novaSenha,
+    });
+    // A troca de senha encerra as outras sessões; a API devolve um token novo
+    // para este aparelho continuar conectado.
+    final token = dados is Map ? dados['token'] : null;
+    if (token is String && token.isNotEmpty) await ApiClient.salvarToken(token);
+  }
+
+  /// Esqueci minha senha (1/2): pede um código de 6 dígitos por e-mail.
+  /// Devolve em quantos segundos dá para pedir de novo.
+  static Future<int> solicitarCodigoSenha(String email) async {
+    final dados = await ApiClient.post('/auth/forgot-password', {'email': email});
+    final espera = dados is Map ? dados['reenviar_em_segundos'] : null;
+    return espera is num ? espera.toInt() : 60;
+  }
+
+  /// Esqueci minha senha (2/2): confere o código e grava a nova senha.
+  static Future<void> redefinirSenha({
+    required String email,
+    required String codigo,
+    required String novaSenha,
+  }) async {
+    await ApiClient.post('/auth/reset-password', {
+      'email': email,
+      'code': codigo,
       'new_password': novaSenha,
     });
   }
 
-  static void logout() {
+  /// Exclui a conta e todos os dados no servidor (exige a senha atual) e sai.
+  static Future<void> excluirConta(String senha) async {
+    await ApiClient.delete('/users/me', {'password': senha});
+    await logout();
+  }
+
+  /// Sai da conta. Aguarda o token ser apagado do aparelho: antes a remoção
+  /// era disparada sem esperar, e fechar o app logo depois podia manter a
+  /// sessão salva (DEF-18).
+  static Future<void> logout() async {
     _isLogged = false;
     _nome = '';
     _email = '';
-    ApiClient.limparToken();
     LancamentoService.limpar();
     CategoriaService.limpar();
     MetaService.limpar();
     _notificarMudanca();
+    await ApiClient.limparToken();
   }
 }

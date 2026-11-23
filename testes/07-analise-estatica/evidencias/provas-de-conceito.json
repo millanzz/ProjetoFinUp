@@ -1,0 +1,59 @@
+{
+  "poc1": {
+    "descricao": "40 palpites simultâneos para um código com limite de 5 tentativas",
+    "palpites_enviados": 40,
+    "palpites_conferidos_pelo_servidor": 3,
+    "tentativas_registradas_no_banco": 5,
+    "limite_esperado": 5,
+    "limite_ultrapassado": false
+  },
+  "poc2": {
+    "descricao": "5 compras em 3x criadas ao mesmo tempo",
+    "respostas": [
+      {
+        "status": 201,
+        "erro": null
+      },
+      {
+        "status": 201,
+        "erro": null
+      },
+      {
+        "status": 201,
+        "erro": null
+      },
+      {
+        "status": 201,
+        "erro": null
+      },
+      {
+        "status": 201,
+        "erro": null
+      }
+    ],
+    "sucesso_201": 5,
+    "linhas_gravadas_por_compra": [
+      {
+        "description": "Parcelada 0",
+        "n": 3
+      },
+      {
+        "description": "Parcelada 1",
+        "n": 3
+      },
+      {
+        "description": "Parcelada 2",
+        "n": 3
+      },
+      {
+        "description": "Parcelada 3",
+        "n": 3
+      },
+      {
+        "description": "Parcelada 4",
+        "n": 3
+      }
+    ],
+    "esperado": "5 respostas 201 e 3 linhas por compra"
+  }
+}

@@ -1,0 +1,3 @@
+IDÊNTICO: o conteúdo do banco após 3 reinícios é igual ao do fim da fase 1.
+sha256 final: bf96ea2c1fda950b3e834734f9860d7062d540e7d90086a6bc18849363b212fd
+sha256 após fase 1: bf96ea2c1fda950b3e834734f9860d7062d540e7d90086a6bc18849363b212fd

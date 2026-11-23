@@ -1,0 +1,99 @@
+{
+  "usuarios": 100,
+  "duracao_s": 62,
+  "medido_em": "2026-11-23T01:56:14.046Z",
+  "geral": {
+    "requisicoes": 13444,
+    "falhas": 0,
+    "taxa_falha_pct": 0,
+    "media_ms": 280.9,
+    "mediana_ms": 274,
+    "p95_ms": 396.7,
+    "min_ms": 44.6,
+    "max_ms": 624.2,
+    "throughput_rps": 216.7
+  },
+  "sem_login": {
+    "requisicoes": 13344,
+    "falhas": 0,
+    "taxa_falha_pct": 0,
+    "media_ms": 281.5,
+    "mediana_ms": 274.4,
+    "p95_ms": 397.1,
+    "min_ms": 44.6,
+    "max_ms": 624.2
+  },
+  "por_rota": {
+    "POST /auth/login": {
+      "requisicoes": 100,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 203.2,
+      "mediana_ms": 198.5,
+      "p95_ms": 328.2,
+      "min_ms": 84.1,
+      "max_ms": 377.6
+    },
+    "GET /incomes": {
+      "requisicoes": 2224,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 266.3,
+      "mediana_ms": 268.1,
+      "p95_ms": 330.3,
+      "min_ms": 44.6,
+      "max_ms": 456.2
+    },
+    "GET /expenses": {
+      "requisicoes": 2224,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 273.8,
+      "mediana_ms": 273.4,
+      "p95_ms": 349.7,
+      "min_ms": 89.9,
+      "max_ms": 469.8
+    },
+    "GET /goals": {
+      "requisicoes": 2224,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 258.8,
+      "mediana_ms": 257.2,
+      "p95_ms": 325.8,
+      "min_ms": 87.6,
+      "max_ms": 452.9
+    },
+    "GET /dashboard": {
+      "requisicoes": 2224,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 275.4,
+      "mediana_ms": 278.1,
+      "p95_ms": 344.5,
+      "min_ms": 111.9,
+      "max_ms": 444.9
+    },
+    "POST /expenses": {
+      "requisicoes": 2224,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 364.4,
+      "mediana_ms": 362.3,
+      "p95_ms": 471.2,
+      "min_ms": 163.3,
+      "max_ms": 624.2
+    },
+    "DELETE /expenses/:id": {
+      "requisicoes": 2224,
+      "falhas": 0,
+      "taxa_falha_pct": 0,
+      "media_ms": 250.4,
+      "mediana_ms": 248.5,
+      "p95_ms": 323.3,
+      "min_ms": 72.4,
+      "max_ms": 468.2
+    }
+  },
+  "tipos_de_erro": {}
+}

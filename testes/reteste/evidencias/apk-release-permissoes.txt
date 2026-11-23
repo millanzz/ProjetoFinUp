@@ -1,0 +1,4 @@
+package: br.com.finup.app
+uses-permission: name='android.permission.INTERNET'
+permission: br.com.finup.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission: name='br.com.finup.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'

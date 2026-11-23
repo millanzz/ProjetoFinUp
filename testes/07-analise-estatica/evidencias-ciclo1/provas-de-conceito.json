@@ -1,0 +1,43 @@
+{
+  "poc1": {
+    "descricao": "40 palpites simultâneos para um código com limite de 5 tentativas",
+    "palpites_enviados": 40,
+    "palpites_conferidos_pelo_servidor": 18,
+    "tentativas_registradas_no_banco": 40,
+    "limite_esperado": 5,
+    "limite_ultrapassado": true
+  },
+  "poc2": {
+    "descricao": "5 compras em 3x criadas ao mesmo tempo",
+    "respostas": [
+      {
+        "status": 201,
+        "erro": null
+      },
+      {
+        "status": 500,
+        "erro": "Erro interno do servidor"
+      },
+      {
+        "status": 500,
+        "erro": "Erro interno do servidor"
+      },
+      {
+        "status": 500,
+        "erro": "Erro interno do servidor"
+      },
+      {
+        "status": 500,
+        "erro": "Erro interno do servidor"
+      }
+    ],
+    "sucesso_201": 1,
+    "linhas_gravadas_por_compra": [
+      {
+        "description": "Parcelada 0",
+        "n": 3
+      }
+    ],
+    "esperado": "5 respostas 201 e 3 linhas por compra"
+  }
+}

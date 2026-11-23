@@ -1,0 +1,5 @@
+Package     Current  Wanted  Latest  Location                 Depended by
+bcrypt        5.1.1   5.1.1   6.0.0  node_modules/bcrypt      backend
+dotenv       16.6.1  16.6.1  18.0.9  node_modules/dotenv      backend
+express       5.2.1   5.3.0   5.3.0  node_modules/express     backend
+nodemailer   10.3.1  10.4.0  10.4.0  node_modules/nodemailer  backend

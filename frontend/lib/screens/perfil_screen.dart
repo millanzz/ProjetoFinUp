@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import '../core/app_theme.dart';
+
 import '../core/app_routes.dart';
+import '../core/app_theme.dart';
+import '../core/categorias.dart';
+import '../core/theme_controller.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
-import '../widgets/skeu_input.dart';
+import '../widgets/fin_controls.dart';
+import '../widgets/fin_feedback.dart';
+import '../widgets/fin_layout.dart';
+import '../widgets/fin_surface.dart';
 
+/// Perfil — aberto pelo avatar da Início.
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
 
@@ -13,525 +20,401 @@ class PerfilScreen extends StatefulWidget {
 }
 
 class _PerfilScreenState extends State<PerfilScreen> {
-  void _mostrarMensagem(String texto, {bool erro = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(texto),
-        backgroundColor: erro ? AppTheme.dangerRed : AppTheme.successGreen,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
-
   // ── Editar perfil ────────────────────────────────────────────
 
-  void _abrirEditarPerfil() {
+  Future<void> _abrirEditarPerfil() async {
     final nomeController = TextEditingController(text: AuthService.nome);
     final emailController = TextEditingController(text: AuthService.email);
-    bool salvando = false;
+    var salvando = false;
 
-    showDialog(
+    final ok = await showFinDialog<bool>(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+      titulo: 'Editar perfil',
+      conteudo: (ctx, _) => Column(
+        children: [
+          FinField(
+            label: 'Nome',
+            controller: nomeController,
+            icon: Icons.person,
+            textCapitalization: TextCapitalization.words,
           ),
-          title: const Text(
-            "Editar perfil",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.darkText,
-            ),
+          const SizedBox(height: 14),
+          FinField(
+            label: 'E-mail',
+            controller: emailController,
+            icon: Icons.mail,
+            keyboardType: TextInputType.emailAddress,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SkeuInput(
-                label: "Nome",
-                controller: nomeController,
-              ),
-              const SizedBox(height: 14),
-              SkeuInput(
-                label: "E-mail",
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: salvando ? null : () => Navigator.pop(ctx),
-              child: const Text(
-                "Cancelar",
-                style: TextStyle(color: AppTheme.coolGray),
-              ),
-            ),
-            TextButton(
-              onPressed: salvando
-                  ? null
-                  : () async {
-                      final nome = nomeController.text.trim();
-                      final email = emailController.text.trim();
-
-                      if (nome.isEmpty || email.isEmpty) {
-                        _mostrarMensagem(
-                          "Preencha nome e e-mail.",
-                          erro: true,
-                        );
-                        return;
-                      }
-
-                      setDialogState(() => salvando = true);
-
-                      try {
-                        await AuthService.atualizarPerfil(
-                          nome: nome,
-                          email: email,
-                        );
-                        if (ctx.mounted) Navigator.pop(ctx);
-                        if (mounted) setState(() {});
-                        _mostrarMensagem("Perfil atualizado!");
-                      } on ApiException catch (e) {
-                        setDialogState(() => salvando = false);
-                        _mostrarMensagem(e.message, erro: true);
-                      } catch (_) {
-                        setDialogState(() => salvando = false);
-                        _mostrarMensagem(
-                          "Não foi possível atualizar o perfil.",
-                          erro: true,
-                        );
-                      }
-                    },
-              child: const Text(
-                "Salvar",
-                style: TextStyle(
-                  color: AppTheme.primaryBlue,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
+      acoes: (ctx, setD) => [
+        FinButton.text(
+          label: 'Cancelar',
+          onPressed: salvando ? null : () => Navigator.pop(ctx),
+        ),
+        FinButton.text(
+          label: 'Salvar',
+          onPressed: salvando
+              ? null
+              : () async {
+                  final nome = nomeController.text.trim();
+                  final email = emailController.text.trim();
+                  if (nome.isEmpty || email.isEmpty) {
+                    showFinSnack(context, 'Preencha nome e e-mail.', erro: true);
+                    return;
+                  }
+                  setD(() => salvando = true);
+                  try {
+                    await AuthService.atualizarPerfil(nome: nome, email: email);
+                    if (ctx.mounted) Navigator.pop(ctx, true);
+                  } on ApiException catch (e) {
+                    setD(() => salvando = false);
+                    if (mounted) showFinSnack(context, e.message, erro: true);
+                  } catch (_) {
+                    setD(() => salvando = false);
+                    if (mounted) showFinSnack(context, 'Não foi possível atualizar o perfil.', erro: true);
+                  }
+                },
+        ),
+      ],
     );
+    if (ok == true && mounted) showFinSnack(context, 'Perfil atualizado');
   }
 
   // ── Alterar senha ────────────────────────────────────────────
 
-  void _abrirAlterarSenha() {
-    final senhaAtualController = TextEditingController();
-    final novaSenhaController = TextEditingController();
-    bool salvando = false;
+  Future<void> _abrirAlterarSenha() async {
+    final atualController = TextEditingController();
+    final novaController = TextEditingController();
+    var salvando = false;
 
-    showDialog(
+    final ok = await showFinDialog<bool>(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+      titulo: 'Alterar senha',
+      conteudo: (ctx, _) => Column(
+        children: [
+          FinField(
+            label: 'Senha atual',
+            controller: atualController,
+            icon: Icons.lock,
+            obscure: true,
           ),
-          title: const Text(
-            "Alterar senha",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.darkText,
-            ),
+          const SizedBox(height: 14),
+          FinField(
+            label: 'Nova senha',
+            controller: novaController,
+            icon: Icons.lock,
+            obscure: true,
+            helper: 'Mínimo de 6 caracteres',
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SkeuInput(
-                label: "Senha atual",
-                controller: senhaAtualController,
-                obscureText: true,
-              ),
-              const SizedBox(height: 14),
-              SkeuInput(
-                label: "Nova senha",
-                hint: "Mínimo de 6 caracteres",
-                controller: novaSenhaController,
-                obscureText: true,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: salvando ? null : () => Navigator.pop(ctx),
-              child: const Text(
-                "Cancelar",
-                style: TextStyle(color: AppTheme.coolGray),
-              ),
-            ),
-            TextButton(
-              onPressed: salvando
-                  ? null
-                  : () async {
-                      final senhaAtual = senhaAtualController.text;
-                      final novaSenha = novaSenhaController.text;
-
-                      if (senhaAtual.isEmpty || novaSenha.isEmpty) {
-                        _mostrarMensagem(
-                          "Preencha os dois campos.",
-                          erro: true,
-                        );
-                        return;
-                      }
-                      if (novaSenha.length < 6) {
-                        _mostrarMensagem(
-                          "A nova senha deve ter pelo menos 6 caracteres.",
-                          erro: true,
-                        );
-                        return;
-                      }
-
-                      setDialogState(() => salvando = true);
-
-                      try {
-                        await AuthService.alterarSenha(
-                          senhaAtual: senhaAtual,
-                          novaSenha: novaSenha,
-                        );
-                        if (ctx.mounted) Navigator.pop(ctx);
-                        _mostrarMensagem("Senha alterada com sucesso!");
-                      } on ApiException catch (e) {
-                        setDialogState(() => salvando = false);
-                        _mostrarMensagem(e.message, erro: true);
-                      } catch (_) {
-                        setDialogState(() => salvando = false);
-                        _mostrarMensagem(
-                          "Não foi possível alterar a senha.",
-                          erro: true,
-                        );
-                      }
-                    },
-              child: const Text(
-                "Salvar",
-                style: TextStyle(
-                  color: AppTheme.primaryBlue,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
+      acoes: (ctx, setD) => [
+        FinButton.text(
+          label: 'Cancelar',
+          onPressed: salvando ? null : () => Navigator.pop(ctx),
+        ),
+        FinButton.text(
+          label: 'Salvar',
+          onPressed: salvando
+              ? null
+              : () async {
+                  final atual = atualController.text;
+                  final nova = novaController.text;
+                  if (atual.isEmpty || nova.isEmpty) {
+                    showFinSnack(context, 'Preencha os dois campos.', erro: true);
+                    return;
+                  }
+                  if (nova.length < 6) {
+                    showFinSnack(context, 'A nova senha deve ter pelo menos 6 caracteres.',
+                        erro: true);
+                    return;
+                  }
+                  setD(() => salvando = true);
+                  try {
+                    await AuthService.alterarSenha(senhaAtual: atual, novaSenha: nova);
+                    if (ctx.mounted) Navigator.pop(ctx, true);
+                  } on ApiException catch (e) {
+                    setD(() => salvando = false);
+                    if (mounted) showFinSnack(context, e.message, erro: true);
+                  } catch (_) {
+                    setD(() => salvando = false);
+                    if (mounted) showFinSnack(context, 'Não foi possível alterar a senha.', erro: true);
+                  }
+                },
+        ),
+      ],
     );
+    if (ok == true && mounted) showFinSnack(context, 'Senha alterada');
   }
 
   // ── Sobre ────────────────────────────────────────────────────
 
   void _abrirSobre() {
-    showDialog(
+    showFinDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        title: const Text(
-          "Sobre o app",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: AppTheme.darkText,
-          ),
-        ),
-        content: const Text(
-          "Sistema de Gestão Financeira\nVersão 1.0.0\n\n"
-          "Projeto de extensão do curso de Análise e "
-          "Desenvolvimento de Sistemas.\n\n"
-          "Desenvolvido com Flutter, Node.js, Express e SQLite.",
-          style: TextStyle(
-            fontSize: 14,
-            color: AppTheme.mediumText,
-            height: 1.5,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              "Fechar",
-              style: TextStyle(
-                color: AppTheme.primaryBlue,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
+      titulo: 'Sobre o FinUp',
+      conteudo: (ctx, _) => Text(
+        'Sistema de Gestão Financeira\nVersão 1.0\n\n'
+        'Projeto de extensão do curso de Análise e Desenvolvimento de Sistemas.\n\n'
+        'Desenvolvido com Flutter, Node.js, Express e SQLite.',
+        style: FinType.bodyM.copyWith(color: ctx.fin.textVar),
       ),
+      acoes: (ctx, _) => [
+        FinButton.text(label: 'Fechar', onPressed: () => Navigator.pop(ctx)),
+      ],
     );
   }
 
   // ── Sair ─────────────────────────────────────────────────────
 
-  void _confirmarSaida() {
-    showDialog(
+  // ── Excluir conta (LGPD; exigida pelas lojas de aplicativos) ───────
+
+  Future<void> _abrirExcluirConta() async {
+    final senhaController = TextEditingController();
+    var excluindo = false;
+
+    final ok = await showFinDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: const Text(
-          "Sair da conta",
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: AppTheme.darkText,
+      titulo: 'Excluir conta',
+      conteudo: (ctx, _) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Sua conta e TODOS os seus dados (lançamentos, categorias e metas) '
+            'serão apagados para sempre. Esta ação não pode ser desfeita.',
+            style: FinType.bodyM.copyWith(color: ctx.fin.textVar),
           ),
-        ),
-        content: const Text(
-          "Tem certeza que deseja sair?",
-          style: TextStyle(color: AppTheme.mediumText),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              "Cancelar",
-              style: TextStyle(color: AppTheme.coolGray),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              AuthService.logout();
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                AppRoutes.login,
-                (route) => false,
-              );
-            },
-            child: const Text(
-              "Sair",
-              style: TextStyle(
-                color: AppTheme.dangerRed,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+          const SizedBox(height: 14),
+          FinField(
+            label: 'Senha atual',
+            controller: senhaController,
+            icon: Icons.lock,
+            obscure: true,
           ),
         ],
       ),
+      acoes: (ctx, setD) => [
+        FinButton.text(
+          label: 'Cancelar',
+          onPressed: excluindo ? null : () => Navigator.pop(ctx),
+        ),
+        FinButton.text(
+          label: 'Excluir',
+          danger: true,
+          onPressed: excluindo
+              ? null
+              : () async {
+                  if (senhaController.text.isEmpty) {
+                    showFinSnack(context, 'Informe sua senha para confirmar.', erro: true);
+                    return;
+                  }
+                  setD(() => excluindo = true);
+                  try {
+                    await AuthService.excluirConta(senhaController.text);
+                    if (ctx.mounted) Navigator.pop(ctx, true);
+                  } on ApiException catch (e) {
+                    setD(() => excluindo = false);
+                    if (mounted) showFinSnack(context, e.message, erro: true);
+                  } catch (_) {
+                    setD(() => excluindo = false);
+                    if (mounted) showFinSnack(context, 'Não foi possível excluir a conta.', erro: true);
+                  }
+                },
+        ),
+      ],
     );
+    if (ok != true || !mounted) return;
+    showFinSnack(context, 'Conta excluída');
+    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
+  }
+
+  Future<void> _confirmarSaida() async {
+    final sair = await finConfirm(
+      context,
+      titulo: 'Sair da conta',
+      mensagem: 'Tem certeza que deseja sair?',
+      confirmar: 'Sair',
+    );
+    if (!sair || !mounted) return;
+    await AuthService.logout();
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Perfil",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                  color: AppTheme.darkText,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              const SizedBox(height: 24),
+    final c = context.fin;
 
-              // Card do usuário
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                  borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
-                    width: 1.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primaryBlue.withOpacity(0.4),
-                      offset: const Offset(0, 8),
-                      blurRadius: 20,
-                      spreadRadius: -4,
-                    ),
-                  ],
-                ),
+    return FinScaffold(
+      body: ListenableBuilder(
+        listenable: Listenable.merge([AuthService.usuarioRevisao, ThemeController.mode]),
+        builder: (context, _) {
+          final escuro = ThemeController.mode.value == ThemeMode.system
+              ? MediaQuery.platformBrightnessOf(context) == Brightness.dark
+              : ThemeController.mode.value == ThemeMode.dark;
+
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 32),
+            children: [
+              const FinTopBar(title: 'Perfil', lead: Icons.arrow_back),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 18, 18, 30),
                 child: Column(
                   children: [
-                    Container(
-                      width: 84,
-                      height: 84,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(26),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.4),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          AuthService.iniciais,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
+                    FinAvatar(iniciais: AuthService.iniciais, size: 96),
                     const SizedBox(height: 16),
                     Text(
                       AuthService.nome,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      textAlign: TextAlign.center,
+                      style: FinType.titleL.copyWith(color: c.text, shadows: FinFx.emboss(c)),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       AuthService.email,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      textAlign: TextAlign.center,
+                      style: FinType.bodyM.copyWith(color: c.textVar),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
-
-              const Text(
-                "Configurações",
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.darkText,
-                ),
-              ),
-              const SizedBox(height: 14),
-
-              Container(
-                decoration: BoxDecoration(
-                  gradient: AppTheme.cardLightGradient,
-                  borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-                  border: Border.all(color: Colors.white.withOpacity(0.8)),
-                  boxShadow: AppTheme.elevatedShadow,
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _opcao(
-                      Icons.person_outline_rounded,
-                      "Editar perfil",
-                      "Nome e e-mail",
-                      _abrirEditarPerfil,
+                    _titulo(c, 'Conta'),
+                    ListCard(
+                      inset: 68,
+                      rows: [
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.edit, Color(0xff8DB7FF), Color(0xff2F66E0)),
+                          titulo: 'Editar perfil',
+                          subtitulo: 'Nome e e-mail',
+                          onTap: _abrirEditarPerfil,
+                        ),
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.lock, Color(0xffC6A2FF), Color(0xff7B4FE0)),
+                          titulo: 'Alterar senha',
+                          subtitulo: 'Senha de acesso',
+                          onTap: _abrirAlterarSenha,
+                        ),
+                      ],
                     ),
-                    _divisor(),
-                    _opcao(
-                      Icons.lock_outline_rounded,
-                      "Alterar senha",
-                      "Atualize sua senha de acesso",
-                      _abrirAlterarSenha,
+                    const SizedBox(height: 22),
+                    _titulo(c, 'Aparência'),
+                    ListCard(
+                      inset: 68,
+                      rows: [
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.dark_mode, Color(0xff9AA6FF), Color(0xff4A55D6)),
+                          titulo: 'Tema escuro',
+                          subtitulo: ThemeController.mode.value == ThemeMode.system
+                              ? 'Seguindo o sistema'
+                              : (escuro ? 'Ativado' : 'Desativado'),
+                          onTap: () => ThemeController.definir(
+                            escuro ? ThemeMode.light : ThemeMode.dark,
+                          ),
+                          trailing: FinSwitch(
+                            value: escuro,
+                            onChanged: (v) => ThemeController.definir(
+                              v ? ThemeMode.dark : ThemeMode.light,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    _divisor(),
-                    _opcao(
-                      Icons.info_outline_rounded,
-                      "Sobre o app",
-                      "Versão e informações do projeto",
-                      _abrirSobre,
+                    const SizedBox(height: 22),
+                    _titulo(c, 'Sobre'),
+                    ListCard(
+                      inset: 68,
+                      rows: [
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.info, Color(0xff74E0FA), Color(0xff1A9EC4)),
+                          titulo: 'Sobre o FinUp',
+                          subtitulo: 'Versão 1.0',
+                          onTap: _abrirSobre,
+                        ),
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.privacy_tip, Color(0xff9FB4FF), Color(0xff4F6BD8)),
+                          titulo: 'Política de privacidade',
+                          subtitulo: 'Como tratamos seus dados',
+                          onTap: () => Navigator.pushNamed(context, AppRoutes.privacidade),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 22),
+                    ListCard(
+                      inset: 68,
+                      rows: [
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.delete_forever, Color(0xffF7A68B), Color(0xffC2410C)),
+                          titulo: 'Excluir conta',
+                          subtitulo: 'Apaga a conta e todos os dados',
+                          perigo: true,
+                          onTap: _abrirExcluirConta,
+                        ),
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.logout, Color(0xffF7A68B), Color(0xffDC7457)),
+                          titulo: 'Sair da conta',
+                          perigo: true,
+                          onTap: _confirmarSaida,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
-
-              // Botão sair
-              GestureDetector(
-                onTap: _confirmarSaida,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.cardLightGradient,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: AppTheme.dangerRed.withOpacity(0.3),
-                    ),
-                    boxShadow: AppTheme.softShadow,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.logout_rounded,
-                        color: AppTheme.dangerRed,
-                        size: 20,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        "Sair da conta",
-                        style: TextStyle(
-                          color: AppTheme.dangerRed,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _divisor() => Divider(
-        height: 1,
-        indent: 20,
-        endIndent: 20,
-        color: AppTheme.silverMist.withOpacity(0.4),
+  Widget _titulo(FinColors c, String t) => Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Text(
+          t,
+          style: FinType.titleS.copyWith(color: c.textVar, shadows: FinFx.emboss(c)),
+        ),
       );
+}
 
-  Widget _opcao(
-    IconData icon,
-    String titulo,
-    String subtitulo,
-    VoidCallback onTap,
-  ) {
+class _Opcao extends StatelessWidget {
+  final EmblemaStyle estilo;
+  final String titulo;
+  final String? subtitulo;
+  final bool perigo;
+  final VoidCallback onTap;
+  final Widget? trailing;
+
+  const _Opcao({
+    required this.estilo,
+    required this.titulo,
+    required this.onTap,
+    this.subtitulo,
+    this.perigo = false,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.fin;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppTheme.cardRadius),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppTheme.primaryBlue.withOpacity(0.12),
-                    AppTheme.primaryBlue.withOpacity(0.22),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.primaryBlue.withOpacity(0.2),
-                ),
-              ),
-              child: Icon(icon, color: AppTheme.primaryBlue, size: 20),
-            ),
+            Emblem(estilo: estilo, size: 38),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -539,28 +422,20 @@ class _PerfilScreenState extends State<PerfilScreen> {
                 children: [
                   Text(
                     titulo,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.darkText,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitulo,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.coolGray,
+                    style: FinType.bodyL.copyWith(
+                      color: perigo ? c.expense : c.text,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  if (subtitulo != null)
+                    Text(subtitulo!, style: FinType.bodyM.copyWith(color: c.textVar)),
                 ],
               ),
             ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: AppTheme.coolGray,
-            ),
+            if (trailing != null)
+              trailing!
+            else if (!perigo)
+              Icon(Icons.chevron_right, size: 22, color: c.textVar),
           ],
         ),
       ),

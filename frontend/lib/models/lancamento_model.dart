@@ -9,6 +9,11 @@ class LancamentoModel {
   final String? categoria;
   final bool parcelado;
 
+  /// Parcelamento: todas as parcelas de uma compra têm o mesmo grupo.
+  final String? parcelaGrupo;
+  final int? parcelaNumero;
+  final int? parcelaTotal;
+
   LancamentoModel({
     String? id,
     required this.titulo,
@@ -17,9 +22,19 @@ class LancamentoModel {
     required this.tipo,
     this.categoria,
     this.parcelado = false,
+    this.parcelaGrupo,
+    this.parcelaNumero,
+    this.parcelaTotal,
   }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 
   bool get isReceita => tipo == TipoLancamento.receita;
+
+  /// Faz parte de um parcelamento com 2 ou mais parcelas.
+  bool get isParcela => parcelaGrupo != null && (parcelaTotal ?? 0) > 1;
+
+  /// "Parcela 3/12" (ou null quando não é parcela).
+  String? get rotuloParcela =>
+      isParcela ? 'Parcela $parcelaNumero/$parcelaTotal' : null;
 
   /// Data no formato exibido no app (DD/MM/AAAA)
   String get dataFormatada =>
@@ -51,15 +66,34 @@ class LancamentoModel {
       tipo: tipo,
       categoria: categoria?.toString(),
       parcelado: map['parcelado'] == 1 || map['parcelado'] == true,
+      parcelaGrupo: map['parcela_grupo']?.toString(),
+      parcelaNumero: (map['parcela_numero'] as num?)?.toInt(),
+      parcelaTotal: (map['parcela_total'] as num?)?.toInt(),
     );
   }
 
-  /// Corpo enviado para a API na criação/edição
-  Map<String, dynamic> toApiJson({int? categoryId}) => {
+  /// Corpo enviado para a API na criação/edição.
+  /// Com [parcelas] ≥ 2, o backend divide [valor] (total) em parcelas mensais.
+  Map<String, dynamic> toApiJson({int? categoryId, int? parcelas}) => {
         'amount': valor,
         'description': titulo,
         'date': dataApi,
         if (categoryId != null) 'category_id': categoryId,
         'parcelado': parcelado,
+        if (parcelas != null && parcelas >= 2) 'parcelas': parcelas,
       };
+
+  /// Cópia com outros campos de parcela (usada ao editar uma parcela).
+  LancamentoModel comParcela(LancamentoModel origem) => LancamentoModel(
+        id: id,
+        titulo: titulo,
+        valor: valor,
+        data: data,
+        tipo: tipo,
+        categoria: categoria,
+        parcelado: parcelado,
+        parcelaGrupo: origem.parcelaGrupo,
+        parcelaNumero: origem.parcelaNumero,
+        parcelaTotal: origem.parcelaTotal,
+      );
 }

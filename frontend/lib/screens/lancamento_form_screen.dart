@@ -1,70 +1,35 @@
 import 'package:flutter/material.dart';
+
 import '../core/app_theme.dart';
+import '../core/categorias.dart';
+import '../core/formatters.dart';
 import '../models/lancamento_model.dart';
 import '../services/api_client.dart';
 import '../services/lancamento_service.dart';
-import '../widgets/skeu_button.dart';
-import '../widgets/skeu_input.dart';
-import '../widgets/skeu_dropdown.dart';
+import '../widgets/fin_controls.dart';
+import '../widgets/fin_feedback.dart';
+import '../widgets/fin_layout.dart';
+import '../widgets/fin_surface.dart';
 
 /// Formulário de lançamento (receita ou despesa).
 ///
-/// Funciona em dois modos:
-/// - **Criação**: `lancamento` é `null` -> chama `LancamentoService.adicionar`
-/// - **Edição**:  `lancamento` é preenchido -> chama `LancamentoService.editar`
+/// - **Criação** (`lancamento == null`): `LancamentoService.adicionar`;
+///   devolve o [LancamentoModel] criado no `Navigator.pop`.
+/// - **Edição**: `LancamentoService.editar`; devolve `true`.
 class LancamentoFormScreen extends StatefulWidget {
-  final String? titulo;
-  final String? textoBotao;
   final TipoLancamento tipo;
-  final List<String>? categorias;
-
-  /// Quando informado, a tela entra em modo de edição.
   final LancamentoModel? lancamento;
 
-  const LancamentoFormScreen({
-    super.key,
-    this.titulo,
-    this.textoBotao,
-    required this.tipo,
-    this.categorias,
-    this.lancamento,
-  });
+  const LancamentoFormScreen({super.key, required this.tipo, this.lancamento});
 
-  /// Atalho para abrir a tela já em modo de edição.
-  static Future<bool?> abrirEdicao(
-    BuildContext context,
-    LancamentoModel lancamento,
-  ) {
+  static Future<bool?> abrirEdicao(BuildContext context, LancamentoModel lancamento) {
     return Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => LancamentoFormScreen(
-          tipo: lancamento.tipo,
-          lancamento: lancamento,
-        ),
+        builder: (_) => LancamentoFormScreen(tipo: lancamento.tipo, lancamento: lancamento),
       ),
     );
   }
-
-  static const List<String> categoriasReceita = [
-    "Salário",
-    "Freelance",
-    "Investimentos",
-    "Bônus",
-    "Outros",
-  ];
-
-  static const List<String> categoriasDespesa = [
-    "Alimentação",
-    "Transporte",
-    "Moradia",
-    "Saúde",
-    "Lazer",
-    "Compras",
-    "Assinaturas",
-    "Impostos",
-    "Outros",
-  ];
 
   @override
   State<LancamentoFormScreen> createState() => _LancamentoFormScreenState();
@@ -77,32 +42,28 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
   String? _categoria;
   DateTime _data = DateTime.now();
   bool _parcelado = false;
+  int _parcelas = 2;
+
+  static const _minParcelas = 2;
+  static const _maxParcelas = 48;
   bool _carregando = false;
 
   bool get _isReceita => widget.tipo == TipoLancamento.receita;
   bool get _isEdicao => widget.lancamento != null;
-  Color get _cor => _isReceita ? AppTheme.primaryBlue : AppTheme.dangerRed;
 
   String get _titulo {
-    if (widget.titulo != null) return widget.titulo!;
-    if (_isEdicao) return _isReceita ? "Editar Receita" : "Editar Despesa";
-    return _isReceita ? "Registrar Receita" : "Registrar Despesa";
+    if (_isEdicao) return _isReceita ? 'Editar receita' : 'Editar despesa';
+    return _isReceita ? 'Nova receita' : 'Nova despesa';
   }
 
   String get _textoBotao {
-    if (widget.textoBotao != null) return widget.textoBotao!;
-    if (_isEdicao) return "Salvar alterações";
-    return _isReceita ? "Salvar Receita" : "Salvar Despesa";
+    if (_isEdicao) return 'Salvar alterações';
+    return _isReceita ? 'Salvar receita' : 'Salvar despesa';
   }
 
-  /// Lista base de categorias + a categoria atual do lançamento
-  /// (caso ela tenha sido criada manualmente e não esteja na lista fixa).
+  /// Lista fixa + a categoria atual (se foi criada fora da lista).
   List<String> get _categorias {
-    final base = widget.categorias ??
-        (_isReceita
-            ? LancamentoFormScreen.categoriasReceita
-            : LancamentoFormScreen.categoriasDespesa);
-
+    final base = _isReceita ? Categorias.receita : Categorias.despesa;
     final atual = widget.lancamento?.categoria;
     if (atual != null && atual.isNotEmpty && !base.contains(atual)) {
       return [atual, ...base];
@@ -110,25 +71,25 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
     return base;
   }
 
-  String get _dataFormatada =>
-      "${_data.day.toString().padLeft(2, '0')}/"
-      "${_data.month.toString().padLeft(2, '0')}/"
-      "${_data.year}";
-
   @override
   void initState() {
     super.initState();
-
-    // Em modo de edição, pré-preenche o formulário
     final l = widget.lancamento;
     if (l != null) {
       _descricaoController.text = l.titulo;
-      _valorController.text = l.valor.toStringAsFixed(2).replaceAll('.', ',');
+      _valorController.text = Fmt.valorCampo(l.valor);
       _categoria = l.categoria;
       _data = l.data;
       _parcelado = l.parcelado;
     }
+    // Atualiza a prévia "12x de R$ ..." enquanto o valor é digitado.
+    _valorController.addListener(() {
+      if (_parcelado && mounted) setState(() {});
+    });
   }
+
+  /// Editando uma parcela de um parcelamento.
+  bool get _editandoParcela => widget.lancamento?.isParcela ?? false;
 
   @override
   void dispose() {
@@ -137,60 +98,44 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
     super.dispose();
   }
 
-  void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensagem),
-        backgroundColor: AppTheme.dangerRed,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
-
   Future<void> _selecionarData() async {
     final selecionada = await showDatePicker(
       context: context,
       initialDate: _data,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      builder: (context, child) => Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(primary: _cor),
-        ),
-        child: child!,
-      ),
     );
-    if (selecionada != null) {
-      setState(() => _data = selecionada);
-    }
+    if (selecionada != null) setState(() => _data = selecionada);
   }
 
   Future<void> _salvar() async {
     final descricao = _descricaoController.text.trim();
-    // aceita tanto "10,50" quanto "10.50"
-    final valor = double.tryParse(
-      _valorController.text.trim().replaceAll(',', '.'),
-    );
+    final valor = Fmt.parseValor(_valorController.text);
 
-    if (descricao.isEmpty) {
-      _mostrarErro("Informe uma descrição.");
+    if (valor == null || valor <= 0) {
+      showFinSnack(context, 'Informe um valor válido maior que zero.', erro: true);
       return;
     }
-    if (valor == null || valor <= 0) {
-      _mostrarErro("Informe um valor válido maior que zero.");
+    if (descricao.isEmpty) {
+      showFinSnack(context, 'Informe uma descrição.', erro: true);
       return;
     }
     if (_categoria == null) {
-      _mostrarErro("Selecione uma categoria.");
+      showFinSnack(context, 'Selecione uma categoria.', erro: true);
       return;
     }
 
+    final parcelar = !_isEdicao && _parcelado;
+    if (parcelar && valor < _parcelas * 0.01) {
+      showFinSnack(context, 'Valor pequeno demais para $_parcelas parcelas.', erro: true);
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
     setState(() => _carregando = true);
 
     try {
+      final original = widget.lancamento;
       final dados = LancamentoModel(
         id: widget.lancamento?.id ?? '',
         titulo: descricao,
@@ -199,267 +144,359 @@ class _LancamentoFormScreenState extends State<LancamentoFormScreen> {
         tipo: widget.tipo,
         categoria: _categoria,
         parcelado: _parcelado,
+        parcelaGrupo: original?.parcelaGrupo,
+        parcelaNumero: original?.parcelaNumero,
+        parcelaTotal: original?.parcelaTotal,
       );
 
       if (_isEdicao) {
         await LancamentoService.editar(dados);
+        if (mounted) Navigator.pop(context, true);
       } else {
-        await LancamentoService.adicionar(dados);
+        final criado = await LancamentoService.adicionar(
+          dados,
+          parcelas: parcelar ? _parcelas : null,
+        );
+        if (mounted) Navigator.pop(context, criado);
       }
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _isEdicao
-                ? "Lançamento atualizado com sucesso!"
-                : (_isReceita
-                    ? "Receita registrada com sucesso!"
-                    : "Despesa registrada com sucesso!"),
-          ),
-          backgroundColor: AppTheme.successGreen,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      );
-      Navigator.pop(context, true);
     } on ApiException catch (e) {
-      if (mounted) _mostrarErro(e.message);
+      if (mounted) showFinSnack(context, e.message, erro: true);
     } catch (_) {
       if (mounted) {
-        _mostrarErro("Não foi possível salvar. Verifique sua conexão.");
+        showFinSnack(context, 'Não foi possível salvar. Verifique sua conexão.', erro: true);
       }
     } finally {
       if (mounted) setState(() => _carregando = false);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Header com voltar
-              Row(
+  /// Card "Compra parcelada": no cadastro tem o interruptor e o número de
+  /// parcelas; editando uma parcela, só informa qual é ela.
+  Widget _cardParcelamento(BuildContext context) {
+    final c = context.fin;
+    final l = widget.lancamento;
+
+    if (_editandoParcela) {
+      return FinSurface.convex(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(Icons.repeat, size: 22, color: c.textVar),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        gradient: AppTheme.cardLightGradient,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.8),
+                  Text(
+                    'Parcela ${l!.parcelaNumero} de ${l.parcelaTotal}',
+                    style: FinType.bodyL.copyWith(color: c.text, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    'As alterações valem só para esta parcela',
+                    style: FinType.bodyM.copyWith(color: c.textVar),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    // Lançamento já salvo sem parcelamento: não dá para parcelar depois.
+    if (_isEdicao) return const SizedBox.shrink();
+
+    final valor = Fmt.parseValor(_valorController.text) ?? 0;
+    final ultimoMes = DateTime(_data.year, _data.month + _parcelas - 1);
+
+    return FinSurface.convex(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => setState(() => _parcelado = !_parcelado),
+            child: Row(
+              children: [
+                Icon(Icons.repeat, size: 22, color: c.textVar),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _isReceita ? 'Receita parcelada' : 'Compra parcelada',
+                        style: FinType.bodyL.copyWith(color: c.text, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        'Divide o valor em parcelas mensais',
+                        style: FinType.bodyM.copyWith(color: c.textVar),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FinSwitch(
+                  value: _parcelado,
+                  onChanged: (v) => setState(() => _parcelado = v),
+                ),
+              ],
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topCenter,
+            child: !_parcelado
+                ? const SizedBox(width: double.infinity)
+                : Padding(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Groove(inset: 0),
+                        const SizedBox(height: 14),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Número de parcelas',
+                                style: FinType.bodyM.copyWith(color: c.textVar),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: _parcelas > _minParcelas ? 1 : 0.4,
+                              child: FinIconButton(
+                                icon: Icons.remove,
+                                tooltip: 'Menos parcelas',
+                                onTap: _parcelas > _minParcelas
+                                    ? () => setState(() => _parcelas--)
+                                    : null,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 56,
+                              child: Text(
+                                '${_parcelas}x',
+                                textAlign: TextAlign.center,
+                                style: FinType.titleL.copyWith(
+                                  color: c.text,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: _parcelas < _maxParcelas ? 1 : 0.4,
+                              child: FinIconButton(
+                                icon: Icons.add,
+                                tooltip: 'Mais parcelas',
+                                onTap: _parcelas < _maxParcelas
+                                    ? () => setState(() => _parcelas++)
+                                    : null,
+                              ),
+                            ),
+                          ],
                         ),
-                        boxShadow: AppTheme.softShadow,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back_rounded,
-                        color: AppTheme.darkText,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      _titulo,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: AppTheme.darkText,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [_cor.withOpacity(0.85), _cor],
-                      ),
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _cor.withOpacity(0.35),
-                          offset: const Offset(0, 4),
-                          blurRadius: 10,
+                        const SizedBox(height: 10),
+                        Text(
+                          valor > 0
+                              ? '${Fmt.resumoParcelas(valor, _parcelas)} · '
+                                  '${Fmt.mesAno(_data)} a ${Fmt.mesAno(ultimoMes)}'
+                              : 'Digite o valor total da compra',
+                          style: FinType.bodyM.copyWith(
+                            color: valor > 0
+                                ? (_isReceita ? c.income : c.expense)
+                                : c.textVar,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
-                    child: Icon(
-                      _isEdicao
-                          ? Icons.edit_rounded
-                          : (_isReceita
-                              ? Icons.arrow_downward_rounded
-                              : Icons.arrow_upward_rounded),
-                      color: Colors.white,
-                      size: 20,
-                    ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 30),
+          ),
+        ],
+      ),
+    );
+  }
 
-              SkeuInput(
-                label: "Valor (R\$)",
-                hint: "0,00",
-                controller: _valorController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                prefixIcon: const Icon(
-                  Icons.attach_money_rounded,
-                  color: AppTheme.coolGray,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(height: 20),
+  @override
+  Widget build(BuildContext context) {
+    final c = context.fin;
+    final corValor = _isReceita ? c.income : c.expense;
+    final estiloValor = FinType.displayS.copyWith(
+      fontSize: 42,
+      height: 50 / 42,
+      color: corValor,
+    );
 
-              SkeuInput(
-                label: "Descrição",
-                hint: _isReceita ? "Ex.: Salário de julho" : "Ex.: Mercado",
-                controller: _descricaoController,
-                prefixIcon: const Icon(
-                  Icons.notes_rounded,
-                  color: AppTheme.coolGray,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              SkeuDropdown<String>(
-                label: "Categoria",
-                hint: "Selecione uma categoria",
-                value: _categoria,
-                items: _categorias
-                    .map(
-                      (c) => DropdownMenuItem(value: c, child: Text(c)),
-                    )
-                    .toList(),
-                onChanged: (v) => setState(() => _categoria = v),
-              ),
-              const SizedBox(height: 20),
-
-              // Data
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return FinScaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FinTopBar(title: _titulo, lead: Icons.close),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 4, bottom: 8),
-                    child: Text(
-                      "Data",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.darkText,
-                      ),
+                  // Valor em destaque, numa cuia côncava
+                  FinSurface.pressed(
+                    depth: 6,
+                    borderRadius: BorderRadius.circular(22),
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+                    child: Column(
+                      children: [
+                        Text(
+                          _editandoParcela
+                              ? 'Valor desta parcela'
+                              : (_parcelado && !_isEdicao ? 'Valor total' : 'Valor'),
+                          style: FinType.labelL.copyWith(color: c.textVar),
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('R\$ ', style: estiloValor),
+                            IntrinsicWidth(
+                              child: TextField(
+                                controller: _valorController,
+                                autofocus: !_isEdicao,
+                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                style: estiloValor,
+                                cursorColor: corValor,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  border: InputBorder.none,
+                                  hintText: '0,00',
+                                  hintStyle: estiloValor.copyWith(
+                                    color: corValor.withValues(alpha: 0.4),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: _selecionarData,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 15,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xfff8fafc),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: AppTheme.silverMist.withOpacity(0.6),
-                        ),
-                        boxShadow: AppTheme.softShadow,
-                      ),
-                      child: Row(
+                  const SizedBox(height: 20),
+                  FinField(
+                    label: 'Descrição',
+                    hint: _isReceita ? 'Ex.: Salário de outubro' : 'Ex.: Mercado',
+                    controller: _descricaoController,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  const SizedBox(height: 22),
+                  Text(
+                    'Categoria',
+                    style: FinType.titleS.copyWith(color: c.text, shadows: FinFx.emboss(c)),
+                  ),
+                  const SizedBox(height: 12),
+                  LayoutBuilder(
+                    builder: (context, box) {
+                      // 4 colunas com 10px de espaço, como no Figma (86px cada).
+                      final w = ((box.maxWidth - 30) / 4).floorToDouble();
+                      return Wrap(
+                        spacing: 10,
+                        runSpacing: 12,
                         children: [
-                          const Icon(
-                            Icons.calendar_today_rounded,
-                            color: AppTheme.coolGray,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            _dataFormatada,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.darkText,
+                          for (final cat in _categorias)
+                            _CategoriaTile(
+                              categoria: cat,
+                              width: w,
+                              selecionada: cat == _categoria,
+                              onTap: () => setState(() => _categoria = cat),
                             ),
-                          ),
-                          const Spacer(),
-                          const Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: AppTheme.coolGray,
-                            size: 20,
-                          ),
                         ],
-                      ),
-                    ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 22),
+                  FinPickerField(
+                    label: 'Data',
+                    value: Fmt.dataCurta(_data),
+                    icon: Icons.calendar_today,
+                    onTap: _selecionarData,
+                  ),
+                  const SizedBox(height: 18),
+                  _cardParcelamento(context),
+                  const SizedBox(height: 26),
+                  FinButton(
+                    label: _textoBotao,
+                    kind: _isReceita ? FinButtonKind.primary : FinButtonKind.coral,
+                    height: 56,
+                    expand: true,
+                    loading: _carregando,
+                    onPressed: _salvar,
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-              // Parcelado
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  gradient: AppTheme.cardLightGradient,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: Colors.white.withOpacity(0.8)),
-                  boxShadow: AppTheme.softShadow,
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.credit_card_rounded,
-                      color: AppTheme.coolGray,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Text(
-                        "Lançamento parcelado",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.darkText,
-                        ),
-                      ),
-                    ),
-                    Switch(
-                      value: _parcelado,
-                      activeColor: _cor,
-                      onChanged: (v) => setState(() => _parcelado = v),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
+class _CategoriaTile extends StatelessWidget {
+  final String categoria;
+  final double width;
+  final bool selecionada;
+  final VoidCallback onTap;
 
-              SkeuButton(
-                text: _textoBotao,
-                icon: Icons.check_rounded,
-                loading: _carregando,
-                variant: _isReceita
-                    ? SkeuButtonVariant.primary
-                    : SkeuButtonVariant.danger,
-                onPressed: _salvar,
-              ),
-            ],
+  const _CategoriaTile({
+    required this.categoria,
+    required this.width,
+    required this.selecionada,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.fin;
+    final conteudo = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Emblem.categoria(categoria, size: 36),
+        const SizedBox(height: 6),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Text(
+            categoria,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: FinType.labelS.copyWith(
+              color: selecionada ? c.primary : c.textVar,
+              fontWeight: selecionada ? FontWeight.w700 : FontWeight.w500,
+            ),
           ),
         ),
+      ],
+    );
+
+    if (selecionada) {
+      return FinSurface.pressed(
+        width: width,
+        height: 82,
+        depth: 3.5,
+        borderRadius: BorderRadius.circular(16),
+        border: c.primary,
+        onTap: onTap,
+        child: conteudo,
+      );
+    }
+    return Semantics(
+      button: true,
+      label: categoria,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: SizedBox(width: width, height: 82, child: conteudo),
       ),
     );
   }

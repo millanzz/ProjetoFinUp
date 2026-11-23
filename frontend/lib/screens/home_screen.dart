@@ -1,15 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import '../core/app_theme.dart';
+
 import '../core/app_routes.dart';
+import '../core/app_theme.dart';
+import '../core/formatters.dart';
+import '../models/lancamento_model.dart';
+import '../models/meta_model.dart';
 import '../services/auth_service.dart';
 import '../services/lancamento_service.dart';
+import '../services/meta_service.dart';
+import '../widgets/fin_controls.dart';
+import '../widgets/fin_layout.dart';
+import '../widgets/fin_surface.dart';
+import '../widgets/lancamento_acoes.dart';
+import '../widgets/meta_card.dart';
 import '../widgets/saldo_card.dart';
-import '../widgets/resumo_card.dart';
-import '../widgets/opcao_button.dart';
-import '../widgets/grafico_pizza.dart';
-import '../widgets/grafico_barras.dart';
 import 'main_navigation_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _agendarViradaDaSaudacao();
+    MetaService.carregar().catchError((_) => <MetaModel>[]);
   }
 
   @override
@@ -38,8 +45,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Ao voltar do segundo plano o horário pode ter mudado de faixa
-    // (e o timer pode ter sido suspenso pelo sistema).
     if (state == AppLifecycleState.resumed) {
       if (mounted) setState(() {});
       _agendarViradaDaSaudacao();
@@ -49,29 +54,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   // ── Saudação ─────────────────────────────────────────────────
 
-  /// Faixas: 5h–11h59 bom dia, 12h–17h59 boa tarde, 18h–4h59 boa noite.
+  /// 5h–11h59 bom dia, 12h–17h59 boa tarde, 18h–4h59 boa noite.
   String get _saudacao {
     final hora = DateTime.now().hour;
-    if (hora >= 5 && hora < 12) return "Bom dia";
-    if (hora >= 12 && hora < 18) return "Boa tarde";
-    return "Boa noite";
+    if (hora >= 5 && hora < 12) return 'Bom dia';
+    if (hora >= 12 && hora < 18) return 'Boa tarde';
+    return 'Boa noite';
   }
 
-  /// Momento da próxima troca de saudação (5h, 12h ou 18h).
   DateTime _proximaVirada() {
     final agora = DateTime.now();
     final hoje = DateTime(agora.year, agora.month, agora.day);
-
     for (final hora in [5, 12, 18]) {
       final marco = hoje.add(Duration(hours: hora));
       if (marco.isAfter(agora)) return marco;
     }
-    // Passou das 18h: a próxima virada é às 5h de amanhã.
     return hoje.add(const Duration(days: 1, hours: 5));
   }
 
-  /// Reagenda o rebuild para o instante exato da virada, em vez de
-  /// ficar checando o relógio a cada segundo.
   void _agendarViradaDaSaudacao() {
     _timerSaudacao?.cancel();
     final espera = _proximaVirada().difference(DateTime.now());
@@ -84,203 +84,176 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // ── Navegação ────────────────────────────────────────────────
 
   Future<void> _recarregar() async {
-    try {
-      await LancamentoService.carregar(force: true);
-    } catch (_) {}
-    if (mounted) setState(() {});
+    await Future.wait([
+      LancamentoService.carregar(force: true).catchError((_) {}),
+      MetaService.carregar().catchError((_) => <MetaModel>[]),
+    ]);
   }
 
-  /// Abre uma tela empilhada (formulários) e recarrega ao voltar.
-  Future<void> _abrirRota(String rota) async {
-    await Navigator.pushNamed(context, rota);
-    await _recarregar();
-  }
-
-  /// Troca a aba da barra inferior em vez de empilhar a tela.
-  void _irParaAba(int aba, String rotaFallback) {
-    final nav = NavegacaoPrincipal.of(context);
-    if (nav != null) {
-      nav.irParaAba(aba);
-    } else {
-      _abrirRota(rotaFallback);
-    }
-  }
+  void _irParaAba(int aba) => NavegacaoPrincipal.of(context)?.irParaAba(aba);
 
   @override
   Widget build(BuildContext context) {
-    final saldo = LancamentoService.saldo;
-    final totalReceitas = LancamentoService.totalReceitas;
-    final totalDespesas = LancamentoService.totalDespesas;
-    final receitas = LancamentoService.getReceitas();
-    final despesas = LancamentoService.getDespesas();
+    return ListenableBuilder(
+      listenable: Listenable.merge([
+        LancamentoService.revisao,
+        MetaService.revisao,
+        AuthService.usuarioRevisao,
+      ]),
+      builder: (context, _) => _build(context),
+    );
+  }
 
-    return SafeArea(
-      child: RefreshIndicator(
-        color: AppTheme.primaryBlue,
+  Widget _build(BuildContext context) {
+    final c = context.fin;
+    final agora = DateTime.now();
+    final mes = DateTime(agora.year, agora.month);
+    final doMes = LancamentoService.getAll()
+        .where((l) => Fmt.mesmoMes(l.data, mes))
+        .toList();
+    final despesas = doMes.where((l) => !l.isReceita).toList();
+    final receitas = doMes.where((l) => l.isReceita).toList();
+
+    final metas = MetaService.metas;
+    final metaDestaque = metas.isEmpty
+        ? null
+        : metas.firstWhere((m) => !m.concluida, orElse: () => metas.first);
+
+    final primeiroNome = AuthService.primeiroNome;
+
+    return FinScaffold(
+      safeBottom: false,
+      body: RefreshIndicator(
+        color: c.primary,
+        backgroundColor: c.surface,
         onRefresh: _recarregar,
-        child: SingleChildScrollView(
+        child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header — escuta AuthService para refletir edições
-              // feitas na aba Perfil.
-              ValueListenableBuilder<int>(
-                valueListenable: AuthService.usuarioRevisao,
-                builder: (context, _, __) {
-                  final primeiroNome = AuthService.primeiroNome;
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "FinUp",
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w800,
-                                color: AppTheme.darkText,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              primeiroNome.isEmpty
-                                  ? "$_saudacao!"
-                                  : "$_saudacao, $primeiroNome!",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppTheme.mediumText,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+          padding: const EdgeInsets.only(bottom: 28),
+          children: [
+            // Barra superior: koi + FinUp + avatar (abre o Perfil)
+            SizedBox(
+              height: 64,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 18, right: 16),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      c.isDark ? 'assets/images/koi_dark.png' : 'assets/images/koi_light.png',
+                      width: 54,
+                      height: 25,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'FinUp',
+                        style: FinType.titleL.copyWith(
+                          color: c.text,
+                          fontWeight: FontWeight.w700,
+                          shadows: FinFx.emboss(c),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      GestureDetector(
-                        onTap: () => _irParaAba(Abas.perfil, AppRoutes.perfil),
-                        child: Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            gradient: AppTheme.primaryGradient,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Colors.white.withOpacity(0.4),
-                              width: 1.5,
-                            ),
-                            boxShadow: AppTheme.blueShadow,
-                          ),
-                          child: Center(
-                            child: Text(
-                              AuthService.iniciais,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
+                    ),
+                    FinAvatar(
+                      iniciais: AuthService.iniciais,
+                      onTap: () => Navigator.pushNamed(context, AppRoutes.perfil),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    primeiroNome.isEmpty ? _saudacao : '$_saudacao, $primeiroNome',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: FinType.headlineS.copyWith(color: c.text, shadows: FinFx.emboss(c)),
+                  ),
+                  const SizedBox(height: 18),
+                  SaldoCard(mes: mes, lancamentosDoMes: doMes),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FinButton(
+                          label: 'Receita',
+                          icon: Icons.add,
+                          expand: true,
+                          onPressed: () => LancamentoAcoes.novo(context, TipoLancamento.receita),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: FinButton(
+                          label: 'Despesa',
+                          icon: Icons.remove,
+                          kind: FinButtonKind.coral,
+                          expand: true,
+                          onPressed: () => LancamentoAcoes.novo(context, TipoLancamento.despesa),
                         ),
                       ),
                     ],
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
-
-              // Saldo
-              SaldoCard(saldo: saldo),
-              const SizedBox(height: 16),
-
-              // Resumo entrada/saída
-              Row(
-                children: [
-                  Expanded(
-                    child: ResumoCard(
-                      titulo: "Entradas",
-                      valor: totalReceitas,
-                      cor: AppTheme.primaryBlue,
-                    ),
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: ResumoCard(
-                      titulo: "Saídas",
-                      valor: totalDespesas,
-                      cor: AppTheme.dangerRed,
-                    ),
+                  const SizedBox(height: 26),
+                  SectionHead(
+                    title: 'Para onde foi o dinheiro',
+                    action: 'Ver despesas',
+                    onAction: () => _irParaAba(Abas.despesas),
                   ),
+                  const SizedBox(height: 10),
+                  if (despesas.isEmpty)
+                    const EmptyCard(
+                      icon: Icons.receipt_long,
+                      texto: 'Nenhuma despesa neste mês.',
+                    )
+                  else
+                    CategoriasCard(lancamentos: despesas, tone: FinTone.coral),
+                  const SizedBox(height: 24),
+                  SectionHead(
+                    title: 'De onde veio',
+                    action: 'Ver entradas',
+                    onAction: () => _irParaAba(Abas.entradas),
+                  ),
+                  const SizedBox(height: 10),
+                  if (receitas.isEmpty)
+                    const EmptyCard(
+                      icon: Icons.savings,
+                      texto: 'Nenhuma entrada neste mês.',
+                    )
+                  else
+                    CategoriasCard(lancamentos: receitas, tone: FinTone.primary),
+                  const SizedBox(height: 24),
+                  SectionHead(
+                    title: 'Metas',
+                    action: 'Ver todas',
+                    onAction: () => _irParaAba(Abas.metas),
+                  ),
+                  const SizedBox(height: 10),
+                  if (metaDestaque == null)
+                    EmptyCard(
+                      icon: Icons.flag,
+                      texto: 'Você ainda não tem metas.',
+                      acao: FinButton.text(
+                        label: 'Criar meta',
+                        icon: Icons.add,
+                        onPressed: () => _irParaAba(Abas.metas),
+                      ),
+                    )
+                  else
+                    MetaCard(
+                      meta: metaDestaque,
+                      compact: true,
+                      onTap: () => _irParaAba(Abas.metas),
+                    ),
                 ],
               ),
-              const SizedBox(height: 28),
-
-              // Ações rápidas
-              const Text(
-                "Ações rápidas",
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.darkText,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: OpcaoButton(
-                      icon: Icons.add_rounded,
-                      label: "Receita",
-                      cor: AppTheme.successGreen,
-                      onTap: () => _abrirRota(AppRoutes.novaReceita),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: OpcaoButton(
-                      icon: Icons.remove_rounded,
-                      label: "Despesa",
-                      cor: AppTheme.dangerRed,
-                      onTap: () => _abrirRota(AppRoutes.novaDespesa),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: OpcaoButton(
-                      icon: Icons.flag_rounded,
-                      label: "Metas",
-                      cor: AppTheme.primaryBlue,
-                      onTap: () => _irParaAba(Abas.metas, AppRoutes.metas),
-                    ),
-                  ),
-                ],
-              ),
-
-              // Gráficos
-              GraficoPizza(
-                entrada: totalReceitas,
-                saida: totalDespesas,
-              ),
-              GraficoBarras(
-                titulo: "Receitas por categoria",
-                lancamentos: receitas,
-                corBarra: AppTheme.primaryBlue,
-              ),
-              GraficoBarras(
-                titulo: "Despesas por categoria",
-                lancamentos: despesas,
-                corBarra: AppTheme.dangerRed,
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

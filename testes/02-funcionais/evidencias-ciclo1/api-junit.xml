@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="Cadastro (POST /users e criação de lançamentos/metas)" time="1.304895" disabled="0" errors="0" tests="13" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-CAD-01 cadastro válido devolve 201 sem a senha e permite login" time="0.190401" classname="test"/>
+		<testcase name="CT-CAD-02 senha é gravada com hash bcrypt, nunca em texto puro" time="0.001232" classname="test"/>
+		<testcase name="CT-CAD-03 novo usuário recebe as 14 categorias padrão (5 receita, 9 despesa)" time="0.130347" classname="test"/>
+		<testcase name="CT-CAD-04 e-mail já cadastrado é recusado com 409 (inclusive com outra caixa)" time="0.006554" classname="test"/>
+		<testcase name="CT-CAD-05 campos obrigatórios ausentes ou só com espaços são recusados com 400" time="0.008443" classname="test"/>
+		<testcase name="CT-CAD-06 e-mail em formato inválido é recusado com 400" time="0.005150" classname="test"/>
+		<testcase name="CT-CAD-07 senha com menos de 6 caracteres é recusada; 6 é aceita (limite)" time="0.062135" classname="test"/>
+		<testcase name="CT-CAD-08 nome com HTML/SQL é gravado como texto, sem efeito colateral" time="0.124663" classname="test"/>
+		<testcase name="CT-CAD-09 cadastrar receita autenticado: aparece na listagem e no dashboard" time="0.128028" classname="test"/>
+		<testcase name="CT-CAD-10 cadastrar despesa parcelada: gera 3 lançamentos visíveis em meses diferentes" time="0.132073" classname="test"/>
+		<testcase name="CT-CAD-11 cadastrar meta: aparece na listagem do usuário" time="0.126854" classname="test"/>
+		<testcase name="CT-CAD-12 cadastrar categoria personalizada e usá-la numa despesa" time="0.128891" classname="test"/>
+		<testcase name="CT-CAD-13 dados de um usuário não aparecem para outro" time="0.249186" classname="test"/>
+	</testsuite>
+	<testsuite name="Edição (perfil, senha, receitas, despesas e metas)" time="2.844711" disabled="0" errors="0" tests="16" failures="1" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-EDI-01 editar nome do perfil reflete em /users/me" time="0.202351" classname="test"/>
+		<testcase name="CT-EDI-02 editar e-mail: o novo entra no login e o antigo deixa de entrar" time="0.191269" classname="test"/>
+		<testcase name="CT-EDI-03 trocar e-mail para um já usado por outra pessoa é recusado com 409" time="0.250241" classname="test"/>
+		<testcase name="CT-EDI-04 perfil com nome vazio, e-mail inválido ou sem campos é recusado com 400" time="0.127867" classname="test"/>
+		<testcase name="CT-EDI-05 editar perfil sem token é recusado com 401" time="0.002015" classname="test"/>
+		<testcase name="CT-EDI-06 trocar senha: a nova entra no login e a antiga não" time="0.360363" classname="test"/>
+		<testcase name="CT-EDI-07 trocar senha com a senha atual errada é recusado com 401" time="0.241422" classname="test"/>
+		<testcase name="CT-EDI-08 nova senha curta ou campos ausentes são recusados com 400" time="0.127704" classname="test"/>
+		<testcase name="CT-EDI-09 nova senha enviada como número é recusada com erro de cliente (4xx)" time="0.181812" classname="test" failure="status veio 500: {&amp;quot;error&amp;quot;:&amp;quot;data must be a string or Buffer and salt must either be a salt string or a number of rounds&amp;quot;}">
+			<failure type="testCodeFailure" message="status veio 500: {&amp;quot;error&amp;quot;:&amp;quot;data must be a string or Buffer and salt must either be a salt string or a number of rounds&amp;quot;}">
+[Error [ERR_TEST_FAILURE]: status veio 500: {"error":"data must be a string or Buffer and salt must either be a salt string or a number of rounds"}] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: status veio 500: {"error":"data must be a string or Buffer and salt must either be a salt string or a number of rounds"}
+      at TestContext.&lt;anonymous> (C:\Users\Pingo\Desktop\FableFinUp\testes\02-funcionais\api\edicao.test.js:80:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+}
+			</failure>
+		</testcase>
+		<testcase name="CT-EDI-10 editar receita (valor, descrição, data, categoria) reflete na listagem" time="0.128455" classname="test"/>
+		<testcase name="CT-EDI-11 editar despesa com dados inválidos é recusado e nada muda" time="0.132498" classname="test"/>
+		<testcase name="CT-EDI-12 editar uma parcela altera só ela, não o parcelamento todo" time="0.128913" classname="test"/>
+		<testcase name="CT-EDI-13 editar lançamento inexistente ou de outro usuário responde 404" time="0.253329" classname="test"/>
+		<testcase name="CT-EDI-14 editar meta (título, alvo, guardado e ícone) reflete na listagem" time="0.126995" classname="test"/>
+		<testcase name="CT-EDI-15 aporte em meta pela API soma ao valor guardado" time="0.126345" classname="test"/>
+		<testcase name="CT-EDI-16 editar meta com dados inválidos ou de outro usuário é recusado" time="0.252225" classname="test"/>
+	</testsuite>
+	<testsuite name="Exclusão (receitas, despesas, parcelamentos, metas e categorias)" time="2.124669" disabled="0" errors="0" tests="13" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-EXC-01 excluir receita: 204, some da listagem e do saldo" time="0.213370" classname="test"/>
+		<testcase name="CT-EXC-02 excluir a mesma receita duas vezes: a segunda responde 404" time="0.129833" classname="test"/>
+		<testcase name="CT-EXC-03 excluir despesa: 204 e o saldo volta a subir" time="0.130640" classname="test"/>
+		<testcase name="CT-EXC-04 usuário não consegue excluir lançamento de outro (404) e o dado continua" time="0.248750" classname="test"/>
+		<testcase name="CT-EXC-05 excluir sem token responde 401" time="0.002560" classname="test"/>
+		<testcase name="CT-EXC-06 excluir uma parcela mantém as outras" time="0.128412" classname="test"/>
+		<testcase name="CT-EXC-07 excluir parcelamento inteiro (DELETE /grupo) remove todas as parcelas" time="0.131109" classname="test"/>
+		<testcase name="CT-EXC-08 excluir parcelamento de outro usuário responde 404 e nada é removido" time="0.246875" classname="test"/>
+		<testcase name="CT-EXC-09 excluir meta: 204, some da listagem; repetir responde 404" time="0.129660" classname="test"/>
+		<testcase name="CT-EXC-10 excluir meta de outro usuário responde 404 e ela continua" time="0.249263" classname="test"/>
+		<testcase name="CT-EXC-11 categoria em uso não pode ser excluída (409); sem uso é excluída (204)" time="0.130475" classname="test"/>
+		<testcase name="CT-EXC-12 excluir categoria de receita sem lançamentos e de outro usuário" time="0.246444" classname="test"/>
+		<testcase name="CT-EXC-13 id inexistente ou não numérico responde 404" time="0.126969" classname="test"/>
+	</testsuite>
+	<testsuite name="Login (POST /auth/login) e acesso autenticado" time="0.536633" disabled="0" errors="0" tests="12" failures="2" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-LOG-01 login com e-mail e senha corretos devolve token e dados do usuário" time="0.064054" classname="test"/>
+		<testcase name="CT-LOG-02 e-mail com maiúsculas e espaços é aceito (não diferencia)" time="0.061093" classname="test"/>
+		<testcase name="CT-LOG-03 senha errada é recusada com 401" time="0.060576" classname="test"/>
+		<testcase name="CT-LOG-04 e-mail não cadastrado recebe a mesma mensagem (não revela quem tem conta)" time="0.002853" classname="test"/>
+		<testcase name="CT-LOG-05 senha diferencia maiúsculas" time="0.059743" classname="test"/>
+		<testcase name="CT-LOG-06 campos vazios ou ausentes são recusados com 400" time="0.006959" classname="test"/>
+		<testcase name="CT-LOG-07 senha enviada como número é recusada com erro de cliente (4xx)" time="0.002822" classname="test" failure="status veio 500: {&amp;quot;error&amp;quot;:&amp;quot;data and hash must be strings&amp;quot;}">
+			<failure type="testCodeFailure" message="status veio 500: {&amp;quot;error&amp;quot;:&amp;quot;data and hash must be strings&amp;quot;}">
+[Error [ERR_TEST_FAILURE]: status veio 500: {"error":"data and hash must be strings"}] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: status veio 500: {"error":"data and hash must be strings"}
+      at TestContext.&lt;anonymous> (C:\Users\Pingo\Desktop\FableFinUp\testes\02-funcionais\api\login.test.js:55:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+}
+			</failure>
+		</testcase>
+		<testcase name="CT-LOG-08 corpo JSON malformado é recusado com 400" time="0.004204" classname="test" failure="status veio 500: {&amp;quot;error&amp;quot;:&amp;quot;Erro interno do servidor&amp;quot;}500 !== 400">
+			<failure type="testCodeFailure" message="status veio 500: {&amp;quot;error&amp;quot;:&amp;quot;Erro interno do servidor&amp;quot;}500 !== 400">
+[Error [ERR_TEST_FAILURE]: status veio 500: {"error":"Erro interno do servidor"}
+
+500 !== 400
+] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: status veio 500: {"error":"Erro interno do servidor"}
+  
+  500 !== 400
+  
+      at TestContext.&lt;anonymous> (C:\Users\Pingo\Desktop\FableFinUp\testes\02-funcionais\api\login.test.js:60:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+}
+			</failure>
+		</testcase>
+		<testcase name="CT-LOG-09 o token do login dá acesso a GET /users/me" time="0.002754" classname="test"/>
+		<testcase name="CT-LOG-10 rotas protegidas sem token respondem 401" time="0.005744" classname="test"/>
+		<testcase name="CT-LOG-11 token mal formatado, adulterado ou expirado responde 401" time="0.004767" classname="test"/>
+		<testcase name="CT-LOG-12 token expira no prazo configurado (JWT_EXPIRES_IN)" time="0.059510" classname="test"/>
+	</testsuite>
+	<!-- tests 54 -->
+	<!-- suites 4 -->
+	<!-- pass 51 -->
+	<!-- fail 3 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 8935.2793 -->
+</testsuites>

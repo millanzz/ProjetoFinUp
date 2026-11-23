@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import '../core/app_theme.dart';
+
 import '../core/app_routes.dart';
-import '../services/auth_service.dart';
+import '../core/app_theme.dart';
 import '../services/api_client.dart';
-import '../services/lancamento_service.dart';
+import '../services/auth_service.dart';
 import '../services/categoria_service.dart';
-import '../widgets/app_logo.dart';
-import '../widgets/skeu_button.dart';
-import '../widgets/skeu_input.dart';
+import '../services/lancamento_service.dart';
+import '../widgets/fin_controls.dart';
+import '../widgets/fin_feedback.dart';
+import '../widgets/fin_surface.dart';
+import 'esqueci_senha_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,17 +30,18 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensagem),
-        backgroundColor: AppTheme.dangerRed,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+  /// Abre "Esqueci minha senha"; ao concluir, preenche o e-mail aqui.
+  Future<void> _esqueciSenha() async {
+    final email = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EsqueciSenhaScreen(emailInicial: _emailController.text.trim()),
       ),
     );
+    if (email == null || !mounted) return;
+    _emailController.text = email;
+    _senhaController.clear();
+    showFinSnack(context, 'Senha redefinida. Entre com a nova senha.');
   }
 
   Future<void> _fazerLogin() async {
@@ -46,10 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final senha = _senhaController.text;
 
     if (email.isEmpty || senha.isEmpty) {
-      _mostrarErro("Preencha e-mail e senha para entrar.");
+      showFinSnack(context, 'Preencha e-mail e senha para entrar.', erro: true);
       return;
     }
 
+    FocusScope.of(context).unfocus();
     setState(() => _carregando = true);
 
     try {
@@ -68,12 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, AppRoutes.home);
     } on ApiException catch (e) {
-      if (mounted) _mostrarErro(e.message);
+      if (mounted) showFinSnack(context, e.message, erro: true);
     } catch (_) {
       if (mounted) {
-        _mostrarErro(
-          "Não foi possível conectar ao servidor. "
-          "Verifique se o back-end está rodando.",
+        showFinSnack(
+          context,
+          'Não foi possível conectar ao servidor. Verifique se o back-end está rodando.',
+          erro: true,
         );
       }
     } finally {
@@ -83,101 +88,101 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Logo do app
-                const Center(child: AppLogo(size: 116)),
-                const SizedBox(height: 24),
-                const Text(
-                  "Seja bem-vindo!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w800,
-                    color: AppTheme.darkText,
-                    letterSpacing: -0.5,
+    final c = context.fin;
+
+    return FinScaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(26, 48, 26, 32),
+        child: AutofillGroup(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: FinSurface.convex(
+                  width: 184,
+                  height: 184,
+                  depth: 12,
+                  borderRadius: BorderRadius.circular(48),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    c.isDark
+                        ? 'assets/images/logo_dark.png'
+                        : 'assets/images/logo_light.png',
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Entre para gerenciar suas finanças",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: AppTheme.mediumText,
-                    fontWeight: FontWeight.w500,
+              ),
+              const SizedBox(height: 32),
+              Text(
+                'Entrar na sua conta',
+                textAlign: TextAlign.center,
+                style: FinType.headlineS.copyWith(
+                  color: c.text,
+                  shadows: FinFx.emboss(c),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Organize, planeje e evolua.',
+                textAlign: TextAlign.center,
+                style: FinType.bodyM.copyWith(color: c.textVar),
+              ),
+              const SizedBox(height: 28),
+              FinField(
+                label: 'E-mail',
+                hint: 'seuemail@exemplo.com',
+                controller: _emailController,
+                icon: Icons.mail,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.email],
+              ),
+              const SizedBox(height: 18),
+              FinField(
+                label: 'Senha',
+                hint: 'Sua senha',
+                controller: _senhaController,
+                icon: Icons.lock,
+                obscure: true,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _fazerLogin(),
+                autofillHints: const [AutofillHints.password],
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: FinButton.text(
+                  label: 'Esqueci minha senha',
+                  onPressed: _carregando ? null : _esqueciSenha,
+                ),
+              ),
+              const SizedBox(height: 18),
+              FinButton(
+                label: 'Entrar',
+                height: 56,
+                expand: true,
+                loading: _carregando,
+                onPressed: _fazerLogin,
+              ),
+              const SizedBox(height: 18),
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    'Ainda não tem conta?',
+                    style: FinType.bodyM.copyWith(color: c.textVar),
                   ),
-                ),
-                const SizedBox(height: 36),
-                SkeuInput(
-                  label: "E-mail",
-                  hint: "seuemail@exemplo.com",
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(
-                    Icons.mail_outline_rounded,
-                    color: AppTheme.coolGray,
-                    size: 20,
+                  FinButton.text(
+                    label: 'Criar conta',
+                    onPressed: _carregando
+                        ? null
+                        : () => Navigator.pushNamed(context, AppRoutes.register),
                   ),
-                ),
-                const SizedBox(height: 20),
-                SkeuInput(
-                  label: "Senha",
-                  hint: "Sua senha",
-                  controller: _senhaController,
-                  obscureText: true,
-                  prefixIcon: const Icon(
-                    Icons.lock_outline_rounded,
-                    color: AppTheme.coolGray,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(height: 32),
-                SkeuButton(
-                  text: "Entrar",
-                  icon: Icons.login_rounded,
-                  loading: _carregando,
-                  onPressed: _fazerLogin,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Não tem uma conta?",
-                      style: TextStyle(
-                        color: AppTheme.mediumText,
-                        fontSize: 14,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _carregando
-                          ? null
-                          : () => Navigator.pushNamed(
-                                context,
-                                AppRoutes.register,
-                              ),
-                      child: const Text(
-                        "Cadastre-se",
-                        style: TextStyle(
-                          color: AppTheme.primaryBlue,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

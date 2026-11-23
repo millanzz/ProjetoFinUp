@@ -1,6 +1,6 @@
 {
-    "name": "gestao_financeira",
-    "short_name": "gestao_financeira",
+    "name": "FinUp",
+    "short_name": "FinUp",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,0 +1,77 @@
+
+backend\src\app.js
+  13:26  warning  Expected to return a value at the end of arrow function  consistent-return
+  67:31  warning  Expected to return a value at the end of arrow function  consistent-return
+
+backend\src\controllers\authController.js
+   7:28  warning  Expected to return a value at the end of arrow function        consistent-return
+  24:23  warning  Expected to return a value at the end of async arrow function  consistent-return
+
+backend\src\controllers\categoryController.js
+  49:35  warning  Expected to return a value at the end of arrow function  consistent-return
+
+backend\src\controllers\dashboardController.js
+  13:19  warning  Arrow function has too many lines (92). Maximum allowed is 60  max-lines-per-function
+  13:30  warning  Expected to return a value at the end of arrow function        consistent-return
+  84:29  warning  Variable Assigned to Object Injection Sink                     security/detect-object-injection
+  87:38  warning  Expected to return a value at the end of arrow function        consistent-return
+  89:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
+  93:39  warning  Expected to return a value at the end of arrow function        consistent-return
+  95:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
+
+backend\src\controllers\goalController.js
+  20:35  warning  Async arrow function has a complexity of 11. Maximum allowed is 10  complexity
+  71:35  warning  Async arrow function has a complexity of 13. Maximum allowed is 10  complexity
+
+backend\src\controllers\lancamentoController.js
+   29:18  warning  Function 'lancamentoController' has too many lines (195). Maximum allowed is 60  max-lines-per-function
+   58:31  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   72:25  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   72:43  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   90:3   warning  Async function 'create' has a complexity of 23. Maximum allowed is 10            complexity
+   90:18  warning  Expected to return a value at the end of async function 'create'                 consistent-return
+  182:3   warning  Async function 'update' has a complexity of 15. Maximum allowed is 10            complexity
+
+backend\src\controllers\passwordResetController.js
+   31:43  warning  Expected to return a value at the end of async arrow function       consistent-return
+  102:42  warning  Async arrow function has a complexity of 13. Maximum allowed is 10  complexity
+
+backend\src\controllers\userController.js
+   34:35  warning  Expected to return a value at the end of async arrow function       consistent-return
+   34:35  warning  Async arrow function has a complexity of 12. Maximum allowed is 10  complexity
+   72:7   warning  Expected to return a value at the end of function                   consistent-return
+   97:16  warning  Expected to return a value at the end of arrow function             consistent-return
+  106:29  warning  Expected to return a value at the end of arrow function             consistent-return
+  141:5   warning  Expected to return a value at the end of function                   consistent-return
+  161:16  warning  Expected to return a value at the end of arrow function             consistent-return
+  170:37  warning  Expected to return a value at the end of arrow function             consistent-return
+  191:22  warning  Expected to return a value at the end of async arrow function       consistent-return
+  207:18  warning  Expected to return a value at the end of arrow function             consistent-return
+  224:35  warning  Expected to return a value at the end of async arrow function       consistent-return
+
+backend\src\database\db.js
+  16:14  warning  Arrow function has too many lines (102). Maximum allowed is 60  max-lines-per-function
+
+backend\src\legal\politicaPrivacidade.js
+  81:61  warning  Generic Object Injection Sink  security/detect-object-injection
+
+backend\src\middlewares\authMiddleware.js
+  10:35  warning  Expected to return a value at the end of arrow function  consistent-return
+  24:60  warning  Expected to return a value at the end of arrow function  consistent-return
+  31:88  warning  Expected to return a value at the end of arrow function  consistent-return
+
+backend\src\middlewares\limiteTentativas.js
+  24:27  warning  Expected to return a value at the end of arrow function  consistent-return
+
+backend\src\servidorHttp.js
+  18:15  warning  Found readFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  18:51  warning  Found readFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+backend\src\utils\dbAsync.js
+  20:25  warning  Expected to return a value at the end of function  consistent-return
+
+backend\src\utils\validators.js
+  83:40  warning  Generic Object Injection Sink  security/detect-object-injection
+
+✖ 44 problems (0 errors, 44 warnings)
+

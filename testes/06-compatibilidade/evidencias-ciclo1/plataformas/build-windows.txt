@@ -1,0 +1,3 @@
+Building Windows application...                                    74,9s
+√ Built build\windows\x64\runner\Release\gestao_financeira.exe
+exit 0

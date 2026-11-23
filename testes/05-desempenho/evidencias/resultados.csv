@@ -1,0 +1,162 @@
+cenario,camada,medida,mediana_ms,p95_ms,kb
+V1,api,"POST /auth/login",59,62.2,0.3
+V2,api,"POST /auth/login",59.2,61.4,0.3
+V3,api,"POST /auth/login",59.4,68.4,0.3
+V4,api,"POST /auth/login",59.3,61.3,0.3
+C1,api,"POST /auth/login",62.1,64.8,0.3
+C2,api,"POST /auth/login",60.5,63.4,0.3
+V1,api,"GET /dashboard",2.5,3,1.9
+V2,api,"GET /dashboard",3.5,3.9,2.5
+V3,api,"GET /dashboard",13.6,15.2,2.7
+V4,api,"GET /dashboard",63.9,64.7,2.7
+C1,api,"GET /dashboard",3.8,5.1,2.5
+C2,api,"GET /dashboard",3.7,4.1,2.5
+V1,api,"GET /dashboard?month=AAAA-MM",2.5,3,1.5
+V2,api,"GET /dashboard?month=AAAA-MM",3.1,3.4,2.4
+V3,api,"GET /dashboard?month=AAAA-MM",9.4,9.7,2.7
+V4,api,"GET /dashboard?month=AAAA-MM",43.7,44.7,2.7
+C1,api,"GET /dashboard?month=AAAA-MM",3.4,4.4,2.4
+C2,api,"GET /dashboard?month=AAAA-MM",3.3,3.7,2.4
+V1,api,"GET /incomes (1ª página, até 500)",2.1,2.3,4.5
+V2,api,"GET /incomes (1ª página, até 500)",3.7,4.1,45.9
+V3,api,"GET /incomes (1ª página, até 500)",6.7,7,119.8
+V4,api,"GET /incomes (1ª página, até 500)",7.3,7.8,120.6
+C1,api,"GET /incomes (1ª página, até 500)",4.2,5.2,45.9
+C2,api,"GET /incomes (1ª página, até 500)",3.8,4.3,45.9
+V1,api,"GET /expenses (1ª página, até 500)",2.7,3,19.6
+V2,api,"GET /expenses (1ª página, até 500)",6.6,7.1,122.7
+V3,api,"GET /expenses (1ª página, até 500)",7.1,7.9,127.9
+V4,api,"GET /expenses (1ª página, até 500)",10.6,10.9,129.4
+C1,api,"GET /expenses (1ª página, até 500)",7.4,9,122.7
+C2,api,"GET /expenses (1ª página, até 500)",7.1,7.7,122.7
+V1,api,"GET /expenses?month=AAAA-MM",1.9,2.3,0.7
+V2,api,"GET /expenses?month=AAAA-MM",2.2,2.4,9.3
+V3,api,"GET /expenses?month=AAAA-MM",5.2,5.9,79.6
+V4,api,"GET /expenses?month=AAAA-MM",6.6,7,125
+C1,api,"GET /expenses?month=AAAA-MM",2.4,3.5,9.3
+C2,api,"GET /expenses?month=AAAA-MM",2.3,2.7,9.3
+V1,api,"GET /goals",1.7,1.8,2.7
+V2,api,"GET /goals",1.5,1.8,2.7
+V3,api,"GET /goals",1.6,1.8,2.7
+V4,api,"GET /goals",1.5,1.7,2.7
+C1,api,"GET /goals",1.9,3.8,2.7
+C2,api,"GET /goals",1.7,2.3,2.7
+V1,api,"GET /categories",1.6,1.9,1.2
+V2,api,"GET /categories",1.4,1.6,1.2
+V3,api,"GET /categories",1.5,1.7,1.2
+V4,api,"GET /categories",1.6,2.2,1.2
+C1,api,"GET /categories",1.7,2.3,1.2
+C2,api,"GET /categories",1.7,2.1,1.2
+V1,api,"GET /lancamentos?from=<mês atual> (cache do app)",2.7,3.5,1
+V2,api,"GET /lancamentos?from=<mês atual> (cache do app)",3.5,3.9,26.2
+V3,api,"GET /lancamentos?from=<mês atual> (cache do app)",13.9,15.6,255.9
+V4,api,"GET /lancamentos?from=<mês atual> (cache do app)",17.8,19.3,276.2
+C1,api,"GET /lancamentos?from=<mês atual> (cache do app)",4,4.7,26.2
+C2,api,"GET /lancamentos?from=<mês atual> (cache do app)",3.8,4,26.2
+V1,api,"GET /lancamentos?limit=0 (só totais)",2,2.2,0.9
+V2,api,"GET /lancamentos?limit=0 (só totais)",2.4,2.6,0.9
+V3,api,"GET /lancamentos?limit=0 (só totais)",6.1,6.5,1
+V4,api,"GET /lancamentos?limit=0 (só totais)",23.3,23.9,1
+C1,api,"GET /lancamentos?limit=0 (só totais)",2.6,3.8,0.9
+C2,api,"GET /lancamentos?limit=0 (só totais)",2.6,3.3,0.9
+V1,api,"GET /lancamentos?limit=100 (1ª página do "Tudo")",3.5,3.7,26.6
+V2,api,"GET /lancamentos?limit=100 (1ª página do "Tudo")",4.1,4.8,27.4
+V3,api,"GET /lancamentos?limit=100 (1ª página do "Tudo")",7.9,8.2,28.3
+V4,api,"GET /lancamentos?limit=100 (1ª página do "Tudo")",27.1,27.7,28.6
+C1,api,"GET /lancamentos?limit=100 (1ª página do "Tudo")",5.1,6.4,27.4
+C2,api,"GET /lancamentos?limit=100 (1ª página do "Tudo")",4.3,4.7,27.4
+V1,api,"GET /lancamentos?limit=100 (última página)",3.4,3.9,26.6
+V2,api,"GET /lancamentos?limit=100 (última página)",5,5.4,25.7
+V3,api,"GET /lancamentos?limit=100 (última página)",22,23.1,26
+V4,api,"GET /lancamentos?limit=100 (última página)",218.7,223,26.1
+C1,api,"GET /lancamentos?limit=100 (última página)",5.4,6.3,25.7
+C2,api,"GET /lancamentos?limit=100 (última página)",5.2,5.7,25.7
+V1,api,"GET /lancamentos/meses",1.5,1.9,0.2
+V2,api,"GET /lancamentos/meses",1.6,1.9,0.3
+V3,api,"GET /lancamentos/meses",3.1,3.2,0.3
+V4,api,"GET /lancamentos/meses",9.3,9.7,0.3
+C1,api,"GET /lancamentos/meses",1.8,2,0.3
+C2,api,"GET /lancamentos/meses",1.7,2.2,0.3
+V1,api,"POST /expenses",8.9,10.9,0.1
+V2,api,"POST /expenses",8.6,9.7,0.1
+V3,api,"POST /expenses",9.1,10.8,0.1
+V4,api,"POST /expenses",8.6,9.7,0.1
+C1,api,"POST /expenses",9.1,11.1,0.1
+C2,api,"POST /expenses",10.1,78,0.1
+V1,api,"PUT /expenses/:id",9.1,13.6,0
+V2,api,"PUT /expenses/:id",8.1,10.1,0
+V3,api,"PUT /expenses/:id",7.4,13.2,0
+V4,api,"PUT /expenses/:id",8.1,11,0
+C1,api,"PUT /expenses/:id",8.7,10.3,0
+C2,api,"PUT /expenses/:id",7.5,9.3,0
+V1,api,"DELETE /expenses/:id",9.2,13.8,0
+V2,api,"DELETE /expenses/:id",9.6,16.4,0
+V3,api,"DELETE /expenses/:id",8.2,11,0
+V4,api,"DELETE /expenses/:id",7.9,8.4,0
+C1,api,"DELETE /expenses/:id",9.7,16,0
+C2,api,"DELETE /expenses/:id",8.4,10.2,0
+V1,api,"GET /dashboard 20 simultaneos",22.8,28.2,
+V2,api,"GET /dashboard 20 simultaneos",37.4,47,
+V3,api,"GET /dashboard 20 simultaneos",237.8,251.4,
+V4,api,"GET /dashboard 20 simultaneos",1158.5,1330.3,
+C1,api,"GET /dashboard 20 simultaneos",37.4,61.3,
+C2,api,"GET /dashboard 20 simultaneos",39.3,48.3,
+V1,app,"Entrar (login + carregar dados)",131.4,,
+V2,app,"Entrar (login + carregar dados)",149,,
+V3,app,"Entrar (login + carregar dados)",236.7,,
+V4,app,"Entrar (login + carregar dados)",571.3,,
+C1,app,"Entrar (login + carregar dados)",158.5,,
+C2,app,"Entrar (login + carregar dados)",150.9,,
+V1,app,"Recarregar o cache do app (mês atual em diante)",15.9,,
+V2,app,"Recarregar o cache do app (mês atual em diante)",19.6,,
+V3,app,"Recarregar o cache do app (mês atual em diante)",65.9,,
+V4,app,"Recarregar o cache do app (mês atual em diante)",384.6,,
+C1,app,"Recarregar o cache do app (mês atual em diante)",22.1,,
+C2,app,"Recarregar o cache do app (mês atual em diante)",22,,
+V1,app,"↳ parte de rede (download do cache)",4.9,,
+V2,app,"↳ parte de rede (download do cache)",6.4,,
+V3,app,"↳ parte de rede (download do cache)",20.1,,
+V4,app,"↳ parte de rede (download do cache)",180.6,,
+C1,app,"↳ parte de rede (download do cache)",7.2,,
+C2,app,"↳ parte de rede (download do cache)",6.3,,
+V1,app,"↳ parte de processamento (JSON → modelos)",0.3,,
+V2,app,"↳ parte de processamento (JSON → modelos)",4.1,,
+V3,app,"↳ parte de processamento (JSON → modelos)",32.5,,
+V4,app,"↳ parte de processamento (JSON → modelos)",173.3,,
+C1,app,"↳ parte de processamento (JSON → modelos)",4.4,,
+C2,app,"↳ parte de processamento (JSON → modelos)",4,,
+V1,app,"Abrir a Início até mostrar o saldo",1132.1,,
+V2,app,"Abrir a Início até mostrar o saldo",1372.3,,
+V3,app,"Abrir a Início até mostrar o saldo",1680.6,,
+V4,app,"Abrir a Início até mostrar o saldo",1845.8,,
+C1,app,"Abrir a Início até mostrar o saldo",1795.3,,
+C2,app,"Abrir a Início até mostrar o saldo",1439.1,,
+V1,app,"Trocar de aba (até recarregar e redesenhar)",125.4,,
+V2,app,"Trocar de aba (até recarregar e redesenhar)",127.3,,
+V3,app,"Trocar de aba (até recarregar e redesenhar)",153,,
+V4,app,"Trocar de aba (até recarregar e redesenhar)",436,,
+C1,app,"Trocar de aba (até recarregar e redesenhar)",146.3,,
+C2,app,"Trocar de aba (até recarregar e redesenhar)",141.4,,
+V1,app,"Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)",220.9,,
+V2,app,"Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)",279.7,,
+V3,app,"Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)",177.4,,
+V4,app,"Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)",596.9,,
+C1,app,"Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)",231.4,,
+C2,app,"Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)",229.9,,
+V2,app,"Histórico "Tudo" → carregar mais uma página",12.4,,
+V3,app,"Histórico "Tudo" → carregar mais uma página",12.2,,
+V4,app,"Histórico "Tudo" → carregar mais uma página",712.2,,
+C1,app,"Histórico "Tudo" → carregar mais uma página",10.9,,
+C2,app,"Histórico "Tudo" → carregar mais uma página",12.6,,
+V1,app,"Lançamentos guardados no aparelho",3,,
+V2,app,"Lançamentos guardados no aparelho",96,,
+V3,app,"Lançamentos guardados no aparelho",951,,
+V4,app,"Lançamentos guardados no aparelho",5260,,
+C1,app,"Lançamentos guardados no aparelho",96,,
+C2,app,"Lançamentos guardados no aparelho",96,,
+V1,app,"KB baixados a cada recarga do cache",1,,
+V2,app,"KB baixados a cada recarga do cache",26.2,,
+V3,app,"KB baixados a cada recarga do cache",255.9,,
+V4,app,"KB baixados a cada recarga do cache",1425.5,,
+C1,app,"KB baixados a cada recarga do cache",26.2,,
+C2,app,"KB baixados a cada recarga do cache",26.2,,

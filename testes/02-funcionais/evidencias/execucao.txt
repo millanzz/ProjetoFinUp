@@ -1,0 +1,7 @@
+2026-11-23 10:38:27 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+41409a1
+redesign-fusao-tema-escuro
+exit api: 0
+exit app: 0

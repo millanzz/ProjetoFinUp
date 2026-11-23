@@ -1,0 +1,122 @@
+▶ Despesas (POST/GET/PUT/DELETE /expenses)
+  ✔ CT-DES-01 cria despesa válida e ela entra no total (16.4169ms)
+  ✔ CT-DES-02 despesa sem categoria é rejeitada (categoria obrigatória) (5.6567ms)
+  ✔ CT-DES-03 categoria de receita não pode ser usada em despesa (5.0875ms)
+  ✔ CT-DES-04 valor inválido é rejeitado e nada é gravado (5.1605ms)
+  ✔ CT-DES-05 parcelamento de R$ 100 em 3x: centavos e datas de fim de mês (7.0835ms)
+  ✔ CT-DES-06 parcelamento cruza ano bissexto (31/01/2028 → 29/02/2028) (4.2703ms)
+  ✔ CT-DES-07 parcelas em 12x de R$ 1.999,99 somam exatamente o total (6.396ms)
+  ✔ CT-DES-08 número de parcelas fora do limite (0, 49, 2.5) é rejeitado (5.2945ms)
+  ✔ CT-DES-09 valor pequeno demais para as parcelas (R$ 0,05 em 10x) é rejeitado (5.3912ms)
+  ✔ CT-DES-10 excluir o grupo remove todas as parcelas e zera o total (5.2801ms)
+  ✔ CT-DES-11 edição com valor inválido é rejeitada e o valor original é mantido (3.6807ms)
+  ✔ CT-DES-12 editar data move a despesa de mês no total mensal (4.5205ms)
+✔ Despesas (POST/GET/PUT/DELETE /expenses) (76.5557ms)
+▶ Metas (POST/PATCH/DELETE /goals e aportes)
+  ✔ CT-MET-01 cria meta com valor guardado 0 e ícone padrão (14.0417ms)
+  ✔ CT-MET-02 valor alvo zero, negativo ou texto é rejeitado (4.5523ms)
+  ✔ CT-MET-03 valor guardado inicial negativo é rejeitado (3.0388ms)
+  ✔ CT-MET-04 aportes somam ao valor guardado (R$ 200 + R$ 150,50 = R$ 350,50) (6.7439ms)
+  ✔ CT-MET-05 aporte zero ou negativo é rejeitado e não altera o valor (5.2962ms)
+  ✔ CT-MET-06 10 aportes simultâneos de R$ 10 resultam em R$ 100 (sem perder nenhum) (10.0014ms)
+  ✔ CT-MET-07 aporte além do alvo é aceito (meta ultrapassada) (4.049ms)
+  ✔ CT-MET-08 aporte em meta de outro usuário retorna 404 e não altera (4.0827ms)
+  ✔ CT-MET-09 edição de valores e validação de ícone (4.739ms)
+  ✖ CT-MET-10 aportes de centavos somam exato (R$ 0,10 + R$ 0,20 = R$ 0,30) (9.4314ms)
+✖ Metas (POST/PATCH/DELETE /goals e aportes) (69.2265ms)
+▶ Receitas (POST/GET/PUT/DELETE /incomes)
+  ✔ CT-REC-01 cria receita válida e ela entra no total (17.3094ms)
+  ✔ CT-REC-02 receita sem categoria é aceita (categoria opcional) (4.3325ms)
+  ✔ CT-REC-03 valor zero, negativo, texto ou infinito é rejeitado (7.1329ms)
+  ✔ CT-REC-04 valor ou data ausentes são rejeitados (4.0048ms)
+  ✔ CT-REC-05 data inexistente ou fora do formato é rejeitada (4.2006ms)
+  ✔ CT-REC-06 categoria de despesa não pode ser usada em receita (2.6415ms)
+  ✔ CT-REC-07 categoria de outro usuário é rejeitada (2.6625ms)
+  ✔ CT-REC-08 receita parcelada divide o total sem perder centavos (R$ 1.000 em 3x) (6.3318ms)
+  ✔ CT-REC-09 listagem por mês retorna só as receitas daquele mês (6.28ms)
+  ✔ CT-REC-10 editar o valor atualiza o total de receitas (6.6476ms)
+  ✔ CT-REC-11 excluir receita de outro usuário retorna 404 e não remove (4.6925ms)
+  ✔ CT-REC-12 excluir a própria receita tira o valor do total (4.7631ms)
+✔ Receitas (POST/GET/PUT/DELETE /incomes) (73.3252ms)
+▶ Cálculo de saldo (GET /dashboard)
+  ✔ CT-SAL-01 usuário sem lançamentos tem saldo e totais zerados (11.9997ms)
+  ✔ CT-SAL-02 saldo = receitas − despesas (R$ 6.500,50 − R$ 1.500,25 = R$ 5.000,25) (5.1098ms)
+  ✔ CT-SAL-03 saldo negativo quando despesas superam receitas (3.3347ms)
+  ✔ CT-SAL-04 filtro ?month considera somente o mês pedido (4.8432ms)
+  ✔ CT-SAL-05 saldo de um usuário não inclui lançamentos de outro (4.0684ms)
+  ✔ CT-SAL-06 mês em formato inválido é rejeitado com 400 (3.4911ms)
+  ✔ CT-SAL-07 evolução mensal agrupa receitas e despesas por mês (5.3962ms)
+  ✔ CT-SAL-08 despesas por categoria somam corretamente e vêm em ordem decrescente (5.1084ms)
+  ✔ CT-SAL-09 compra parcelada entra no saldo de cada mês pela parcela (8.6382ms)
+  ✖ CT-SAL-10 saldo exato em centavos (R$ 0,10 + R$ 0,20 − R$ 0,30 = R$ 0,00) (5.3223ms)
+  ✖ CT-SAL-12 saldo exato em centavos, ordem inversa (R$ 0,30 − (R$ 0,10 + R$ 0,20) = R$ 0,00) (8.849ms)
+  ✔ CT-SAL-11 saldo exato com muitos lançamentos de centavos (100 × R$ 0,01 − R$ 1,00) (19.015ms)
+✖ Cálculo de saldo (GET /dashboard) (87.4314ms)
+ℹ tests 46
+ℹ suites 4
+ℹ pass 43
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 252.096
+
+✖ failing tests:
+
+test at metas.test.js:86:3
+✖ CT-MET-10 aportes de centavos somam exato (R$ 0,10 + R$ 0,20 = R$ 0,30) (9.4314ms)
+  AssertionError [ERR_ASSERTION]: current_amount veio 0.30000000000000004
+  + actual - expected
+  
+  + 0.30000000000000004
+  - 0.3
+       ^
+  
+      at TestContext.<anonymous> (C:\Users\Pingo\Desktop\FableFinUp\testes\01-unitarios-calculos\backend\metas.test.js:90:12)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0.30000000000000004,
+    expected: 0.3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at saldo.test.js:117:3
+✖ CT-SAL-10 saldo exato em centavos (R$ 0,10 + R$ 0,20 − R$ 0,30 = R$ 0,00) (5.3223ms)
+  AssertionError [ERR_ASSERTION]: balance veio 5.551115123125783e-17 (total_incomes=0.30000000000000004)
+  + actual - expected
+  
+  + 5.551115123125783e-17
+  - 0
+  
+      at TestContext.<anonymous> (C:\Users\Pingo\Desktop\FableFinUp\testes\01-unitarios-calculos\backend\saldo.test.js:122:12)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 5.551115123125783e-17,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at saldo.test.js:126:3
+✖ CT-SAL-12 saldo exato em centavos, ordem inversa (R$ 0,30 − (R$ 0,10 + R$ 0,20) = R$ 0,00) (8.849ms)
+  AssertionError [ERR_ASSERTION]: balance veio -5.551115123125783e-17 (total_expenses=0.30000000000000004)
+  + actual - expected
+  
+  + -5.551115123125783e-17
+  - 0
+  
+      at TestContext.<anonymous> (C:\Users\Pingo\Desktop\FableFinUp\testes\01-unitarios-calculos\backend\saldo.test.js:131:12)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: -5.551115123125783e-17,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

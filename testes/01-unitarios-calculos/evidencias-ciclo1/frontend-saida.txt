@@ -1,0 +1,48 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/01-unitarios-calculos/frontend/calculos_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: Saldo do mês (SaldoCard) CT-FE-SAL-01 sem lançamentos mostra R$ 0,00
+00:00 +1: Saldo do mês (SaldoCard) CT-FE-SAL-02 saldo = entradas − saídas (R$ 6.500,50 − R$ 1.500,25)
+00:00 +2: Saldo do mês (SaldoCard) CT-FE-SAL-03 saldo negativo exibe sinal de menos
+00:00 +3: Saldo do mês (SaldoCard) CT-FE-SAL-04 saldo zerado por centavos não aparece como negativo
+00:00 +4: Saldo do mês (SaldoCard) CT-FE-SAL-05 saldo zerado por centavos (ordem inversa) não aparece como negativo
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: no matching candidates
+  Actual: _TextWidgetFinder:<Found 1 widget with text "−R$ 0,00": [
+            Text("−R$ 0,00", inherit: true, color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000,
+blue: 1.0000, colorSpace: ColorSpace.sRGB), family: Roboto_700, familyFallback: [Roboto], size:
+36.0, weight: 700, letterSpacing: -0.8, height: 1.2x, dependencies: [DefaultSelectionStyle,
+DefaultTextStyle, MediaQuery]),
+          ]>
+   Which: means one was found but none were expected
+saldo zero não deve ser exibido como "−R$ 0,00"
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/01-unitarios-calculos/frontend/calculos_test.dart:70:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/01-unitarios-calculos/frontend/calculos_test.dart line 70
+The test description was:
+  CT-FE-SAL-05 saldo zerado por centavos (ordem inversa) não aparece como negativo
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +4 -1: Saldo do mês (SaldoCard) CT-FE-SAL-05 saldo zerado por centavos (ordem inversa) não aparece como negativo [E]
+  Test failed. See exception logs above.
+  The test description was: CT-FE-SAL-05 saldo zerado por centavos (ordem inversa) não aparece como negativo
+  
+00:01 +4 -1: Progresso de metas (MetaModel) CT-FE-MET-01 progresso = guardado / alvo (R$ 250 de R$ 1.000 = 25%)
+00:01 +5 -1: Progresso de metas (MetaModel) CT-FE-MET-02 alvo zero não divide por zero (progresso 0)
+00:01 +6 -1: Progresso de metas (MetaModel) CT-FE-MET-03 meta concluída ao atingir ou ultrapassar o alvo
+00:01 +7 -1: Progresso de metas (MetaModel) CT-FE-MET-04 fromApi trata current_amount nulo como 0 e inteiros como double
+00:01 +8 -1: Progresso de metas (MetaModel) CT-FE-MET-05 aportes de centavos concluem a meta (0,10 + 0,20 ≥ 0,30)
+00:01 +9 -1: Valores de receitas e despesas no app CT-FE-LAN-01 fromApi converte amount inteiro/decimal e identifica o tipo
+00:01 +10 -1: Valores de receitas e despesas no app CT-FE-LAN-02 divisão de parcelas no app bate com o backend (R$ 100 em 3x)
+00:01 +11 -1: Valores de receitas e despesas no app CT-FE-LAN-03 toApiJson envia o valor e a data no formato do backend
+00:01 +12 -1: (tearDownAll)
+00:01 +12 -1: Some tests failed.
