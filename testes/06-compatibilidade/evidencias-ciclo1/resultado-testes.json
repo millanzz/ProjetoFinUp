@@ -1,0 +1,331 @@
+{"protocolVersion":"0.1.1","runnerVersion":null,"pid":22452,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":1}
+{"count":1,"time":6,"type":"allSuites"}
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":10289}
+{"group":{"id":2,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":24,"line":null,"column":null,"url":null},"type":"group","time":10291}
+{"test":{"id":3,"name":"(setUpAll)","suiteID":0,"groupIDs":[2],"metadata":{"skip":false,"skipReason":null},"line":245,"column":3,"url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":10292}
+{"testID":3,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":11372}
+{"group":{"id":4,"suiteID":0,"parentID":2,"name":"A — aparelhos","metadata":{"skip":false,"skipReason":null},"testCount":13,"line":277,"column":5,"url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"group","time":11373}
+{"test":{"id":5,"name":"A — aparelhos A01 Galaxy Z Fold (tela externa) (280×653)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":11373}
+{"testID":5,"messageType":"print","message":"(The following exception is now available via WidgetTester.takeException:)","type":"print","time":46466}
+{"testID":5,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":46467}
+{"testID":5,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":46467}
+{"testID":5,"messageType":"print","message":"Expected: empty","type":"print","time":46467}
+{"testID":5,"messageType":"print","message":"  Actual: [","type":"print","time":46467}
+{"testID":5,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 5.6 pixels on the right.',","type":"print","time":46468}
+{"testID":5,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 5.6 pixels on the right.',","type":"print","time":46468}
+{"testID":5,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 5.6 pixels on the right.'","type":"print","time":46469}
+{"testID":5,"messageType":"print","message":"          ]","type":"print","time":46470}
+{"testID":5,"messageType":"print","message":"A01 Galaxy Z Fold (tela externa)","type":"print","time":46470}
+{"testID":5,"messageType":"print","message":"","type":"print","time":46471}
+{"testID":5,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":46480}
+{"testID":5,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":46487}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46490}
+{"testID":5,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":46491}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46492}
+{"testID":5,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":46493}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46494}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46496}
+{"testID":5,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":46501}
+{"testID":5,"messageType":"print","message":"","type":"print","time":46509}
+{"testID":5,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":46511}
+{"testID":5,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":46511}
+{"testID":5,"messageType":"print","message":"The test description was:","type":"print","time":46512}
+{"testID":5,"messageType":"print","message":"  A01 Galaxy Z Fold (tela externa) (280×653)","type":"print","time":46531}
+{"testID":5,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":46536}
+{"testID":5,"messageType":"print","message":"(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)","type":"print","time":46539}
+{"testID":5,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":46539}
+{"testID":5,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":46539}
+{"testID":5,"messageType":"print","message":"Expected: empty","type":"print","time":46540}
+{"testID":5,"messageType":"print","message":"  Actual: [","type":"print","time":46540}
+{"testID":5,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 5.6 pixels on the right.',","type":"print","time":46541}
+{"testID":5,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 5.6 pixels on the right.',","type":"print","time":46541}
+{"testID":5,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 5.6 pixels on the right.'","type":"print","time":46542}
+{"testID":5,"messageType":"print","message":"          ]","type":"print","time":46542}
+{"testID":5,"messageType":"print","message":"A01 Galaxy Z Fold (tela externa)","type":"print","time":46543}
+{"testID":5,"messageType":"print","message":"","type":"print","time":46543}
+{"testID":5,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":46544}
+{"testID":5,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":46544}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46544}
+{"testID":5,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":46544}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46544}
+{"testID":5,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":46545}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46545}
+{"testID":5,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":46545}
+{"testID":5,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":46546}
+{"testID":5,"messageType":"print","message":"","type":"print","time":46546}
+{"testID":5,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":46546}
+{"testID":5,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":46547}
+{"testID":5,"messageType":"print","message":"The test description was:","type":"print","time":46547}
+{"testID":5,"messageType":"print","message":"  A01 Galaxy Z Fold (tela externa) (280×653)","type":"print","time":46547}
+{"testID":5,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":46548}
+{"testID":5,"error":"Test failed. See exception logs above.\nThe test description was: A01 Galaxy Z Fold (tela externa) (280×653)","stackTrace":"","isFailure":false,"type":"error","time":46550}
+{"testID":5,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":46550}
+{"test":{"id":6,"name":"A — aparelhos A02 iPhone SE 1ª geração (320×568)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":46551}
+{"testID":6,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":81802}
+{"test":{"id":7,"name":"A — aparelhos A03 Android pequeno (Galaxy J/A básico) (360×640)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":81803}
+{"testID":7,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":115519}
+{"test":{"id":8,"name":"A — aparelhos A04 iPhone SE 2ª/3ª geração (375×667)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":115519}
+{"testID":8,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":149683}
+{"test":{"id":9,"name":"A — aparelhos A05 iPhone 14 / 15 (390×844)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":149683}
+{"testID":9,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":181850}
+{"test":{"id":10,"name":"A — aparelhos A06 Pixel 7 / Galaxy S23 (412×915)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":181850}
+{"testID":10,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":213700}
+{"test":{"id":11,"name":"A — aparelhos A07 iPhone 14/15 Pro Max (430×932)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":213701}
+{"testID":11,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":245943}
+{"test":{"id":12,"name":"A — aparelhos A08 iPhone 14 em paisagem (844×390)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":245944}
+{"testID":12,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":280606}
+{"test":{"id":13,"name":"A — aparelhos A09 Android em paisagem (915×412)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":280607}
+{"testID":13,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":315282}
+{"test":{"id":14,"name":"A — aparelhos A10 iPad 9ª geração (810×1080)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":315283}
+{"testID":14,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":351080}
+{"test":{"id":15,"name":"A — aparelhos A11 Tablet Android 10\" (800×1280)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":351080}
+{"testID":15,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":385181}
+{"test":{"id":16,"name":"A — aparelhos A12 Notebook / Web 1280×800 (1280×800)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":385182}
+{"testID":16,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":423986}
+{"test":{"id":17,"name":"A — aparelhos A13 Monitor Full HD 1920×1080 (1920×1080)","suiteID":0,"groupIDs":[2,4],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":423986}
+{"testID":17,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":463018}
+{"group":{"id":18,"suiteID":0,"parentID":2,"name":"B — fonte ampliada","metadata":{"skip":false,"skipReason":null},"testCount":6,"line":277,"column":5,"url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"group","time":463018}
+{"test":{"id":19,"name":"B — fonte ampliada B01 Android pequeno · fonte 130% (360×640)","suiteID":0,"groupIDs":[2,18],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":463018}
+{"testID":19,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":496221}
+{"test":{"id":20,"name":"B — fonte ampliada B02 Android pequeno · fonte 200% (360×640)","suiteID":0,"groupIDs":[2,18],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":496222}
+{"testID":20,"messageType":"print","message":"(The following exception is now available via WidgetTester.takeException:)","type":"print","time":548711}
+{"testID":20,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":548711}
+{"testID":20,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":548711}
+{"testID":20,"messageType":"print","message":"Expected: empty","type":"print","time":548712}
+{"testID":20,"messageType":"print","message":"  Actual: [","type":"print","time":548712}
+{"testID":20,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by","type":"print","time":548712}
+{"testID":20,"messageType":"print","message":"130 pixels on the right.',","type":"print","time":548713}
+{"testID":20,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":548713}
+{"testID":20,"messageType":"print","message":"overflowed by 130 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0","type":"print","time":548714}
+{"testID":20,"messageType":"print","message":"widgets with text \"Nome completo\": []; ação principal não verificada',","type":"print","time":548714}
+{"testID":20,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":548715}
+{"testID":20,"messageType":"print","message":"overflowed by 130 pixels on the right.',","type":"print","time":548715}
+{"testID":20,"messageType":"print","message":"            'Início: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by","type":"print","time":548715}
+{"testID":20,"messageType":"print","message":"6.8 pixels on the right.',","type":"print","time":548716}
+{"testID":20,"messageType":"print","message":"            'Entradas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed","type":"print","time":548716}
+{"testID":20,"messageType":"print","message":"by 6.8 pixels on the right.',","type":"print","time":548717}
+{"testID":20,"messageType":"print","message":"            'Despesas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed","type":"print","time":548718}
+{"testID":20,"messageType":"print","message":"by 6.8 pixels on the right.',","type":"print","time":548719}
+{"testID":20,"messageType":"print","message":"            'Metas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by","type":"print","time":548720}
+{"testID":20,"messageType":"print","message":"6.8 pixels on the right.',","type":"print","time":548720}
+{"testID":20,"messageType":"print","message":"            'Histórico: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed","type":"print","time":548721}
+{"testID":20,"messageType":"print","message":"by 6.8 pixels on the right.',","type":"print","time":548721}
+{"testID":20,"messageType":"print","message":"            'Perfil: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by","type":"print","time":548722}
+{"testID":20,"messageType":"print","message":"6.8 pixels on the right.',","type":"print","time":548722}
+{"testID":20,"messageType":"print","message":"            'Formulário de despesa: A RenderFlex overflowed by 7.1 pixels on the right.; A","type":"print","time":548723}
+{"testID":20,"messageType":"print","message":"RenderFlex overflowed by 6.8 pixels on the right.; A RenderFlex overflowed by 22 pixels on the","type":"print","time":548724}
+{"testID":20,"messageType":"print","message":"bottom.'","type":"print","time":548724}
+{"testID":20,"messageType":"print","message":"          ]","type":"print","time":548725}
+{"testID":20,"messageType":"print","message":"B02 Android pequeno · fonte 200%","type":"print","time":548726}
+{"testID":20,"messageType":"print","message":"","type":"print","time":548728}
+{"testID":20,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":548729}
+{"testID":20,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":548730}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548730}
+{"testID":20,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":548730}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548731}
+{"testID":20,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":548731}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548731}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548732}
+{"testID":20,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":548732}
+{"testID":20,"messageType":"print","message":"","type":"print","time":548732}
+{"testID":20,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":548732}
+{"testID":20,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":548732}
+{"testID":20,"messageType":"print","message":"The test description was:","type":"print","time":548733}
+{"testID":20,"messageType":"print","message":"  B02 Android pequeno · fonte 200% (360×640)","type":"print","time":548733}
+{"testID":20,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":548733}
+{"testID":20,"messageType":"print","message":"(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)","type":"print","time":548733}
+{"testID":20,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":548734}
+{"testID":20,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":548734}
+{"testID":20,"messageType":"print","message":"Expected: empty","type":"print","time":548734}
+{"testID":20,"messageType":"print","message":"  Actual: [","type":"print","time":548734}
+{"testID":20,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by","type":"print","time":548735}
+{"testID":20,"messageType":"print","message":"130 pixels on the right.',","type":"print","time":548735}
+{"testID":20,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":548735}
+{"testID":20,"messageType":"print","message":"overflowed by 130 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0","type":"print","time":548735}
+{"testID":20,"messageType":"print","message":"widgets with text \"Nome completo\": []; ação principal não verificada',","type":"print","time":548735}
+{"testID":20,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":548736}
+{"testID":20,"messageType":"print","message":"overflowed by 130 pixels on the right.',","type":"print","time":548736}
+{"testID":20,"messageType":"print","message":"            'Início: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by","type":"print","time":548736}
+{"testID":20,"messageType":"print","message":"6.8 pixels on the right.',","type":"print","time":548736}
+{"testID":20,"messageType":"print","message":"            'Entradas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed","type":"print","time":548737}
+{"testID":20,"messageType":"print","message":"by 6.8 pixels on the right.',","type":"print","time":548737}
+{"testID":20,"messageType":"print","message":"            'Despesas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed","type":"print","time":548738}
+{"testID":20,"messageType":"print","message":"by 6.8 pixels on the right.',","type":"print","time":548738}
+{"testID":20,"messageType":"print","message":"            'Metas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by","type":"print","time":548738}
+{"testID":20,"messageType":"print","message":"6.8 pixels on the right.',","type":"print","time":548739}
+{"testID":20,"messageType":"print","message":"            'Histórico: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed","type":"print","time":548739}
+{"testID":20,"messageType":"print","message":"by 6.8 pixels on the right.',","type":"print","time":548739}
+{"testID":20,"messageType":"print","message":"            'Perfil: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by","type":"print","time":548739}
+{"testID":20,"messageType":"print","message":"6.8 pixels on the right.',","type":"print","time":548739}
+{"testID":20,"messageType":"print","message":"            'Formulário de despesa: A RenderFlex overflowed by 7.1 pixels on the right.; A","type":"print","time":548740}
+{"testID":20,"messageType":"print","message":"RenderFlex overflowed by 6.8 pixels on the right.; A RenderFlex overflowed by 22 pixels on the","type":"print","time":548740}
+{"testID":20,"messageType":"print","message":"bottom.'","type":"print","time":548740}
+{"testID":20,"messageType":"print","message":"          ]","type":"print","time":548740}
+{"testID":20,"messageType":"print","message":"B02 Android pequeno · fonte 200%","type":"print","time":548740}
+{"testID":20,"messageType":"print","message":"","type":"print","time":548741}
+{"testID":20,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":548741}
+{"testID":20,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":548741}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548741}
+{"testID":20,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":548742}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548742}
+{"testID":20,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":548742}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548742}
+{"testID":20,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":548744}
+{"testID":20,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":548744}
+{"testID":20,"messageType":"print","message":"","type":"print","time":548744}
+{"testID":20,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":548744}
+{"testID":20,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":548745}
+{"testID":20,"messageType":"print","message":"The test description was:","type":"print","time":548745}
+{"testID":20,"messageType":"print","message":"  B02 Android pequeno · fonte 200% (360×640)","type":"print","time":548745}
+{"testID":20,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":548745}
+{"testID":20,"error":"Test failed. See exception logs above.\nThe test description was: B02 Android pequeno · fonte 200% (360×640)","stackTrace":"","isFailure":false,"type":"error","time":548746}
+{"testID":20,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":548746}
+{"test":{"id":21,"name":"B — fonte ampliada B03 iPhone 14 · fonte 130% (390×844)","suiteID":0,"groupIDs":[2,18],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":548747}
+{"testID":21,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":580738}
+{"test":{"id":22,"name":"B — fonte ampliada B04 iPhone 14 · fonte 200% (390×844)","suiteID":0,"groupIDs":[2,18],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":580738}
+{"testID":22,"messageType":"print","message":"(The following exception is now available via WidgetTester.takeException:)","type":"print","time":631472}
+{"testID":22,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":631474}
+{"testID":22,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":631475}
+{"testID":22,"messageType":"print","message":"Expected: empty","type":"print","time":631475}
+{"testID":22,"messageType":"print","message":"  Actual: [","type":"print","time":631475}
+{"testID":22,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by","type":"print","time":631476}
+{"testID":22,"messageType":"print","message":"100 pixels on the right.',","type":"print","time":631476}
+{"testID":22,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":631477}
+{"testID":22,"messageType":"print","message":"overflowed by 100 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0","type":"print","time":631477}
+{"testID":22,"messageType":"print","message":"widgets with text \"Nome completo\": []; ação principal não verificada',","type":"print","time":631477}
+{"testID":22,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":631478}
+{"testID":22,"messageType":"print","message":"overflowed by 100 pixels on the right.',","type":"print","time":631478}
+{"testID":22,"messageType":"print","message":"            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'","type":"print","time":631479}
+{"testID":22,"messageType":"print","message":"          ]","type":"print","time":631479}
+{"testID":22,"messageType":"print","message":"B04 iPhone 14 · fonte 200%","type":"print","time":631479}
+{"testID":22,"messageType":"print","message":"","type":"print","time":631479}
+{"testID":22,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":631480}
+{"testID":22,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":631480}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631480}
+{"testID":22,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":631480}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631481}
+{"testID":22,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":631481}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631481}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631481}
+{"testID":22,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":631481}
+{"testID":22,"messageType":"print","message":"","type":"print","time":631482}
+{"testID":22,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":631482}
+{"testID":22,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":631483}
+{"testID":22,"messageType":"print","message":"The test description was:","type":"print","time":631483}
+{"testID":22,"messageType":"print","message":"  B04 iPhone 14 · fonte 200% (390×844)","type":"print","time":631483}
+{"testID":22,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":631483}
+{"testID":22,"messageType":"print","message":"(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)","type":"print","time":631484}
+{"testID":22,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":631484}
+{"testID":22,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":631484}
+{"testID":22,"messageType":"print","message":"Expected: empty","type":"print","time":631485}
+{"testID":22,"messageType":"print","message":"  Actual: [","type":"print","time":631485}
+{"testID":22,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by","type":"print","time":631485}
+{"testID":22,"messageType":"print","message":"100 pixels on the right.',","type":"print","time":631486}
+{"testID":22,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":631486}
+{"testID":22,"messageType":"print","message":"overflowed by 100 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0","type":"print","time":631486}
+{"testID":22,"messageType":"print","message":"widgets with text \"Nome completo\": []; ação principal não verificada',","type":"print","time":631486}
+{"testID":22,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":631487}
+{"testID":22,"messageType":"print","message":"overflowed by 100 pixels on the right.',","type":"print","time":631487}
+{"testID":22,"messageType":"print","message":"            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'","type":"print","time":631488}
+{"testID":22,"messageType":"print","message":"          ]","type":"print","time":631489}
+{"testID":22,"messageType":"print","message":"B04 iPhone 14 · fonte 200%","type":"print","time":631490}
+{"testID":22,"messageType":"print","message":"","type":"print","time":631490}
+{"testID":22,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":631490}
+{"testID":22,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":631491}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631491}
+{"testID":22,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":631491}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631492}
+{"testID":22,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":631492}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631492}
+{"testID":22,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":631492}
+{"testID":22,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":631493}
+{"testID":22,"messageType":"print","message":"","type":"print","time":631493}
+{"testID":22,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":631493}
+{"testID":22,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":631493}
+{"testID":22,"messageType":"print","message":"The test description was:","type":"print","time":631494}
+{"testID":22,"messageType":"print","message":"  B04 iPhone 14 · fonte 200% (390×844)","type":"print","time":631494}
+{"testID":22,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":631494}
+{"testID":22,"error":"Test failed. See exception logs above.\nThe test description was: B04 iPhone 14 · fonte 200% (390×844)","stackTrace":"","isFailure":false,"type":"error","time":631495}
+{"testID":22,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":631495}
+{"test":{"id":23,"name":"B — fonte ampliada B05 Pixel 7 · fonte 130% (412×915)","suiteID":0,"groupIDs":[2,18],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":631495}
+{"testID":23,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":663135}
+{"test":{"id":24,"name":"B — fonte ampliada B06 Pixel 7 · fonte 200% (412×915)","suiteID":0,"groupIDs":[2,18],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":663135}
+{"testID":24,"messageType":"print","message":"(The following exception is now available via WidgetTester.takeException:)","type":"print","time":695192}
+{"testID":24,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":695193}
+{"testID":24,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":695193}
+{"testID":24,"messageType":"print","message":"Expected: empty","type":"print","time":695193}
+{"testID":24,"messageType":"print","message":"  Actual: [","type":"print","time":695193}
+{"testID":24,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by","type":"print","time":695194}
+{"testID":24,"messageType":"print","message":"78 pixels on the right.',","type":"print","time":695194}
+{"testID":24,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":695194}
+{"testID":24,"messageType":"print","message":"overflowed by 78 pixels on the right.',","type":"print","time":695195}
+{"testID":24,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":695195}
+{"testID":24,"messageType":"print","message":"overflowed by 78 pixels on the right.',","type":"print","time":695195}
+{"testID":24,"messageType":"print","message":"            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'","type":"print","time":695196}
+{"testID":24,"messageType":"print","message":"          ]","type":"print","time":695196}
+{"testID":24,"messageType":"print","message":"B06 Pixel 7 · fonte 200%","type":"print","time":695196}
+{"testID":24,"messageType":"print","message":"","type":"print","time":695196}
+{"testID":24,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":695197}
+{"testID":24,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":695197}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695197}
+{"testID":24,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":695198}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695198}
+{"testID":24,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":695198}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695198}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695199}
+{"testID":24,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":695199}
+{"testID":24,"messageType":"print","message":"","type":"print","time":695199}
+{"testID":24,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":695199}
+{"testID":24,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":695200}
+{"testID":24,"messageType":"print","message":"The test description was:","type":"print","time":695200}
+{"testID":24,"messageType":"print","message":"  B06 Pixel 7 · fonte 200% (412×915)","type":"print","time":695200}
+{"testID":24,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":695200}
+{"testID":24,"messageType":"print","message":"(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)","type":"print","time":695201}
+{"testID":24,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════","type":"print","time":695201}
+{"testID":24,"messageType":"print","message":"The following TestFailure was thrown running a test:","type":"print","time":695201}
+{"testID":24,"messageType":"print","message":"Expected: empty","type":"print","time":695202}
+{"testID":24,"messageType":"print","message":"  Actual: [","type":"print","time":695202}
+{"testID":24,"messageType":"print","message":"            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by","type":"print","time":695202}
+{"testID":24,"messageType":"print","message":"78 pixels on the right.',","type":"print","time":695202}
+{"testID":24,"messageType":"print","message":"            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":695203}
+{"testID":24,"messageType":"print","message":"overflowed by 78 pixels on the right.',","type":"print","time":695203}
+{"testID":24,"messageType":"print","message":"            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex","type":"print","time":695203}
+{"testID":24,"messageType":"print","message":"overflowed by 78 pixels on the right.',","type":"print","time":695204}
+{"testID":24,"messageType":"print","message":"            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'","type":"print","time":695206}
+{"testID":24,"messageType":"print","message":"          ]","type":"print","time":695206}
+{"testID":24,"messageType":"print","message":"B06 Pixel 7 · fonte 200%","type":"print","time":695207}
+{"testID":24,"messageType":"print","message":"","type":"print","time":695207}
+{"testID":24,"messageType":"print","message":"When the exception was thrown, this was the stack:","type":"print","time":695207}
+{"testID":24,"messageType":"print","message":"#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)","type":"print","time":695208}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695208}
+{"testID":24,"messageType":"print","message":"#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)","type":"print","time":695208}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695208}
+{"testID":24,"messageType":"print","message":"#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)","type":"print","time":695209}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695209}
+{"testID":24,"messageType":"print","message":"<asynchronous suspension>","type":"print","time":695209}
+{"testID":24,"messageType":"print","message":"(elided one frame from package:stack_trace)","type":"print","time":695209}
+{"testID":24,"messageType":"print","message":"","type":"print","time":695209}
+{"testID":24,"messageType":"print","message":"This was caught by the test expectation on the following line:","type":"print","time":695210}
+{"testID":24,"messageType":"print","message":"  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234","type":"print","time":695210}
+{"testID":24,"messageType":"print","message":"The test description was:","type":"print","time":695210}
+{"testID":24,"messageType":"print","message":"  B06 Pixel 7 · fonte 200% (412×915)","type":"print","time":695210}
+{"testID":24,"messageType":"print","message":"════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":695210}
+{"testID":24,"error":"Test failed. See exception logs above.\nThe test description was: B06 Pixel 7 · fonte 200% (412×915)","stackTrace":"","isFailure":false,"type":"error","time":695211}
+{"testID":24,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":695211}
+{"group":{"id":25,"suiteID":0,"parentID":2,"name":"C — tema escuro","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":277,"column":5,"url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"group","time":695212}
+{"test":{"id":26,"name":"C — tema escuro C01 iPhone 14 · tema escuro (390×844)","suiteID":0,"groupIDs":[2,25],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":695212}
+{"testID":26,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":728026}
+{"test":{"id":27,"name":"C — tema escuro C02 iPad · tema escuro (810×1080)","suiteID":0,"groupIDs":[2,25],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":728026}
+{"testID":27,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":763554}
+{"group":{"id":28,"suiteID":0,"parentID":2,"name":"D — teclado aberto","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":277,"column":5,"url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"group","time":763554}
+{"test":{"id":29,"name":"D — teclado aberto D01 iPhone SE 1ª · teclado aberto (320×568)","suiteID":0,"groupIDs":[2,28],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":763554}
+{"testID":29,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":775674}
+{"test":{"id":30,"name":"D — teclado aberto D02 Android pequeno · teclado aberto (360×640)","suiteID":0,"groupIDs":[2,28],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":775675}
+{"testID":30,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":787682}
+{"test":{"id":31,"name":"D — teclado aberto D03 Pixel 7 · teclado aberto (412×915)","suiteID":0,"groupIDs":[2,28],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":279,"root_column":9,"root_url":"file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart"},"type":"testStart","time":787682}
+{"testID":31,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":799649}
+{"test":{"id":32,"name":"(tearDownAll)","suiteID":0,"groupIDs":[2],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":799649}
+{"testID":32,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":799651}
+{"success":false,"type":"done","time":799698}

@@ -1,0 +1,16 @@
+Diagnóstico de overflow — 2026-11-08T13:14:17.492699
+
+## A01 Galaxy Z Fold externa 280×653 · login
+- A RenderFlex overflowed by 5.6 pixels on the right.  ←  lib/screens/login_screen.dart:169
+
+## B02 Android pequeno 360×640 · fonte 200% · login
+- A RenderFlex overflowed by 22 pixels on the bottom.  ←  lib/widgets/fin_controls.dart:253
+- A RenderFlex overflowed by 130 pixels on the right.  ←  lib/screens/login_screen.dart:169
+
+## B02 Android pequeno 360×640 · fonte 200% · início
+- A RenderFlex overflowed by 7.1 pixels on the right.  ←  lib/widgets/saldo_card.dart:46
+- A RenderFlex overflowed by 6.8 pixels on the right.  ←  lib/widgets/saldo_card.dart:156
+
+## B06 Pixel 7 412×915 · fonte 200% · login
+- A RenderFlex overflowed by 22 pixels on the bottom.  ←  lib/widgets/fin_controls.dart:253
+- A RenderFlex overflowed by 78 pixels on the right.  ←  lib/screens/login_screen.dart:169

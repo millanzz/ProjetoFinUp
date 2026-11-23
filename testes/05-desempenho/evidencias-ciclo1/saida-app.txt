@@ -1,0 +1,79 @@
+== Cenário V1: usuário=100 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V1
+RESULTADO V1 {"cenario":"V1","medido_em":"2026-11-08T01:23:25.508351","entrar_ms":145.2,"lancamentos_no_app":100,"recarga_mediana_ms":15.9,"recarga_ms":[15.9,27.9,38.1,13.2,15.7],"rede_mediana_ms":7.7,"processamento_mediana_ms":4.6,"kb_baixados_por_recarga":24.1,"abrir_inicio_primeiro_quadro_ms":817.0,"abrir_inicio_ate_saldo_ms":1184.9,"troca_aba_primeiro_quadro_mediana_ms":126.4,"troca_aba_ate_atualizar_mediana_ms":377.6,"troca_aba_ms":[453.5,398.0,377.6,263.6,362.7,366.7],"historico_tudo_mediana_ms":398.7,"historico_tudo_ms":[456.2,398.7,365.3]}
+00:06 +1: (tearDownAll)
+00:06 +1: All tests passed!
+== Cenário V2: usuário=1000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V2
+RESULTADO V2 {"cenario":"V2","medido_em":"2026-11-08T01:23:49.215876","entrar_ms":223.8,"lancamentos_no_app":1000,"recarga_mediana_ms":52.6,"recarga_ms":[74.3,56.8,52.6,51.8,51.0],"rede_mediana_ms":14.6,"processamento_mediana_ms":35.3,"kb_baixados_por_recarga":243.2,"abrir_inicio_primeiro_quadro_ms":1118.9,"abrir_inicio_ate_saldo_ms":1510.6,"troca_aba_primeiro_quadro_mediana_ms":151.4,"troca_aba_ate_atualizar_mediana_ms":629.4,"troca_aba_ms":[668.4,549.2,629.4,616.5,382.6,723.0],"historico_tudo_mediana_ms":2225.6,"historico_tudo_ms":[2742.5,2225.6,2029.2]}
+00:15 +1: (tearDownAll)
+00:15 +1: All tests passed!
+== Cenário V3: usuário=10000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V3
+RESULTADO V3 {"cenario":"V3","medido_em":"2026-11-08T01:24:26.881290","entrar_ms":652.1,"lancamentos_no_app":10000,"recarga_mediana_ms":467.3,"recarga_ms":[471.8,461.0,467.3,471.0,451.2],"rede_mediana_ms":103.5,"processamento_mediana_ms":356.2,"kb_baixados_por_recarga":2455.7,"abrir_inicio_primeiro_quadro_ms":2856.9,"abrir_inicio_ate_saldo_ms":3188.4,"troca_aba_primeiro_quadro_mediana_ms":185.3,"troca_aba_ate_atualizar_mediana_ms":1761.9,"troca_aba_ms":[1995.8,1597.2,1886.5,1545.4,1721.2,1761.9],"historico_tudo_mediana_ms":37392.1,"historico_tudo_ms":[32140.9,37392.1,38022.1]}
+02:47 +1: (tearDownAll)
+02:47 +1: All tests passed!
+== Cenário V4: usuário=50000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V4
+23:20 +0 -1: desempenho do app — cenário V4 [E]
+  TimeoutException after 0:20:00.000000: Test timed out after 20 minutes.
+  dart:isolate  _RawReceivePort._handleMessage
+  
+  Guarded function conflict.
+  You must use "await" with all Future-returning test APIs.
+  The guarded method "pump" from class WidgetTester was called from file:///C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart on line 120.
+  Then, the "setSurfaceSize" method from class TestWidgetsFlutterBinding was called from file:///C:/Users/Pingo/Desktop/FableFinUp/testes/02-funcionais/app/suporte.dart on line 131.
+  The first method (WidgetTester.pump) had not yet finished executing at the time that the second method (TestWidgetsFlutterBinding.setSurfaceSize) was called. Since both are guarded, and the second was not a nested call inside the first, the first must complete its execution before the second can be called. Typically, this is achieved by putting an "await" statement in front of the call to the first.
+  
+  When the first method (WidgetTester.pump) was called, this was the stack:
+  #0      TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:72:42)
+  #1      WidgetTester.pump (package:flutter_test/src/widget_tester.dart:652:27)
+  #2      main.<anonymous closure> (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart:120:17)
+  <asynchronous suspension>
+  #3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+  <asynchronous suspension>
+  #4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+  <asynchronous suspension>
+  <asynchronous suspension>
+  (elided one frame from package:stack_trace)
+  package:flutter_test/src/test_async_utils.dart 312:5  TestAsyncUtils.guardSync
+  package:flutter_test/src/test_async_utils.dart 66:5   TestAsyncUtils.guard
+  package:flutter_test/src/binding.dart 1164:27         TestWidgetsFlutterBinding.setSurfaceSize
+  ..\testes\02-funcionais\app\suporte.dart 131:31       telaDeCelular.<fn>
+  
+  'package:flutter_test/src/binding.dart': Failed assertion: line 2780 pos 12: '!_expectingFrame': is not true.
+  dart:core                                      _AssertionError._throwNew
+  package:flutter_test/src/binding.dart 2780:12  LiveTestWidgetsFlutterBinding.postTest
+  
+23:20 +0 -1: (tearDownAll)
+37:37 +0 -1: Some tests failed.
+== Cenário C1: usuário=1000 outros=100000 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário C1
+RESULTADO C1 {"cenario":"C1","medido_em":"2026-11-08T02:06:09.607912","entrar_ms":225.4,"lancamentos_no_app":1000,"recarga_mediana_ms":67.0,"recarga_ms":[83.9,70.3,67.0,66.7,63.9],"rede_mediana_ms":27.8,"processamento_mediana_ms":34.6,"kb_baixados_por_recarga":243.2,"abrir_inicio_primeiro_quadro_ms":1183.0,"abrir_inicio_ate_saldo_ms":1564.8,"troca_aba_primeiro_quadro_mediana_ms":151.4,"troca_aba_ate_atualizar_mediana_ms":746.6,"troca_aba_ms":[687.4,799.1,767.0,523.4,629.9,746.6],"historico_tudo_mediana_ms":2148.6,"historico_tudo_ms":[2708.2,2148.6,2060.4]}
+00:16 +1: (tearDownAll)
+00:16 +1: All tests passed!
+== Cenário C2: usuário=1000 outros=500000 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário C2
+RESULTADO C2 {"cenario":"C2","medido_em":"2026-11-08T02:07:36.410778","entrar_ms":289.8,"lancamentos_no_app":1000,"recarga_mediana_ms":119.1,"recarga_ms":[131.6,124.5,119.1,118.2,115.6],"rede_mediana_ms":79.4,"processamento_mediana_ms":34.7,"kb_baixados_por_recarga":243.2,"abrir_inicio_primeiro_quadro_ms":1162.4,"abrir_inicio_ate_saldo_ms":1533.0,"troca_aba_primeiro_quadro_mediana_ms":152.2,"troca_aba_ate_atualizar_mediana_ms":739.5,"troca_aba_ms":[685.0,803.4,766.2,643.6,739.5,733.0],"historico_tudo_mediana_ms":2223.5,"historico_tudo_ms":[2683.5,2223.5,2001.1]}
+00:16 +1: (tearDownAll)
+00:17 +1: All tests passed!
+--- reexecução do cenário V4 em 2026-11-08 02:08:41 -0300 ---
+== Cenário V4: usuário=50000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V4
+RESULTADO V4 {"cenario":"V4","medido_em":"2026-11-08T02:09:19.463172","entrar_ms":2504.1,"lancamentos_no_app":50000,"recarga_mediana_ms":2292.2,"recarga_ms":[2302.6,2235.2,2292.2,2282.0,2320.2],"rede_mediana_ms":541.4,"processamento_mediana_ms":1762.0,"kb_baixados_por_recarga":12377.2,"abrir_inicio_primeiro_quadro_ms":7493.8,"abrir_inicio_ate_saldo_ms":7799.5,"troca_aba_ms":[5779.3,5069.4,5328.5,5201.4,4846.2,5068.6],"troca_aba_primeiro_quadro_mediana_ms":229.1,"troca_aba_ate_atualizar_mediana_ms":5201.4,"historico_tudo_ms":[663548.6],"historico_tudo_mediana_ms":663548.6,"concluido":true}
+22:33 +1: (tearDownAll)
+22:34 +1: All tests passed!

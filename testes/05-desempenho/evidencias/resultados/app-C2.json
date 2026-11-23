@@ -1,0 +1,36 @@
+{
+  "cenario": "C2",
+  "medido_em": "2026-11-22T22:53:45.104749",
+  "entrar_ms": 210.9,
+  "lancamentos_no_app": 1000,
+  "recarga_mediana_ms": 56.8,
+  "recarga_ms": [
+    70.0,
+    56.8,
+    53.4,
+    58.7,
+    51.3
+  ],
+  "rede_mediana_ms": 15.8,
+  "processamento_mediana_ms": 34.1,
+  "kb_baixados_por_recarga": 243.2,
+  "abrir_inicio_primeiro_quadro_ms": 1012.6,
+  "abrir_inicio_ate_saldo_ms": 1372.3,
+  "troca_aba_ms": [
+    205.2,
+    136.6,
+    133.0,
+    131.7,
+    133.5,
+    129.5
+  ],
+  "troca_aba_primeiro_quadro_mediana_ms": 133.5,
+  "troca_aba_ate_atualizar_mediana_ms": 133.5,
+  "historico_tudo_ms": [
+    174.2,
+    143.3,
+    148.7
+  ],
+  "historico_tudo_mediana_ms": 148.7,
+  "concluido": true
+}

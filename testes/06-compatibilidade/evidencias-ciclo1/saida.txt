@@ -1,0 +1,308 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart
+00:00 +0: (setUpAll)
+00:01 +0: A — aparelhos A01 Galaxy Z Fold (tela externa) (280×653)
+(The following exception is now available via WidgetTester.takeException:)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 5.6 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 5.6 pixels on the right.',
+            'Esqueci minha senha: A RenderFlex overflowed by 5.6 pixels on the right.'
+          ]
+A01 Galaxy Z Fold (tela externa)
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  A01 Galaxy Z Fold (tela externa) (280×653)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 5.6 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 5.6 pixels on the right.',
+            'Esqueci minha senha: A RenderFlex overflowed by 5.6 pixels on the right.'
+          ]
+A01 Galaxy Z Fold (tela externa)
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  A01 Galaxy Z Fold (tela externa) (280×653)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:36 +0 -1: A — aparelhos A01 Galaxy Z Fold (tela externa) (280×653) [E]
+  Test failed. See exception logs above.
+  The test description was: A01 Galaxy Z Fold (tela externa) (280×653)
+  
+00:36 +0 -1: A — aparelhos A02 iPhone SE 1ª geração (320×568)
+01:11 +1 -1: A — aparelhos A03 Android pequeno (Galaxy J/A básico) (360×640)
+01:45 +2 -1: A — aparelhos A04 iPhone SE 2ª/3ª geração (375×667)
+02:19 +3 -1: A — aparelhos A05 iPhone 14 / 15 (390×844)
+02:51 +4 -1: A — aparelhos A06 Pixel 7 / Galaxy S23 (412×915)
+03:23 +5 -1: A — aparelhos A07 iPhone 14/15 Pro Max (430×932)
+03:55 +6 -1: A — aparelhos A08 iPhone 14 em paisagem (844×390)
+04:30 +7 -1: A — aparelhos A09 Android em paisagem (915×412)
+05:04 +8 -1: A — aparelhos A10 iPad 9ª geração (810×1080)
+05:40 +9 -1: A — aparelhos A11 Tablet Android 10" (800×1280)
+06:14 +10 -1: A — aparelhos A12 Notebook / Web 1280×800 (1280×800)
+06:53 +11 -1: A — aparelhos A13 Monitor Full HD 1920×1080 (1920×1080)
+07:32 +12 -1: B — fonte ampliada B01 Android pequeno · fonte 130% (360×640)
+08:05 +13 -1: B — fonte ampliada B02 Android pequeno · fonte 200% (360×640)
+(The following exception is now available via WidgetTester.takeException:)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by
+130 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 130 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0
+widgets with text "Nome completo": []; ação principal não verificada',
+            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 130 pixels on the right.',
+            'Início: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by
+6.8 pixels on the right.',
+            'Entradas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed
+by 6.8 pixels on the right.',
+            'Despesas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed
+by 6.8 pixels on the right.',
+            'Metas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by
+6.8 pixels on the right.',
+            'Histórico: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed
+by 6.8 pixels on the right.',
+            'Perfil: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by
+6.8 pixels on the right.',
+            'Formulário de despesa: A RenderFlex overflowed by 7.1 pixels on the right.; A
+RenderFlex overflowed by 6.8 pixels on the right.; A RenderFlex overflowed by 22 pixels on the
+bottom.'
+          ]
+B02 Android pequeno · fonte 200%
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  B02 Android pequeno · fonte 200% (360×640)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by
+130 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 130 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0
+widgets with text "Nome completo": []; ação principal não verificada',
+            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 130 pixels on the right.',
+            'Início: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by
+6.8 pixels on the right.',
+            'Entradas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed
+by 6.8 pixels on the right.',
+            'Despesas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed
+by 6.8 pixels on the right.',
+            'Metas: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by
+6.8 pixels on the right.',
+            'Histórico: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed
+by 6.8 pixels on the right.',
+            'Perfil: A RenderFlex overflowed by 7.1 pixels on the right.; A RenderFlex overflowed by
+6.8 pixels on the right.',
+            'Formulário de despesa: A RenderFlex overflowed by 7.1 pixels on the right.; A
+RenderFlex overflowed by 6.8 pixels on the right.; A RenderFlex overflowed by 22 pixels on the
+bottom.'
+          ]
+B02 Android pequeno · fonte 200%
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  B02 Android pequeno · fonte 200% (360×640)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+08:58 +13 -2: B — fonte ampliada B02 Android pequeno · fonte 200% (360×640) [E]
+  Test failed. See exception logs above.
+  The test description was: B02 Android pequeno · fonte 200% (360×640)
+  
+08:58 +13 -2: B — fonte ampliada B03 iPhone 14 · fonte 130% (390×844)
+09:30 +14 -2: B — fonte ampliada B04 iPhone 14 · fonte 200% (390×844)
+(The following exception is now available via WidgetTester.takeException:)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by
+100 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 100 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0
+widgets with text "Nome completo": []; ação principal não verificada',
+            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 100 pixels on the right.',
+            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'
+          ]
+B04 iPhone 14 · fonte 200%
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  B04 iPhone 14 · fonte 200% (390×844)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by
+100 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 100 pixels on the right.; falha ao abrir a tela: Tempo esgotado esperando: Found 0
+widgets with text "Nome completo": []; ação principal não verificada',
+            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 100 pixels on the right.',
+            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'
+          ]
+B04 iPhone 14 · fonte 200%
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  B04 iPhone 14 · fonte 200% (390×844)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+10:21 +14 -3: B — fonte ampliada B04 iPhone 14 · fonte 200% (390×844) [E]
+  Test failed. See exception logs above.
+  The test description was: B04 iPhone 14 · fonte 200% (390×844)
+  
+10:21 +14 -3: B — fonte ampliada B05 Pixel 7 · fonte 130% (412×915)
+10:52 +15 -3: B — fonte ampliada B06 Pixel 7 · fonte 200% (412×915)
+(The following exception is now available via WidgetTester.takeException:)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by
+78 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 78 pixels on the right.',
+            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 78 pixels on the right.',
+            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'
+          ]
+B06 Pixel 7 · fonte 200%
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  B06 Pixel 7 · fonte 200% (412×915)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+(If WidgetTester.takeException is called, the above exception will be ignored. If it is not, then the above exception will be dumped when another exception is caught by the framework or when the test ends, whichever happens first, and then the test will fail due to having not caught or expected the exception.)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            'Login: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex overflowed by
+78 pixels on the right.',
+            'Criar conta: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 78 pixels on the right.',
+            'Esqueci minha senha: A RenderFlex overflowed by 22 pixels on the bottom.; A RenderFlex
+overflowed by 78 pixels on the right.',
+            'Formulário de despesa: A RenderFlex overflowed by 22 pixels on the bottom.'
+          ]
+B06 Pixel 7 · fonte 200%
+
+When the exception was thrown, this was the stack:
+#4      visitarPerfil (file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart:234:3)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/flutter/compat_test.dart line 234
+The test description was:
+  B06 Pixel 7 · fonte 200% (412×915)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+11:24 +15 -4: B — fonte ampliada B06 Pixel 7 · fonte 200% (412×915) [E]
+  Test failed. See exception logs above.
+  The test description was: B06 Pixel 7 · fonte 200% (412×915)
+  
+11:24 +15 -4: C — tema escuro C01 iPhone 14 · tema escuro (390×844)
+11:57 +16 -4: C — tema escuro C02 iPad · tema escuro (810×1080)
+12:33 +17 -4: D — teclado aberto D01 iPhone SE 1ª · teclado aberto (320×568)
+12:45 +18 -4: D — teclado aberto D02 Android pequeno · teclado aberto (360×640)
+12:57 +19 -4: D — teclado aberto D03 Pixel 7 · teclado aberto (412×915)
+13:09 +20 -4: (tearDownAll)
+13:09 +20 -4: Some tests failed.

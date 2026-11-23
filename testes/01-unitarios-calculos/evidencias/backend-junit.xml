@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="Despesas (POST/GET/PUT/DELETE /expenses)" time="0.238710" disabled="0" errors="0" tests="12" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-DES-01 cria despesa válida e ela entra no total" time="0.103871" classname="test"/>
+		<testcase name="CT-DES-02 despesa sem categoria é rejeitada (categoria obrigatória)" time="0.004204" classname="test"/>
+		<testcase name="CT-DES-03 categoria de receita não pode ser usada em despesa" time="0.003579" classname="test"/>
+		<testcase name="CT-DES-04 valor inválido é rejeitado e nada é gravado" time="0.005628" classname="test"/>
+		<testcase name="CT-DES-05 parcelamento de R$ 100 em 3x: centavos e datas de fim de mês" time="0.081076" classname="test"/>
+		<testcase name="CT-DES-06 parcelamento cruza ano bissexto (31/01/2028 → 29/02/2028)" time="0.004600" classname="test"/>
+		<testcase name="CT-DES-07 parcelas em 12x de R$ 1.999,99 somam exatamente o total" time="0.006615" classname="test"/>
+		<testcase name="CT-DES-08 número de parcelas fora do limite (0, 49, 2.5) é rejeitado" time="0.004516" classname="test"/>
+		<testcase name="CT-DES-09 valor pequeno demais para as parcelas (R$ 0,05 em 10x) é rejeitado" time="0.004821" classname="test"/>
+		<testcase name="CT-DES-10 excluir o grupo remove todas as parcelas e zera o total" time="0.006896" classname="test"/>
+		<testcase name="CT-DES-11 edição com valor inválido é rejeitada e o valor original é mantido" time="0.004473" classname="test"/>
+		<testcase name="CT-DES-12 editar data move a despesa de mês no total mensal" time="0.006046" classname="test"/>
+	</testsuite>
+	<testsuite name="Metas (POST/PATCH/DELETE /goals e aportes)" time="0.155523" disabled="0" errors="0" tests="10" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-MET-01 cria meta com valor guardado 0 e ícone padrão" time="0.100463" classname="test"/>
+		<testcase name="CT-MET-02 valor alvo zero, negativo ou texto é rejeitado" time="0.004265" classname="test"/>
+		<testcase name="CT-MET-03 valor guardado inicial negativo é rejeitado" time="0.003276" classname="test"/>
+		<testcase name="CT-MET-04 aportes somam ao valor guardado (R$ 200 + R$ 150,50 = R$ 350,50)" time="0.005987" classname="test"/>
+		<testcase name="CT-MET-05 aporte zero ou negativo é rejeitado e não altera o valor" time="0.004401" classname="test"/>
+		<testcase name="CT-MET-06 10 aportes simultâneos de R$ 10 resultam em R$ 100 (sem perder nenhum)" time="0.005870" classname="test"/>
+		<testcase name="CT-MET-07 aporte além do alvo é aceito (meta ultrapassada)" time="0.003407" classname="test"/>
+		<testcase name="CT-MET-08 aporte em meta de outro usuário retorna 404 e não altera" time="0.002937" classname="test"/>
+		<testcase name="CT-MET-09 edição de valores e validação de ícone" time="0.003597" classname="test"/>
+		<testcase name="CT-MET-10 aportes de centavos somam exato (R$ 0,10 + R$ 0,20 = R$ 0,30)" time="0.019233" classname="test"/>
+	</testsuite>
+	<testsuite name="Receitas (POST/GET/PUT/DELETE /incomes)" time="0.224544" disabled="0" errors="0" tests="12" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-REC-01 cria receita válida e ela entra no total" time="0.103641" classname="test"/>
+		<testcase name="CT-REC-02 receita sem categoria é aceita (categoria opcional)" time="0.003893" classname="test"/>
+		<testcase name="CT-REC-03 valor zero, negativo, texto ou infinito é rejeitado" time="0.003991" classname="test"/>
+		<testcase name="CT-REC-04 valor ou data ausentes são rejeitados" time="0.004855" classname="test"/>
+		<testcase name="CT-REC-05 data inexistente ou fora do formato é rejeitada" time="0.003237" classname="test"/>
+		<testcase name="CT-REC-06 categoria de despesa não pode ser usada em receita" time="0.002924" classname="test"/>
+		<testcase name="CT-REC-07 categoria de outro usuário é rejeitada" time="0.002901" classname="test"/>
+		<testcase name="CT-REC-08 receita parcelada divide o total sem perder centavos (R$ 1.000 em 3x)" time="0.071717" classname="test"/>
+		<testcase name="CT-REC-09 listagem por mês retorna só as receitas daquele mês" time="0.007083" classname="test"/>
+		<testcase name="CT-REC-10 editar o valor atualiza o total de receitas" time="0.006876" classname="test"/>
+		<testcase name="CT-REC-11 excluir receita de outro usuário retorna 404 e não remove" time="0.005549" classname="test"/>
+		<testcase name="CT-REC-12 excluir a própria receita tira o valor do total" time="0.005867" classname="test"/>
+	</testsuite>
+	<testsuite name="Cálculo de saldo (GET /dashboard)" time="0.292846" disabled="0" errors="0" tests="12" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-SAL-01 usuário sem lançamentos tem saldo e totais zerados" time="0.101639" classname="test"/>
+		<testcase name="CT-SAL-02 saldo = receitas − despesas (R$ 6.500,50 − R$ 1.500,25 = R$ 5.000,25)" time="0.011334" classname="test"/>
+		<testcase name="CT-SAL-03 saldo negativo quando despesas superam receitas" time="0.007298" classname="test"/>
+		<testcase name="CT-SAL-04 filtro ?month considera somente o mês pedido" time="0.005849" classname="test"/>
+		<testcase name="CT-SAL-05 saldo de um usuário não inclui lançamentos de outro" time="0.004256" classname="test"/>
+		<testcase name="CT-SAL-06 mês em formato inválido é rejeitado com 400" time="0.002707" classname="test"/>
+		<testcase name="CT-SAL-07 evolução mensal agrupa receitas e despesas por mês" time="0.062887" classname="test"/>
+		<testcase name="CT-SAL-08 despesas por categoria somam corretamente e vêm em ordem decrescente" time="0.013418" classname="test"/>
+		<testcase name="CT-SAL-09 compra parcelada entra no saldo de cada mês pela parcela" time="0.010443" classname="test"/>
+		<testcase name="CT-SAL-10 saldo exato em centavos (R$ 0,10 + R$ 0,20 − R$ 0,30 = R$ 0,00)" time="0.005181" classname="test"/>
+		<testcase name="CT-SAL-12 saldo exato em centavos, ordem inversa (R$ 0,30 − (R$ 0,10 + R$ 0,20) = R$ 0,00)" time="0.004277" classname="test"/>
+		<testcase name="CT-SAL-11 saldo exato com muitos lançamentos de centavos (100 × R$ 0,01 − R$ 1,00)" time="0.061251" classname="test"/>
+	</testsuite>
+	<!-- tests 46 -->
+	<!-- suites 4 -->
+	<!-- pass 46 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 606.5732 -->
+</testsuites>

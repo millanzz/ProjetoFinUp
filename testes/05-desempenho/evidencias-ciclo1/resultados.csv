@@ -1,0 +1,121 @@
+cenario,camada,medida,mediana_ms,p95_ms,kb
+V1,api,"POST /auth/login",60.5,62.9,0.3
+V2,api,"POST /auth/login",60.2,62.6,0.3
+V3,api,"POST /auth/login",61.1,62.6,0.3
+V4,api,"POST /auth/login",60.9,64.3,0.3
+C1,api,"POST /auth/login",61.3,63.9,0.3
+C2,api,"POST /auth/login",60.9,63.2,0.3
+V1,api,"GET /dashboard",2.1,2.5,2
+V2,api,"GET /dashboard",3.2,3.6,2.6
+V3,api,"GET /dashboard",14.7,15.3,2.7
+V4,api,"GET /dashboard",85.8,88,2.7
+C1,api,"GET /dashboard",39.9,40.5,2.6
+C2,api,"GET /dashboard",191.4,194.9,2.6
+V1,api,"GET /dashboard?month=AAAA-MM",2.1,2.4,1.5
+V2,api,"GET /dashboard?month=AAAA-MM",3.5,3.6,2.4
+V3,api,"GET /dashboard?month=AAAA-MM",17.2,17.6,2.7
+V4,api,"GET /dashboard?month=AAAA-MM",100.5,102.3,2.7
+C1,api,"GET /dashboard?month=AAAA-MM",39.9,40.6,2.4
+C2,api,"GET /dashboard?month=AAAA-MM",192.2,197.1,2.4
+V1,api,"GET /incomes",1.5,1.7,4.5
+V2,api,"GET /incomes",3.2,3.5,45.9
+V3,api,"GET /incomes",19.9,35,470.3
+V4,api,"GET /incomes",97.8,109.2,2385.3
+C1,api,"GET /incomes",4.7,5.1,45.9
+C2,api,"GET /incomes",15.3,16.3,45.9
+V1,api,"GET /expenses",2.2,2.4,19.6
+V2,api,"GET /expenses",9.2,9.9,197.3
+V3,api,"GET /expenses",81.1,93,1985.4
+V4,api,"GET /expenses",421.7,473.8,9991.9
+C1,api,"GET /expenses",20,22.5,197.3
+C2,api,"GET /expenses",61.2,62.9,197.3
+V1,api,"GET /expenses?month=AAAA-MM",1.4,1.6,0.7
+V2,api,"GET /expenses?month=AAAA-MM",1.9,2.2,9.3
+V3,api,"GET /expenses?month=AAAA-MM",8.2,9.3,79.6
+V4,api,"GET /expenses?month=AAAA-MM",35.3,36.7,416.6
+C1,api,"GET /expenses?month=AAAA-MM",12.7,13.1,9.3
+C2,api,"GET /expenses?month=AAAA-MM",53.6,54.1,9.3
+V1,api,"GET /goals",1.4,1.6,2.7
+V2,api,"GET /goals",1.3,1.5,2.7
+V3,api,"GET /goals",1.8,14.1,2.7
+V4,api,"GET /goals",1.3,1.7,2.7
+C1,api,"GET /goals",1.4,1.9,2.7
+C2,api,"GET /goals",1.4,2,2.7
+V1,api,"GET /categories",1.3,1.7,1.2
+V2,api,"GET /categories",1.2,1.5,1.2
+V3,api,"GET /categories",1.6,2.3,1.2
+V4,api,"GET /categories",1.2,2,1.2
+C1,api,"GET /categories",1.5,1.7,1.2
+C2,api,"GET /categories",1.5,1.9,1.2
+V1,api,"POST /expenses",7.7,8.5,0.1
+V2,api,"POST /expenses",9,14.6,0.1
+V3,api,"POST /expenses",7.2,8.6,0.1
+V4,api,"POST /expenses",7.9,10.2,0.1
+C1,api,"POST /expenses",8.9,11.4,0.1
+C2,api,"POST /expenses",8.1,27.6,0.1
+V1,api,"PUT /expenses/:id",6.6,8.2,0
+V2,api,"PUT /expenses/:id",6.7,8.4,0
+V3,api,"PUT /expenses/:id",6.1,7.9,0
+V4,api,"PUT /expenses/:id",6.9,9.7,0
+C1,api,"PUT /expenses/:id",8.5,10.8,0
+C2,api,"PUT /expenses/:id",7.2,25.9,0
+V1,api,"DELETE /expenses/:id",6,7.1,0
+V2,api,"DELETE /expenses/:id",6.2,7.6,0
+V3,api,"DELETE /expenses/:id",5.8,7.7,0
+V4,api,"DELETE /expenses/:id",7.1,8.5,0
+C1,api,"DELETE /expenses/:id",6.9,10.1,0
+C2,api,"DELETE /expenses/:id",7.5,29.6,0
+V1,api,"GET /dashboard 20 simultaneos",17.7,23.9,
+V2,api,"GET /dashboard 20 simultaneos",34.2,39.4,
+V3,api,"GET /dashboard 20 simultaneos",259.1,284.5,
+V4,api,"GET /dashboard 20 simultaneos",1692.6,1791,
+C1,api,"GET /dashboard 20 simultaneos",779.7,787,
+C2,api,"GET /dashboard 20 simultaneos",3837.3,3875.6,
+V1,app,"Entrar (login + carregar dados)",145.2,,
+V2,app,"Entrar (login + carregar dados)",223.8,,
+V3,app,"Entrar (login + carregar dados)",652.1,,
+V4,app,"Entrar (login + carregar dados)",2504.1,,
+C1,app,"Entrar (login + carregar dados)",225.4,,
+C2,app,"Entrar (login + carregar dados)",289.8,,
+V1,app,"Recarregar todos os lançamentos",15.9,,
+V2,app,"Recarregar todos os lançamentos",52.6,,
+V3,app,"Recarregar todos os lançamentos",467.3,,
+V4,app,"Recarregar todos os lançamentos",2292.2,,
+C1,app,"Recarregar todos os lançamentos",67,,
+C2,app,"Recarregar todos os lançamentos",119.1,,
+V1,app,"↳ parte de rede (download)",7.7,,
+V2,app,"↳ parte de rede (download)",14.6,,
+V3,app,"↳ parte de rede (download)",103.5,,
+V4,app,"↳ parte de rede (download)",541.4,,
+C1,app,"↳ parte de rede (download)",27.8,,
+C2,app,"↳ parte de rede (download)",79.4,,
+V1,app,"↳ parte de processamento (JSON → modelos)",4.6,,
+V2,app,"↳ parte de processamento (JSON → modelos)",35.3,,
+V3,app,"↳ parte de processamento (JSON → modelos)",356.2,,
+V4,app,"↳ parte de processamento (JSON → modelos)",1762,,
+C1,app,"↳ parte de processamento (JSON → modelos)",34.6,,
+C2,app,"↳ parte de processamento (JSON → modelos)",34.7,,
+V1,app,"Abrir a Início até mostrar o saldo",1184.9,,
+V2,app,"Abrir a Início até mostrar o saldo",1510.6,,
+V3,app,"Abrir a Início até mostrar o saldo",3188.4,,
+V4,app,"Abrir a Início até mostrar o saldo",7799.5,,
+C1,app,"Abrir a Início até mostrar o saldo",1564.8,,
+C2,app,"Abrir a Início até mostrar o saldo",1533,,
+V1,app,"Trocar de aba (até recarregar e redesenhar)",377.6,,
+V2,app,"Trocar de aba (até recarregar e redesenhar)",629.4,,
+V3,app,"Trocar de aba (até recarregar e redesenhar)",1761.9,,
+V4,app,"Trocar de aba (até recarregar e redesenhar)",5201.4,,
+C1,app,"Trocar de aba (até recarregar e redesenhar)",746.6,,
+C2,app,"Trocar de aba (até recarregar e redesenhar)",739.5,,
+V1,app,"Histórico → filtro "Tudo"",398.7,,
+V2,app,"Histórico → filtro "Tudo"",2225.6,,
+V3,app,"Histórico → filtro "Tudo"",37392.1,,
+V4,app,"Histórico → filtro "Tudo"",663548.6,,
+C1,app,"Histórico → filtro "Tudo"",2148.6,,
+C2,app,"Histórico → filtro "Tudo"",2223.5,,
+V1,app,"KB baixados a cada recarga",24.1,,
+V2,app,"KB baixados a cada recarga",243.2,,
+V3,app,"KB baixados a cada recarga",2455.7,,
+V4,app,"KB baixados a cada recarga",12377.2,,
+C1,app,"KB baixados a cada recarga",243.2,,
+C2,app,"KB baixados a cada recarga",243.2,,

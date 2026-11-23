@@ -1,0 +1,17 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/01-unitarios-calculos/frontend/calculos_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: Saldo do mês (SaldoCard) CT-FE-SAL-01 sem lançamentos mostra R$ 0,00
+00:01 +1: Saldo do mês (SaldoCard) CT-FE-SAL-02 saldo = entradas − saídas (R$ 6.500,50 − R$ 1.500,25)
+00:01 +2: Saldo do mês (SaldoCard) CT-FE-SAL-03 saldo negativo exibe sinal de menos
+00:01 +3: Saldo do mês (SaldoCard) CT-FE-SAL-04 saldo zerado por centavos não aparece como negativo
+00:01 +4: Saldo do mês (SaldoCard) CT-FE-SAL-05 saldo zerado por centavos (ordem inversa) não aparece como negativo
+00:02 +5: Progresso de metas (MetaModel) CT-FE-MET-01 progresso = guardado / alvo (R$ 250 de R$ 1.000 = 25%)
+00:02 +6: Progresso de metas (MetaModel) CT-FE-MET-02 alvo zero não divide por zero (progresso 0)
+00:02 +7: Progresso de metas (MetaModel) CT-FE-MET-03 meta concluída ao atingir ou ultrapassar o alvo
+00:02 +8: Progresso de metas (MetaModel) CT-FE-MET-04 fromApi trata current_amount nulo como 0 e inteiros como double
+00:02 +9: Progresso de metas (MetaModel) CT-FE-MET-05 aportes de centavos concluem a meta (0,10 + 0,20 ≥ 0,30)
+00:02 +10: Valores de receitas e despesas no app CT-FE-LAN-01 fromApi converte amount inteiro/decimal e identifica o tipo
+00:02 +11: Valores de receitas e despesas no app CT-FE-LAN-02 divisão de parcelas no app bate com o backend (R$ 100 em 3x)
+00:02 +12: Valores de receitas e despesas no app CT-FE-LAN-03 toApiJson envia o valor e a data no formato do backend
+00:02 +13: (tearDownAll)
+00:02 +13: All tests passed!

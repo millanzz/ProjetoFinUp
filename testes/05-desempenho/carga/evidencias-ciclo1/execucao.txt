@@ -1,0 +1,8 @@
+2026-11-09 20:58:46 -0300
+v24.11.0
+CPU: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
+RAM: 15.9 GB
+banco: {"lancamentos_usuario":1000,"lancamentos_banco":51000,"tamanho_mb":3.9,"segundos":2.489}
+10 usuários · 3172 req em 60.6s · 52.3 req/s · média 19.5 ms · p95 47.8 ms · falhas 0 (0%)
+50 usuários · 7940 req em 61.7s · 128.7 req/s · média 212.3 ms · p95 374.2 ms · falhas 0 (0%)
+100 usuários · 8152 req em 63s · 129.4 req/s · média 582.8 ms · p95 919.4 ms · falhas 0 (0%)

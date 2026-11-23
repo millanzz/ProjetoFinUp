@@ -1,0 +1,3 @@
+package: br.com.finup.app
+permission: br.com.finup.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission: name='br.com.finup.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'

@@ -1,0 +1,20 @@
+2026-11-22 22:49:59 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+CPU: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
+RAM: 15.9 GB
+Disco: KINGSTON SA400S37480G
+exit api V1: 0
+exit app V1: 0
+exit api V2: 0
+exit app V2: 0
+exit api V3: 0
+exit app V3: 0
+exit api V4: 0
+exit app V4: 0
+exit api C1: 0
+exit app C1: 0
+exit api C2: 0
+exit app C2: 0

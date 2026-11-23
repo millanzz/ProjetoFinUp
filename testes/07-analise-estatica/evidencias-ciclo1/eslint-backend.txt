@@ -1,0 +1,62 @@
+
+backend\src\app.js
+  41:25  warning  'next' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+
+backend\src\controllers\authController.js
+   7:28  warning  Expected to return a value at the end of arrow function        consistent-return
+  20:23  warning  Expected to return a value at the end of async arrow function  consistent-return
+
+backend\src\controllers\categoryController.js
+   6:29  warning  Expected to return a value at the end of arrow function  consistent-return
+  19:5   warning  Expected to return a value at the end of function        consistent-return
+  45:35  warning  Expected to return a value at the end of arrow function  consistent-return
+
+backend\src\controllers\dashboardController.js
+  12:19  warning  Arrow function has too many lines (92). Maximum allowed is 60  max-lines-per-function
+  12:30  warning  Expected to return a value at the end of arrow function        consistent-return
+  83:29  warning  Variable Assigned to Object Injection Sink                     security/detect-object-injection
+  86:38  warning  Expected to return a value at the end of arrow function        consistent-return
+  88:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
+  92:39  warning  Expected to return a value at the end of arrow function        consistent-return
+  94:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
+
+backend\src\controllers\goalController.js
+  70:35  warning  Async arrow function has a complexity of 12. Maximum allowed is 10  complexity
+
+backend\src\controllers\lancamentoController.js
+   29:18  warning  Function 'lancamentoController' has too many lines (188). Maximum allowed is 60  max-lines-per-function
+   61:12  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   61:45  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   63:44  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   63:62  warning  Generic Object Injection Sink                                                    security/detect-object-injection
+   86:3   warning  Async function 'create' has a complexity of 20. Maximum allowed is 10            complexity
+   86:18  warning  Expected to return a value at the end of async function 'create'                 consistent-return
+  168:3   warning  Async function 'update' has a complexity of 12. Maximum allowed is 10            complexity
+
+backend\src\controllers\passwordResetController.js
+  30:43  warning  Expected to return a value at the end of async arrow function       consistent-return
+  99:42  warning  Async arrow function has a complexity of 13. Maximum allowed is 10  complexity
+
+backend\src\controllers\userController.js
+   28:35  warning  Expected to return a value at the end of async arrow function  consistent-return
+   63:7   warning  Expected to return a value at the end of function              consistent-return
+   91:16  warning  Expected to return a value at the end of arrow function        consistent-return
+  100:29  warning  Expected to return a value at the end of arrow function        consistent-return
+  132:5   warning  Expected to return a value at the end of function              consistent-return
+  152:16  warning  Expected to return a value at the end of arrow function        consistent-return
+  161:37  warning  Expected to return a value at the end of arrow function        consistent-return
+  178:22  warning  Expected to return a value at the end of async arrow function  consistent-return
+  192:18  warning  Expected to return a value at the end of arrow function        consistent-return
+
+backend\src\database\db.js
+  16:14  warning  Arrow function has too many lines (90). Maximum allowed is 60  max-lines-per-function
+
+backend\src\middlewares\authMiddleware.js
+   8:35  warning  Expected to return a value at the end of arrow function  consistent-return
+  22:60  warning  Expected to return a value at the end of arrow function  consistent-return
+
+backend\src\utils\dbAsync.js
+  20:25  warning  Expected to return a value at the end of function  consistent-return
+
+✖ 37 problems (0 errors, 37 warnings)
+

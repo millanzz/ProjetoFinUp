@@ -1,0 +1,12 @@
+[22:48:17] API iniciada (pid 1833)
+[22:48:17] fase1 — processo novo do app
+[22:48:28] fase1 terminou (exit 0)
+[22:48:28] API derrubada à força (pid 1833)
+[22:48:29] API iniciada (pid 1867)
+[22:48:29] fase2 — processo novo do app
+[22:48:40] fase2 terminou (exit 0)
+[22:48:40] API derrubada à força (pid 1867)
+[22:48:41] API iniciada (pid 1892)
+[22:48:42] fase3 — processo novo do app
+[22:48:51] fase3 terminou (exit 0)
+[22:48:51] API derrubada à força (pid 1892)

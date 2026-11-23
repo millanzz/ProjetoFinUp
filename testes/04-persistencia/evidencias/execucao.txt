@@ -1,0 +1,9 @@
+2026-11-22 22:48:13 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit fase1: 0
+exit fase2: 0
+exit fase3: 0
+exit durabilidade: 0

@@ -1,0 +1,12 @@
+[00:59:31] API iniciada (pid 893)
+[00:59:31] fase1 — processo novo do app
+[00:59:41] fase1 terminou (exit 0)
+[00:59:41] API derrubada à força (pid 893)
+[00:59:43] API iniciada (pid 924)
+[00:59:43] fase2 — processo novo do app
+[00:59:53] fase2 terminou (exit 0)
+[00:59:53] API derrubada à força (pid 924)
+[00:59:54] API iniciada (pid 949)
+[00:59:54] fase3 — processo novo do app
+[01:00:02] fase3 terminou (exit 0)
+[01:00:02] API derrubada à força (pid 949)

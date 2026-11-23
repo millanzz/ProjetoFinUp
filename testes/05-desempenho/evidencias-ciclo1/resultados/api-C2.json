@@ -1,0 +1,137 @@
+{
+  "cenario": "C2",
+  "medido_em": "2026-11-08T05:07:24.089Z",
+  "rotas": [
+    {
+      "rota": "POST /auth/login",
+      "n": 10,
+      "min": 59.9,
+      "mediana": 60.9,
+      "p95": 63.2,
+      "max": 63.2,
+      "media": 61.6,
+      "kb_resposta": 0.3,
+      "status": 200
+    },
+    {
+      "rota": "GET /dashboard",
+      "n": 20,
+      "min": 189.5,
+      "mediana": 191.4,
+      "p95": 194.9,
+      "max": 195.6,
+      "media": 191.9,
+      "kb_resposta": 2.6,
+      "status": 200
+    },
+    {
+      "rota": "GET /dashboard?month=AAAA-MM",
+      "n": 20,
+      "min": 190.3,
+      "mediana": 192.2,
+      "p95": 197.1,
+      "max": 198.3,
+      "media": 193.1,
+      "kb_resposta": 2.4,
+      "status": 200
+    },
+    {
+      "rota": "GET /incomes",
+      "n": 20,
+      "min": 14.7,
+      "mediana": 15.3,
+      "p95": 16.3,
+      "max": 16.4,
+      "media": 15.5,
+      "kb_resposta": 45.9,
+      "status": 200
+    },
+    {
+      "rota": "GET /expenses",
+      "n": 20,
+      "min": 60.3,
+      "mediana": 61.2,
+      "p95": 62.9,
+      "max": 64.6,
+      "media": 61.6,
+      "kb_resposta": 197.3,
+      "status": 200
+    },
+    {
+      "rota": "GET /expenses?month=AAAA-MM",
+      "n": 20,
+      "min": 52.8,
+      "mediana": 53.6,
+      "p95": 54.1,
+      "max": 55.9,
+      "media": 53.7,
+      "kb_resposta": 9.3,
+      "status": 200
+    },
+    {
+      "rota": "GET /goals",
+      "n": 20,
+      "min": 1.3,
+      "mediana": 1.4,
+      "p95": 2,
+      "max": 2.5,
+      "media": 1.5,
+      "kb_resposta": 2.7,
+      "status": 200
+    },
+    {
+      "rota": "GET /categories",
+      "n": 20,
+      "min": 1.2,
+      "mediana": 1.5,
+      "p95": 1.9,
+      "max": 3.1,
+      "media": 1.6,
+      "kb_resposta": 1.2,
+      "status": 200
+    },
+    {
+      "rota": "POST /expenses",
+      "n": 20,
+      "min": 6.5,
+      "mediana": 8.1,
+      "p95": 27.6,
+      "max": 28.3,
+      "media": 12.9,
+      "kb_resposta": 0.1,
+      "status": 201
+    },
+    {
+      "rota": "PUT /expenses/:id",
+      "n": 20,
+      "min": 1.5,
+      "mediana": 7.2,
+      "p95": 25.9,
+      "max": 34.3,
+      "media": 9.1,
+      "kb_resposta": 0,
+      "status": 200
+    },
+    {
+      "rota": "DELETE /expenses/:id",
+      "n": 20,
+      "min": 5.8,
+      "mediana": 7.5,
+      "p95": 29.6,
+      "max": 31.6,
+      "media": 10.2,
+      "kb_resposta": 0,
+      "status": 204
+    }
+  ],
+  "simultaneo": {
+    "rota": "GET /dashboard (20 simultâneos × 5)",
+    "n": 100,
+    "min": 197,
+    "mediana": 3837.3,
+    "p95": 3875.6,
+    "max": 3878.6,
+    "media": 3340.1,
+    "req_por_segundo": 5
+  }
+}

@@ -1,0 +1,9 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/reteste/fluxos_novos_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: UI-CONTA-01 excluir conta pelo Perfil apaga a conta e volta ao login
+00:08 +1: UI-CONTA-02 senha errada ao excluir mostra aviso e a conta continua
+00:15 +2: UI-PRIV-01 Perfil → Política de privacidade mostra o texto da API
+00:20 +3: UI-PRIV-02 no cadastro, "termos de uso" abre a política
+00:22 +4: UI-SESS-01 trocar a senha no app mantém este aparelho conectado
+00:31 +5: (tearDownAll)
+00:31 +5: All tests passed!

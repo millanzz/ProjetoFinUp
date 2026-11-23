@@ -1,0 +1,84 @@
+== Cenário V1: usuário=100 outros=0 ==
+Cenário V1
+  POST /auth/login                   mediana       64 ms   p95       88 ms         0.3 KB   (HTTP 200)
+  GET /dashboard                     mediana      2.5 ms   p95      2.9 ms         1.9 KB   (HTTP 200)
+  GET /dashboard?month=AAAA-MM       mediana      2.6 ms   p95        3 ms         1.5 KB   (HTTP 200)
+  GET /incomes                       mediana      2.2 ms   p95      3.9 ms         4.5 KB   (HTTP 200)
+  GET /expenses                      mediana      3.5 ms   p95      4.4 ms        19.6 KB   (HTTP 200)
+  GET /expenses?month=AAAA-MM        mediana      1.8 ms   p95      2.1 ms         0.7 KB   (HTTP 200)
+  GET /goals                         mediana      1.7 ms   p95      2.1 ms         2.7 KB   (HTTP 200)
+  GET /categories                    mediana      1.5 ms   p95      1.9 ms         1.2 KB   (HTTP 200)
+  POST /expenses                     mediana      8.9 ms   p95     11.8 ms         0.1 KB   (HTTP 201)
+  PUT /expenses/:id                  mediana      7.9 ms   p95     10.8 ms         0.0 KB   (HTTP 200)
+  DELETE /expenses/:id               mediana      9.2 ms   p95     15.3 ms         0.0 KB   (HTTP 204)
+  GET /dashboard (20 simultâneos × 5) mediana       21 ms   p95     28.3 ms   752 req/s
+== Cenário V2: usuário=1000 outros=0 ==
+Cenário V2
+  POST /auth/login                   mediana     60.8 ms   p95     62.7 ms         0.3 KB   (HTTP 200)
+  GET /dashboard                     mediana      3.5 ms   p95      3.9 ms         2.5 KB   (HTTP 200)
+  GET /dashboard?month=AAAA-MM       mediana      3.8 ms   p95      4.3 ms         2.4 KB   (HTTP 200)
+  GET /incomes                       mediana      3.5 ms   p95      3.7 ms        45.9 KB   (HTTP 200)
+  GET /expenses                      mediana      9.5 ms   p95     10.2 ms       197.3 KB   (HTTP 200)
+  GET /expenses?month=AAAA-MM        mediana      2.4 ms   p95      3.9 ms         9.3 KB   (HTTP 200)
+  GET /goals                         mediana      1.7 ms   p95      1.9 ms         2.7 KB   (HTTP 200)
+  GET /categories                    mediana      1.6 ms   p95      1.9 ms         1.2 KB   (HTTP 200)
+  POST /expenses                     mediana      8.8 ms   p95     32.8 ms         0.1 KB   (HTTP 201)
+  PUT /expenses/:id                  mediana      7.6 ms   p95       30 ms         0.0 KB   (HTTP 200)
+  DELETE /expenses/:id               mediana      7.6 ms   p95     31.2 ms         0.0 KB   (HTTP 204)
+  GET /dashboard (20 simultâneos × 5) mediana     38.6 ms   p95     44.4 ms   426 req/s
+== Cenário V3: usuário=10000 outros=0 ==
+Cenário V3
+  POST /auth/login                   mediana     74.9 ms   p95     96.8 ms         0.3 KB   (HTTP 200)
+  GET /dashboard                     mediana     14.2 ms   p95     14.9 ms         2.7 KB   (HTTP 200)
+  GET /dashboard?month=AAAA-MM       mediana     16.7 ms   p95     17.1 ms         2.7 KB   (HTTP 200)
+  GET /incomes                       mediana     20.9 ms   p95     40.5 ms       470.3 KB   (HTTP 200)
+  GET /expenses                      mediana     79.4 ms   p95     96.9 ms      1985.4 KB   (HTTP 200)
+  GET /expenses?month=AAAA-MM        mediana      7.9 ms   p95        8 ms        79.6 KB   (HTTP 200)
+  GET /goals                         mediana      1.7 ms   p95      1.8 ms         2.7 KB   (HTTP 200)
+  GET /categories                    mediana      1.6 ms   p95      1.8 ms         1.2 KB   (HTTP 200)
+  POST /expenses                     mediana      9.3 ms   p95     20.5 ms         0.1 KB   (HTTP 201)
+  PUT /expenses/:id                  mediana      7.3 ms   p95      8.1 ms         0.0 KB   (HTTP 200)
+  DELETE /expenses/:id               mediana      8.1 ms   p95      8.6 ms         0.0 KB   (HTTP 204)
+  GET /dashboard (20 simultâneos × 5) mediana    210.7 ms   p95    254.4 ms   80 req/s
+== Cenário V4: usuário=50000 outros=0 ==
+Cenário V4
+  POST /auth/login                   mediana     61.1 ms   p95     64.3 ms         0.3 KB   (HTTP 200)
+  GET /dashboard                     mediana       66 ms   p95       69 ms         2.7 KB   (HTTP 200)
+  GET /dashboard?month=AAAA-MM       mediana     79.5 ms   p95     80.4 ms         2.7 KB   (HTTP 200)
+  GET /incomes                       mediana       98 ms   p95    136.6 ms      2385.3 KB   (HTTP 200)
+  GET /expenses                      mediana    491.4 ms   p95      560 ms      9991.9 KB   (HTTP 200)
+  GET /expenses?month=AAAA-MM        mediana     40.3 ms   p95     52.7 ms       416.6 KB   (HTTP 200)
+  GET /goals                         mediana      1.7 ms   p95      1.9 ms         2.7 KB   (HTTP 200)
+  GET /categories                    mediana      1.9 ms   p95      2.2 ms         1.2 KB   (HTTP 200)
+  POST /expenses                     mediana        8 ms   p95      9.6 ms         0.1 KB   (HTTP 201)
+  PUT /expenses/:id                  mediana      7.8 ms   p95      9.1 ms         0.0 KB   (HTTP 200)
+  DELETE /expenses/:id               mediana        8 ms   p95     14.2 ms         0.0 KB   (HTTP 204)
+  GET /dashboard (20 simultâneos × 5) mediana   1094.5 ms   p95   1410.5 ms   15 req/s
+== Cenário C1: usuário=1000 outros=100000 ==
+Cenário C1
+  POST /auth/login                   mediana     73.1 ms   p95     95.8 ms         0.3 KB   (HTTP 200)
+  GET /dashboard                     mediana      5.7 ms   p95       12 ms         2.5 KB   (HTTP 200)
+  GET /dashboard?month=AAAA-MM       mediana      5.3 ms   p95      6.9 ms         2.4 KB   (HTTP 200)
+  GET /incomes                       mediana      5.3 ms   p95      8.1 ms        45.9 KB   (HTTP 200)
+  GET /expenses                      mediana     10.7 ms   p95     14.6 ms       197.3 KB   (HTTP 200)
+  GET /expenses?month=AAAA-MM        mediana      2.6 ms   p95      3.1 ms         9.3 KB   (HTTP 200)
+  GET /goals                         mediana      1.6 ms   p95      1.9 ms         2.7 KB   (HTTP 200)
+  GET /categories                    mediana      1.6 ms   p95        2 ms         1.2 KB   (HTTP 200)
+  POST /expenses                     mediana        9 ms   p95     11.1 ms         0.1 KB   (HTTP 201)
+  PUT /expenses/:id                  mediana      9.1 ms   p95     13.4 ms         0.0 KB   (HTTP 200)
+  DELETE /expenses/:id               mediana      7.3 ms   p95      8.5 ms         0.0 KB   (HTTP 204)
+  GET /dashboard (20 simultâneos × 5) mediana     37.3 ms   p95     47.9 ms   424 req/s
+== Cenário C2: usuário=1000 outros=500000 ==
+Cenário C2
+  POST /auth/login                   mediana     60.4 ms   p95     63.1 ms         0.3 KB   (HTTP 200)
+  GET /dashboard                     mediana      3.4 ms   p95      4.1 ms         2.5 KB   (HTTP 200)
+  GET /dashboard?month=AAAA-MM       mediana        4 ms   p95      4.2 ms         2.4 KB   (HTTP 200)
+  GET /incomes                       mediana      3.5 ms   p95      3.6 ms        45.9 KB   (HTTP 200)
+  GET /expenses                      mediana      9.5 ms   p95     10.1 ms       197.3 KB   (HTTP 200)
+  GET /expenses?month=AAAA-MM        mediana      2.4 ms   p95      3.9 ms         9.3 KB   (HTTP 200)
+  GET /goals                         mediana      1.6 ms   p95      1.8 ms         2.7 KB   (HTTP 200)
+  GET /categories                    mediana      1.5 ms   p95      1.8 ms         1.2 KB   (HTTP 200)
+  POST /expenses                     mediana     10.6 ms   p95     19.2 ms         0.1 KB   (HTTP 201)
+  PUT /expenses/:id                  mediana      6.8 ms   p95      8.7 ms         0.0 KB   (HTTP 200)
+  DELETE /expenses/:id               mediana      6.9 ms   p95      8.6 ms         0.0 KB   (HTTP 204)
+  GET /dashboard (20 simultâneos × 5) mediana     35.9 ms   p95     47.5 ms   426 req/s

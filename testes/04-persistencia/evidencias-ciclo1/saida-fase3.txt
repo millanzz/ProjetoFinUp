@@ -1,0 +1,5 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/04-persistencia/flutter/fase3_apos_sair_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: FASE 3 — reabrir após sair da conta
+00:03 +1: (tearDownAll)
+00:03 +1: All tests passed!

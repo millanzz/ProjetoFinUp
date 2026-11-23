@@ -1,0 +1,4 @@
+PRONTO api=http://127.0.0.1:3999 inspetor=http://127.0.0.1:4000 banco=C:\Users\Pingo\Desktop\FableFinUp\testes\03-integracao\evidencias\banco-integracao.db
+PRONTO api=http://127.0.0.1:3999 inspetor=http://127.0.0.1:4000 banco=C:\Users\Pingo\Desktop\FableFinUp\testes\03-integracao\evidencias\banco-integracao.db
+PRONTO api=http://127.0.0.1:3999 inspetor=http://127.0.0.1:4000 banco=C:\Users\Pingo\Desktop\FableFinUp\testes\03-integracao\evidencias\banco-integracao.db
+PRONTO api=http://127.0.0.1:3999 inspetor=http://127.0.0.1:4000 banco=C:\Users\Pingo\Desktop\FableFinUp\testes\03-integracao\evidencias\banco-integracao.db

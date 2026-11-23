@@ -1,0 +1,147 @@
+[22:45:37] 01 unitários
+2026-11-22 22:45:37 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit backend: 0
+exit frontend: 0
+[22:46:00] 02 funcionais
+2026-11-22 22:46:01 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit api: 0
+exit app: 0
+[22:47:53] 03 integração
+2026-11-22 22:47:54 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit: 0
+[22:48:13] 04 persistência
+[22:48:17] API iniciada (pid 1833)
+[22:48:17] fase1 — processo novo do app
+[22:48:28] fase1 terminou (exit 0)
+[22:48:28] API derrubada à força (pid 1833)
+[22:48:29] API iniciada (pid 1867)
+[22:48:29] fase2 — processo novo do app
+[22:48:40] fase2 terminou (exit 0)
+[22:48:40] API derrubada à força (pid 1867)
+[22:48:41] API iniciada (pid 1892)
+[22:48:42] fase3 — processo novo do app
+[22:48:51] fase3 terminou (exit 0)
+[22:48:51] API derrubada à força (pid 1892)
+2026-11-22 22:48:13 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit fase1: 0
+exit fase2: 0
+exit fase3: 0
+exit durabilidade: 0
+IDÊNTICO: o conteúdo do banco após 3 reinícios é igual ao do fim da fase 1.
+sha256 final: 3ffae2ed0e2fdca6a603d2f99b4ef77a95314fe76ea3045fe338d9075982c498
+sha256 após fase 1: 3ffae2ed0e2fdca6a603d2f99b4ef77a95314fe76ea3045fe338d9075982c498
+[22:49:09] 07 análise estática
+2026-11-22 22:49:09 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit dart projeto: 0
+dart estrito: 70 issues found. (ran in 4.2s)
+exit eslint: 0
+total: 44
+[
+  [ 'consistent-return', 25 ],
+  [ 'security/detect-object-injection', 8 ],
+  [ 'complexity', 6 ],
+  [ 'max-lines-per-function', 3 ],
+  [ 'security/detect-non-literal-fs-filename', 2 ]
+]
+[22:49:42] 06 compatibilidade
+24 folhas geradas
+/c/Users/Pingo/Desktop/FableFinUp/testes/06-compatibilidade/executar.sh: line 30:  2052 Killed                     node "$AQUI/../03-integracao/servidor/servidor.js" "$TMPD/compat.db" 3999 > "$TMPD/api.log" 2>&1
+2026-11-22 22:49:43 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit: 1
+[22:49:59] 05 desempenho
+== Cenário V1: usuário=100 outros=0 ==
+   banco: {"lancamentos_usuario":100,"lancamentos_banco":100,"tamanho_mb":0.1,"segundos":0.211}
+== Cenário V2: usuário=1000 outros=0 ==
+   banco: {"lancamentos_usuario":1000,"lancamentos_banco":1000,"tamanho_mb":0.2,"segundos":0.739}
+== Cenário V3: usuário=10000 outros=0 ==
+   banco: {"lancamentos_usuario":10000,"lancamentos_banco":10000,"tamanho_mb":1.4,"segundos":0.696}
+== Cenário V4: usuário=50000 outros=0 ==
+   banco: {"lancamentos_usuario":50000,"lancamentos_banco":50000,"tamanho_mb":6.6,"segundos":3.038}
+== Cenário C1: usuário=1000 outros=100000 ==
+   banco: {"lancamentos_usuario":1000,"lancamentos_banco":101000,"tamanho_mb":13.7,"segundos":6.182}
+== Cenário C2: usuário=1000 outros=500000 ==
+   banco: {"lancamentos_usuario":1000,"lancamentos_banco":501000,"tamanho_mb":69,"segundos":24.73}
+gr�ficos gerados
+2026-11-22 22:49:59 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+CPU: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
+RAM: 15.9 GB
+Disco: KINGSTON SA400S37480G
+exit api V1: 0
+exit app V1: 0
+exit api V2: 0
+exit app V2: 0
+exit api V3: 0
+exit app V3: 0
+exit api V4: 0
+exit app V4: 0
+exit api C1: 0
+exit app C1: 0
+exit api C2: 0
+exit app C2: 0
+[22:54:00] 05 carga
+10 usuários · 3364 req em 61s · 55.1 req/s · média 10.7 ms · p95 21.3 ms · falhas 0 (0%)
+50 usuários · 12662 req em 61.2s · 206.7 req/s · média 69.1 ms · p95 153.1 ms · falhas 0 (0%)
+100 usuários · 13444 req em 62s · 216.7 req/s · média 280.9 ms · p95 396.7 ms · falhas 0 (0%)
+[22:57:18] fim
+[22:59:58] ===== 4ª passada (categorias padrão gravadas antes da resposta) =====
+[22:59:58] 02-funcionais
+2026-11-22 22:59:58 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit api: 0
+exit app: 0
+[23:01:47] 03-integracao
+2026-11-22 23:01:47 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit: 0
+[23:02:04] 06-compatibilidade
+24 folhas geradas
+testes/06-compatibilidade/executar.sh: line 30:   883 Killed                     node "$AQUI/../03-integracao/servidor/servidor.js" "$TMPD/compat.db" 3999 > "$TMPD/api.log" 2>&1
+2026-11-22 23:02:04 -0300
+v24.11.0
+Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
+e1376b8
+redesign-fusao-tema-escuro
+exit: 0
+[23:15:58] reteste
+testes/reteste/executar.sh: line 33:   916 Killed                     node "$AQUI/../03-integracao/servidor/servidor.js" "$TMPD/ui.db" 3999 > "$TMPD/api-ui.log" 2>&1
+2026-11-22 23:15:58 -0300
+exit api: 0
+exit app: 0
+exit telas: 0
+exit apk-internet: 0
+exit web: 0
+[23:22:42] fim 4ª passada

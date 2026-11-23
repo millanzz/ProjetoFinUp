@@ -1,0 +1,336 @@
+{
+  "usuario": {
+    "id": 1,
+    "name": "Paula M. Ribeiro",
+    "email": "paula@teste.local",
+    "created_at": "2026-11-08 03:59:37"
+  },
+  "categorias": [
+    {
+      "id": 6,
+      "name": "Alimentação",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 12,
+      "name": "Assinaturas",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 4,
+      "name": "Bônus",
+      "type": "income",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 11,
+      "name": "Compras",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 2,
+      "name": "Freelance",
+      "type": "income",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 13,
+      "name": "Impostos",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 3,
+      "name": "Investimentos",
+      "type": "income",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 10,
+      "name": "Lazer",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 8,
+      "name": "Moradia",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 5,
+      "name": "Outros",
+      "type": "income",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 14,
+      "name": "Outros",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 15,
+      "name": "Projetos",
+      "type": "income",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 1,
+      "name": "Salário",
+      "type": "income",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 9,
+      "name": "Saúde",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 7,
+      "name": "Transporte",
+      "type": "expense",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    }
+  ],
+  "receitas": [
+    {
+      "id": 1,
+      "amount": 5200,
+      "description": "Salário",
+      "date": "2026-11-05",
+      "category_id": 1,
+      "parcelado": 0,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": null,
+      "parcela_numero": null,
+      "parcela_total": null,
+      "category_name": "Salário"
+    },
+    {
+      "id": 2,
+      "amount": 850.5,
+      "description": "Logo — padaria São João",
+      "date": "2026-11-02",
+      "category_id": 15,
+      "parcelado": 0,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": null,
+      "parcela_numero": null,
+      "parcela_total": null,
+      "category_name": "Projetos"
+    }
+  ],
+  "despesas": [
+    {
+      "id": 7,
+      "amount": 900,
+      "description": "Notebook",
+      "date": "2027-02-01",
+      "category_id": 11,
+      "parcelado": 1,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": "c474d1c3-1e99-4a9e-8c14-057a520d9140",
+      "parcela_numero": 4,
+      "parcela_total": 4,
+      "category_name": "Compras"
+    },
+    {
+      "id": 6,
+      "amount": 900,
+      "description": "Notebook",
+      "date": "2027-01-01",
+      "category_id": 11,
+      "parcelado": 1,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": "c474d1c3-1e99-4a9e-8c14-057a520d9140",
+      "parcela_numero": 3,
+      "parcela_total": 4,
+      "category_name": "Compras"
+    },
+    {
+      "id": 2,
+      "amount": 412.9,
+      "description": "Mercado do mês",
+      "date": "2026-11-04",
+      "category_id": 6,
+      "parcelado": 0,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": null,
+      "parcela_numero": null,
+      "parcela_total": null,
+      "category_name": "Alimentação"
+    },
+    {
+      "id": 1,
+      "amount": 1450,
+      "description": "Aluguel",
+      "date": "2026-11-03",
+      "category_id": 8,
+      "parcelado": 0,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": null,
+      "parcela_numero": null,
+      "parcela_total": null,
+      "category_name": "Moradia"
+    },
+    {
+      "id": 4,
+      "amount": 900,
+      "description": "Notebook",
+      "date": "2026-11-01",
+      "category_id": 11,
+      "parcelado": 1,
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37",
+      "parcela_grupo": "c474d1c3-1e99-4a9e-8c14-057a520d9140",
+      "parcela_numero": 1,
+      "parcela_total": 4,
+      "category_name": "Compras"
+    }
+  ],
+  "metas": [
+    {
+      "id": 2,
+      "title": "Viagem",
+      "target_amount": 6000,
+      "current_amount": 0,
+      "icon": "flight",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    },
+    {
+      "id": 1,
+      "title": "Reserva de emergência",
+      "target_amount": 10000,
+      "current_amount": 2750.75,
+      "icon": "wallet",
+      "user_id": 1,
+      "created_at": "2026-11-08 03:59:37"
+    }
+  ],
+  "dashboard": {
+    "balance": 1487.6000000000004,
+    "total_incomes": 6050.5,
+    "total_expenses": 4562.9,
+    "expenses_by_category": [
+      {
+        "category": "Compras",
+        "total": 2700
+      },
+      {
+        "category": "Moradia",
+        "total": 1450
+      },
+      {
+        "category": "Alimentação",
+        "total": 412.9
+      }
+    ],
+    "incomes_by_category": [
+      {
+        "category": "Salário",
+        "total": 5200
+      },
+      {
+        "category": "Projetos",
+        "total": 850.5
+      }
+    ],
+    "monthly": [
+      {
+        "month": "2026-11",
+        "incomes": 6050.5,
+        "expenses": 2762.9
+      },
+      {
+        "month": "2027-01",
+        "incomes": 0,
+        "expenses": 900
+      },
+      {
+        "month": "2027-02",
+        "incomes": 0,
+        "expenses": 900
+      }
+    ]
+  },
+  "dashboard_mes": {
+    "balance": 3287.6,
+    "total_incomes": 6050.5,
+    "total_expenses": 2762.9,
+    "expenses_by_category": [
+      {
+        "category": "Moradia",
+        "total": 1450
+      },
+      {
+        "category": "Compras",
+        "total": 900
+      },
+      {
+        "category": "Alimentação",
+        "total": 412.9
+      }
+    ],
+    "incomes_by_category": [
+      {
+        "category": "Salário",
+        "total": 5200
+      },
+      {
+        "category": "Projetos",
+        "total": 850.5
+      }
+    ],
+    "monthly": [
+      {
+        "month": "2026-11",
+        "incomes": 6050.5,
+        "expenses": 2762.9
+      },
+      {
+        "month": "2027-01",
+        "incomes": 0,
+        "expenses": 900
+      },
+      {
+        "month": "2027-02",
+        "incomes": 0,
+        "expenses": 900
+      }
+    ]
+  },
+  "saldo_no_app": 1487.6000000000004,
+  "excluidos": {
+    "despesa_cinema": 3,
+    "parcela_2_notebook": 5,
+    "meta_carro": 3
+  },
+  "mes": "2026-11"
+}

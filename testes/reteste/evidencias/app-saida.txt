@@ -1,0 +1,4 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/reteste/logout_test.dart
+00:00 +0: DEF-18 logout() só termina depois de apagar o token do aparelho
+00:00 +1: DEF-01/02 arredondamento: 0,30 − (0,10 + 0,20) vira 0 e mostra "R$ 0,00"
+00:00 +2: All tests passed!

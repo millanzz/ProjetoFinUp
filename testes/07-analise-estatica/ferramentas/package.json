@@ -1,0 +1,11 @@
+{
+  "name": "finup-analise-estatica",
+  "private": true,
+  "description": "Ferramentas da análise estática do backend (não fazem parte do app)",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-security": "^3.0.1",
+    "globals": "^16.5.0"
+  }
+}

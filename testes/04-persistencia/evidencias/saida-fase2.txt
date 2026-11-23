@@ -1,0 +1,5 @@
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/04-persistencia/flutter/fase2_reabertura_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: FASE 2 — reabrir o app após reiniciar a API
+00:04 +1: (tearDownAll)
+00:05 +1: All tests passed!
