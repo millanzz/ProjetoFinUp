@@ -1,10 +1,10 @@
-2026-11-22 23:22:59 -0300
+2026-11-23 10:11:41 -0300
 v24.11.0
 Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
-e1376b8
+41409a1
 redesign-fusao-tema-escuro
 exit dart projeto: 0
-dart estrito: 70 issues found. (ran in 2.6s)
+dart estrito: 78 issues found. (ran in 2.2s)
 exit eslint: 0
 total: 44
 [

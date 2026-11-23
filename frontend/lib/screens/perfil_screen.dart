@@ -354,18 +354,18 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       rows: [
                         _Opcao(
                           estilo: const EmblemaStyle(
-                              Icons.logout, Color(0xffF7A68B), Color(0xffDC7457)),
-                          titulo: 'Sair da conta',
-                          perigo: true,
-                          onTap: _confirmarSaida,
-                        ),
-                        _Opcao(
-                          estilo: const EmblemaStyle(
                               Icons.delete_forever, Color(0xffF7A68B), Color(0xffC2410C)),
                           titulo: 'Excluir conta',
                           subtitulo: 'Apaga a conta e todos os dados',
                           perigo: true,
                           onTap: _abrirExcluirConta,
+                        ),
+                        _Opcao(
+                          estilo: const EmblemaStyle(
+                              Icons.logout, Color(0xffF7A68B), Color(0xffDC7457)),
+                          titulo: 'Sair da conta',
+                          perigo: true,
+                          onTap: _confirmarSaida,
                         ),
                       ],
                     ),

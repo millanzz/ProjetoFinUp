@@ -28,26 +28,26 @@ CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,
           email TEXT NOT NULL UNIQUE, password TEXT NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, sessoes_desde INTEGER NOT NULL DEFAULT 0);
 
 -- categories: 2 linha(s)
-{"id":1,"name":"Salário","type":"income","user_id":1,"created_at":"2026-11-23 02:02:02"}
-{"id":2,"name":"Moradia","type":"expense","user_id":1,"created_at":"2026-11-23 02:02:02"}
+{"id":1,"name":"Salário","type":"income","user_id":1,"created_at":"2026-11-23 12:15:40"}
+{"id":2,"name":"Moradia","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:40"}
 
 -- expenses: 4 linha(s)
-{"id":1,"amount":1500,"description":"Aluguel antigo","date":"2025-12-10","category_id":2,"user_id":1,"created_at":"2026-11-23 02:02:02","parcelado":0,"parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":2,"amount":300,"description":"Sofá","date":"2026-11-08","category_id":2,"user_id":1,"created_at":"2026-11-23 02:02:02","parcelado":1,"parcela_grupo":"81f642cf-0fff-42ed-a898-3cdec7b6731a","parcela_numero":1,"parcela_total":3}
-{"id":3,"amount":300,"description":"Sofá","date":"2026-12-08","category_id":2,"user_id":1,"created_at":"2026-11-23 02:02:02","parcelado":1,"parcela_grupo":"81f642cf-0fff-42ed-a898-3cdec7b6731a","parcela_numero":2,"parcela_total":3}
-{"id":4,"amount":300,"description":"Sofá","date":"2027-01-08","category_id":2,"user_id":1,"created_at":"2026-11-23 02:02:02","parcelado":1,"parcela_grupo":"81f642cf-0fff-42ed-a898-3cdec7b6731a","parcela_numero":3,"parcela_total":3}
+{"id":1,"amount":1500,"description":"Aluguel antigo","date":"2025-12-10","category_id":2,"user_id":1,"created_at":"2026-11-23 12:15:40","parcelado":0,"parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":2,"amount":300,"description":"Sofá","date":"2026-11-08","category_id":2,"user_id":1,"created_at":"2026-11-23 12:15:41","parcelado":1,"parcela_grupo":"179dd838-7e4f-43ec-98d9-8346e5c0d6ba","parcela_numero":1,"parcela_total":3}
+{"id":3,"amount":300,"description":"Sofá","date":"2026-12-08","category_id":2,"user_id":1,"created_at":"2026-11-23 12:15:41","parcelado":1,"parcela_grupo":"179dd838-7e4f-43ec-98d9-8346e5c0d6ba","parcela_numero":2,"parcela_total":3}
+{"id":4,"amount":300,"description":"Sofá","date":"2027-01-08","category_id":2,"user_id":1,"created_at":"2026-11-23 12:15:41","parcelado":1,"parcela_grupo":"179dd838-7e4f-43ec-98d9-8346e5c0d6ba","parcela_numero":3,"parcela_total":3}
 
 -- goals: 4 linha(s)
-{"id":1,"title":"Reserva","target_amount":10000,"current_amount":2500,"icon":"flag","user_id":1,"created_at":"2026-11-23 02:02:02"}
-{"id":2,"title":"Viagem","target_amount":8000,"current_amount":0,"icon":"flight","user_id":1,"created_at":"2026-11-23 02:02:02"}
-{"id":3,"title":"Praia","target_amount":3000,"current_amount":100,"icon":"flight","user_id":1,"created_at":"2026-11-23 02:02:02"}
-{"id":4,"title":"Sem ícone","target_amount":500,"current_amount":0,"icon":"flag","user_id":1,"created_at":"2026-11-23 02:02:02"}
+{"id":1,"title":"Reserva","target_amount":10000,"current_amount":2500,"icon":"flag","user_id":1,"created_at":"2026-11-23 12:15:40"}
+{"id":2,"title":"Viagem","target_amount":8000,"current_amount":0,"icon":"flight","user_id":1,"created_at":"2026-11-23 12:15:40"}
+{"id":3,"title":"Praia","target_amount":3000,"current_amount":100,"icon":"flight","user_id":1,"created_at":"2026-11-23 12:15:40"}
+{"id":4,"title":"Sem ícone","target_amount":500,"current_amount":0,"icon":"flag","user_id":1,"created_at":"2026-11-23 12:15:40"}
 
 -- incomes: 1 linha(s)
-{"id":1,"amount":5000,"description":"Salário antigo","date":"2025-12-05","category_id":1,"user_id":1,"created_at":"2026-11-23 02:02:02","parcelado":0,"parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":1,"amount":5000,"description":"Salário antigo","date":"2025-12-05","category_id":1,"user_id":1,"created_at":"2026-11-23 12:15:40","parcelado":0,"parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
 
 -- password_resets: 0 linha(s)
 
 -- users: 1 linha(s)
-{"id":1,"name":"Usuária Antiga","email":"legado@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 02:02:02","sessoes_desde":0}
+{"id":1,"name":"Usuária Antiga","email":"legado@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 12:15:40","sessoes_desde":0}
 

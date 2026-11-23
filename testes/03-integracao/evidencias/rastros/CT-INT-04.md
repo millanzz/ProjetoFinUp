@@ -1,6 +1,6 @@
 # CT-INT-04 — login com senha errada: o erro da API chega ao app e nada é salvo
 
-Gerado em 2026-11-22T23:01:55.517169
+Gerado em 2026-11-23T09:15:31.681023
 
 ### 01. Conferência no SQLite
 

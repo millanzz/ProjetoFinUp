@@ -23,7 +23,8 @@ app.use((req, res, next) => {
 require('./database/db');
 
 // middlewares globais
-app.use(cors()); // libera o acesso para o app Flutter
+// libera o acesso para o app Flutter; expõe os cabeçalhos de paginação para a versão Web
+app.use(cors({ exposedHeaders: ['X-Total-Count', 'X-Next-Offset'] }));
 app.use(express.json());
 
 // rota de healthcheck
@@ -44,6 +45,7 @@ const incomeRoutes = require('./routes/incomeRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const extratoRoutes = require('./routes/extratoRoutes');
 
 // registrar rotas com prefixo
 app.use('/users', userRoutes);
@@ -53,6 +55,7 @@ app.use('/incomes', incomeRoutes);
 app.use('/expenses', expenseRoutes);
 app.use('/goals', goalRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/lancamentos', extratoRoutes);
 
 // middleware 404 (rota não encontrada)
 app.use((req, res) => {

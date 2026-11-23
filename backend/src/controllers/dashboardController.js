@@ -1,5 +1,6 @@
 const db = require('../database/db');
 const { isValidMonth, erroInterno } = require('../utils/validators');
+const { inicioDoMesSeguinte } = require('../utils/paginacao');
 
 /**
  * GET /dashboard
@@ -17,9 +18,9 @@ exports.summary = (req, res) => {
     return res.status(400).json({ error: 'month deve estar no formato AAAA-MM' });
   }
 
-  // filtro de mês opcional (strftime('%Y-%m', date))
-  const monthFilter = month ? ` AND strftime('%Y-%m', date) = ?` : '';
-  const monthParams = month ? [month] : [];
+  // Filtro de mês opcional, por faixa de datas para usar o índice (user_id, date)
+  const monthFilter = month ? ` AND date >= ? AND date < ?` : '';
+  const monthParams = month ? [`${month}-01`, inicioDoMesSeguinte(month)] : [];
 
   const queries = {
     totalIncomes: {
@@ -37,7 +38,7 @@ exports.summary = (req, res) => {
                    ROUND(SUM(e.amount), 2) AS total
             FROM expenses e
             LEFT JOIN categories c ON c.id = e.category_id
-            WHERE e.user_id = ?${monthFilter.replace('date', 'e.date')}
+            WHERE e.user_id = ?${monthFilter.replace(/date/g, 'e.date')}
             GROUP BY c.name
             ORDER BY total DESC`,
       params: [userId, ...monthParams]
@@ -47,7 +48,7 @@ exports.summary = (req, res) => {
                    ROUND(SUM(i.amount), 2) AS total
             FROM incomes i
             LEFT JOIN categories c ON c.id = i.category_id
-            WHERE i.user_id = ?${monthFilter.replace('date', 'i.date')}
+            WHERE i.user_id = ?${monthFilter.replace(/date/g, 'i.date')}
             GROUP BY c.name
             ORDER BY total DESC`,
       params: [userId, ...monthParams]

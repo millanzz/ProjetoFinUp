@@ -1,6 +1,6 @@
 # CT-INT-13 — excluir lançamento e parcelamento no app apaga as linhas do SQLite
 
-Gerado em 2026-11-22T23:01:56.917332
+Gerado em 2026-11-23T09:15:33.576862
 
 ### 01. Flutter → API: `POST /expenses` → **201**
 
@@ -27,7 +27,53 @@ Resposta da API:
 }
 ```
 
-### 02. Flutter → API: `POST /expenses` → **201**
+### 02. Flutter → API: `GET /lancamentos?limit=0` → **200**
+
+Resposta da API:
+```json
+{
+  "itens": [],
+  "total": 9,
+  "proximo_offset": null,
+  "receitas": 4500.75,
+  "despesas": 1523,
+  "saldo": 2977.75,
+  "categorias": [
+    {
+      "tipo": "receita",
+      "categoria": "Salário",
+      "total": 4500.75
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Compras",
+      "total": 1000
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Pets",
+      "total": 370
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Alimentação",
+      "total": 95.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Lazer",
+      "total": 45
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Outros",
+      "total": 12.5
+    }
+  ]
+}
+```
+
+### 03. Flutter → API: `POST /expenses` → **201**
 
 Enviado pelo app:
 ```json
@@ -51,7 +97,7 @@ Resposta da API:
   "category_id": 42,
   "parcelado": 1,
   "user_id": 3,
-  "parcela_grupo": "e8e26c35-ad48-4ba8-9cc8-1dc089da1f82",
+  "parcela_grupo": "36cedc95-8998-4036-9ea7-a54d3ac2b8be",
   "parcela_total": 6,
   "valor_total": 600,
   "parcelas": [
@@ -95,10 +141,97 @@ Resposta da API:
 }
 ```
 
-### 03. Flutter → API: `DELETE /expenses/8` → **204**
+### 04. Flutter → API: `GET /lancamentos?limit=0` → **200**
+
+Resposta da API:
+```json
+{
+  "itens": [],
+  "total": 15,
+  "proximo_offset": null,
+  "receitas": 4500.75,
+  "despesas": 2123,
+  "saldo": 2377.75,
+  "categorias": [
+    {
+      "tipo": "receita",
+      "categoria": "Salário",
+      "total": 4500.75
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Compras",
+      "total": 1000
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Outros",
+      "total": 612.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Pets",
+      "total": 370
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Alimentação",
+      "total": 95.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Lazer",
+      "total": 45
+    }
+  ]
+}
+```
+
+### 05. Flutter → API: `DELETE /expenses/8` → **204**
 
 
-### 04. Conferência no SQLite
+### 06. Flutter → API: `GET /lancamentos?limit=0` → **200**
+
+Resposta da API:
+```json
+{
+  "itens": [],
+  "total": 14,
+  "proximo_offset": null,
+  "receitas": 4500.75,
+  "despesas": 2078,
+  "saldo": 2422.75,
+  "categorias": [
+    {
+      "tipo": "receita",
+      "categoria": "Salário",
+      "total": 4500.75
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Compras",
+      "total": 1000
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Outros",
+      "total": 612.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Pets",
+      "total": 370
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Alimentação",
+      "total": 95.5
+    }
+  ]
+}
+```
+
+### 07. Conferência no SQLite
 
 ```sql
 SELECT id FROM expenses WHERE id = ?   -- params: [8]
@@ -107,7 +240,7 @@ SELECT id FROM expenses WHERE id = ?   -- params: [8]
 []
 ```
 
-### 05. Flutter → API: `DELETE /expenses/grupo/e8e26c35-ad48-4ba8-9cc8-1dc089da1f82` → **200**
+### 08. Flutter → API: `DELETE /expenses/grupo/36cedc95-8998-4036-9ea7-a54d3ac2b8be` → **200**
 
 Resposta da API:
 ```json
@@ -116,10 +249,51 @@ Resposta da API:
 }
 ```
 
-### 06. Conferência no SQLite
+### 09. Flutter → API: `GET /lancamentos?limit=0` → **200**
+
+Resposta da API:
+```json
+{
+  "itens": [],
+  "total": 8,
+  "proximo_offset": null,
+  "receitas": 4500.75,
+  "despesas": 1478,
+  "saldo": 3022.75,
+  "categorias": [
+    {
+      "tipo": "receita",
+      "categoria": "Salário",
+      "total": 4500.75
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Compras",
+      "total": 1000
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Pets",
+      "total": 370
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Alimentação",
+      "total": 95.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Outros",
+      "total": 12.5
+    }
+  ]
+}
+```
+
+### 10. Conferência no SQLite
 
 ```sql
-SELECT id FROM expenses WHERE parcela_grupo = ?   -- params: [e8e26c35-ad48-4ba8-9cc8-1dc089da1f82]
+SELECT id FROM expenses WHERE parcela_grupo = ?   -- params: [36cedc95-8998-4036-9ea7-a54d3ac2b8be]
 ```
 ```json
 []

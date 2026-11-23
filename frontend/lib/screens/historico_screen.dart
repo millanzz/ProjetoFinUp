@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../core/formatters.dart';
 import '../models/lancamento_model.dart';
+import '../services/consulta_lancamentos.dart';
 import '../services/lancamento_service.dart';
 import '../widgets/fin_controls.dart';
 import '../widgets/fin_layout.dart';
@@ -21,42 +22,74 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
 
   static const _filtros = ['Este mês', '3 meses', '6 meses', 'Tudo'];
 
-  List<LancamentoModel> get _filtrados {
-    final todos = LancamentoService.getAll();
+  /// Filtros além de "Este mês" não estão no cache: são buscados página por
+  /// página, com os totais do período inteiro calculados pela API.
+  ConsultaLancamentos? _consulta;
+
+  DateTime? _inicioDoFiltro(int filtro) {
     final agora = DateTime.now();
-    switch (_filtro) {
-      case 0:
-        return todos.where((l) => Fmt.mesmoMes(l.data, agora)).toList();
+    switch (filtro) {
       case 1:
-        final limite = DateTime(agora.year, agora.month - 2, 1);
-        return todos.where((l) => !l.data.isBefore(limite)).toList();
+        return DateTime(agora.year, agora.month - 2, 1);
       case 2:
-        final limite = DateTime(agora.year, agora.month - 5, 1);
-        return todos.where((l) => !l.data.isBefore(limite)).toList();
+        return DateTime(agora.year, agora.month - 5, 1);
       default:
-        return todos;
+        return null;
     }
+  }
+
+  void _escolherFiltro(int i) {
+    if (i == _filtro) return;
+    _consulta?.dispose();
+    _consulta = i == 0 ? null : ConsultaLancamentos(de: _inicioDoFiltro(i));
+    setState(() => _filtro = i);
+  }
+
+  @override
+  void dispose() {
+    _consulta?.dispose();
+    super.dispose();
   }
 
   Future<void> _recarregar() async {
     try {
-      await LancamentoService.carregar(force: true);
+      if (_consulta != null) {
+        await _consulta!.recarregar();
+      } else {
+        await LancamentoService.carregar(force: true);
+      }
     } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: LancamentoService.revisao,
+      listenable: Listenable.merge([LancamentoService.revisao, _consulta]),
       builder: (context, _) => _build(context),
     );
   }
 
   Widget _build(BuildContext context) {
     final c = context.fin;
-    final lista = _filtrados;
-    final entradas = lista.where((l) => l.isReceita).fold<double>(0, (s, l) => s + l.valor);
-    final saidas = lista.where((l) => !l.isReceita).fold<double>(0, (s, l) => s + l.valor);
+    final consulta = _consulta;
+    final List<LancamentoModel> lista;
+    final double entradas, saidas;
+    final int quantidade;
+    if (consulta == null) {
+      final agora = DateTime.now();
+      lista = LancamentoService.getAll().where((l) => Fmt.mesmoMes(l.data, agora)).toList();
+      entradas = lista.where((l) => l.isReceita).fold<double>(0, (s, l) => s + l.valor);
+      saidas = lista.where((l) => !l.isReceita).fold<double>(0, (s, l) => s + l.valor);
+      quantidade = lista.length;
+    } else {
+      lista = consulta.itens;
+      entradas = consulta.receitas;
+      saidas = consulta.despesas;
+      quantidade = consulta.total;
+    }
+    final aguardando = consulta != null && !consulta.pronta;
+    final falhou = consulta != null && consulta.erro != null && lista.isEmpty;
+    final temMais = consulta != null && consulta.temMais;
 
     // Agrupa por dia (a lista já vem do mais recente para o mais antigo).
     final grupos = <DateTime, List<LancamentoModel>>{};
@@ -77,7 +110,7 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
               FinChip(
                 label: _filtros[i],
                 selected: _filtro == i,
-                onTap: () => setState(() => _filtro = i),
+                onTap: () => _escolherFiltro(i),
               ),
               if (i < _filtros.length - 1) const SizedBox(width: 8),
             ],
@@ -130,7 +163,9 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                '${lista.length} ${lista.length == 1 ? 'lançamento' : 'lançamentos'}',
+                aguardando
+                    ? 'Carregando…'
+                    : '$quantidade ${quantidade == 1 ? 'lançamento' : 'lançamentos'}',
                 style: FinType.titleM.copyWith(color: c.text, shadows: FinFx.emboss(c)),
               ),
             ),
@@ -148,12 +183,36 @@ class _HistoricoScreenState extends State<HistoricoScreen> {
         // Lista sob demanda (ListView.builder): só monta os grupos de dias que
         // aparecem na tela. Antes, com o filtro "Tudo", todos os lançamentos eram
         // montados de uma vez e a tela travava com milhares de itens (DEF-08).
+        // Nos períodos longos, a próxima página só é buscada quando o fim da
+        // lista aparece (CarregandoMais).
         child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(bottom: 28),
-          itemCount: cabecalho.length + (lista.isEmpty ? 1 : dias.length),
+          itemCount: cabecalho.length +
+              (lista.isEmpty ? 1 : dias.length + (temMais ? 1 : 0)),
           itemBuilder: (context, i) {
             if (i < cabecalho.length) return cabecalho[i];
+            if (aguardando) return const CarregandoMais();
+            if (falhou) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+                child: EmptyCard(
+                  icon: Icons.cloud_off,
+                  texto: consulta.erro!.message,
+                  acao: FinButton.text(
+                    label: 'Tentar de novo',
+                    icon: Icons.refresh,
+                    onPressed: _recarregar,
+                  ),
+                ),
+              );
+            }
+            if (lista.isNotEmpty && i == cabecalho.length + dias.length) {
+              return CarregandoMais(
+                key: ValueKey(lista.length),
+                aoAparecer: consulta?.carregarMais,
+              );
+            }
             if (lista.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.fromLTRB(18, 10, 18, 0),

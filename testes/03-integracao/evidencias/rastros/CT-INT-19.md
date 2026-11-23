@@ -1,6 +1,6 @@
 # CT-INT-19 — criar meta no app grava no SQLite e o app lê o progresso correto
 
-Gerado em 2026-11-22T23:01:57.575057
+Gerado em 2026-11-23T09:15:34.876974
 
 ### 01. Flutter → API: `POST /goals` → **201**
 
@@ -37,7 +37,7 @@ Resposta da API:
     "current_amount": 1250,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```

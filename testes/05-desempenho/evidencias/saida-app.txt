@@ -2,41 +2,73 @@
 00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
 00:00 +0: (setUpAll)
 00:00 +0: desempenho do app — cenário V1
-RESULTADO V1 {"cenario":"V1","medido_em":"2026-11-22T22:50:12.517413","entrar_ms":162.7,"lancamentos_no_app":100,"recarga_mediana_ms":26.6,"recarga_ms":[45.3,48.5,26.6,23.8,22.0],"rede_mediana_ms":9.5,"processamento_mediana_ms":6.1,"kb_baixados_por_recarga":24.1,"abrir_inicio_primeiro_quadro_ms":1027.8,"abrir_inicio_ate_saldo_ms":1391.2,"troca_aba_ms":[183.2,134.7,117.7,133.5,133.1,117.8],"troca_aba_primeiro_quadro_mediana_ms":133.5,"troca_aba_ate_atualizar_mediana_ms":133.5,"historico_tudo_ms":[147.7,114.2,111.7],"historico_tudo_mediana_ms":114.2,"concluido":true}
-00:11 +1: (tearDownAll)
+RESULTADO V1 {"cenario":"V1","medido_em":"2026-11-23T09:40:49.905479","entrar_ms":131.4,"lancamentos_no_app":3,"lancamentos_do_usuario":100,"recarga_mediana_ms":15.9,"recarga_ms":[15.9,20.5,15.0,27.5,13.1],"rede_mediana_ms":4.9,"processamento_mediana_ms":0.3,"kb_baixados_por_recarga":1.0,"abrir_inicio_primeiro_quadro_ms":780.0,"abrir_inicio_ate_saldo_ms":1132.1,"troca_aba_ms":[172.5,111.6,125.4,108.6,146.5,108.1],"troca_aba_primeiro_quadro_mediana_ms":125.4,"troca_aba_ate_atualizar_mediana_ms":125.4,"historico_tudo_ms":[220.9,182.2,277.7],"historico_tudo_mediana_ms":220.9,"concluido":true}
+00:10 +1: (tearDownAll)
 00:11 +1: All tests passed!
 == Cenário V2: usuário=1000 outros=0 ==
 00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
 00:00 +0: (setUpAll)
 00:00 +0: desempenho do app — cenário V2
-RESULTADO V2 {"cenario":"V2","medido_em":"2026-11-22T22:50:35.540889","entrar_ms":213.8,"lancamentos_no_app":1000,"recarga_mediana_ms":60.8,"recarga_ms":[82.2,58.1,60.8,52.1,76.4],"rede_mediana_ms":16.0,"processamento_mediana_ms":34.2,"kb_baixados_por_recarga":243.2,"abrir_inicio_primeiro_quadro_ms":1041.9,"abrir_inicio_ate_saldo_ms":1417.6,"troca_aba_ms":[205.9,153.8,134.9,145.6,171.3,131.3],"troca_aba_primeiro_quadro_mediana_ms":153.8,"troca_aba_ate_atualizar_mediana_ms":153.8,"historico_tudo_ms":[176.9,164.6,278.7],"historico_tudo_mediana_ms":176.9,"concluido":true}
-00:12 +1: (tearDownAll)
-00:12 +1: All tests passed!
+RESULTADO V2 {"cenario":"V2","medido_em":"2026-11-23T09:41:10.880121","entrar_ms":149.0,"lancamentos_no_app":96,"lancamentos_do_usuario":1000,"recarga_mediana_ms":19.6,"recarga_ms":[30.5,19.6,32.7,18.7,18.0],"rede_mediana_ms":6.4,"processamento_mediana_ms":4.1,"kb_baixados_por_recarga":26.2,"abrir_inicio_primeiro_quadro_ms":1003.2,"abrir_inicio_ate_saldo_ms":1372.3,"troca_aba_ms":[198.9,128.5,125.3,124.6,127.3,124.3],"troca_aba_primeiro_quadro_mediana_ms":127.3,"troca_aba_ate_atualizar_mediana_ms":127.3,"historico_tudo_ms":[226.4,279.9,279.7],"historico_tudo_mediana_ms":279.7,"historico_rolar_pagina_ms":[90.7,10.9,12.4],"historico_rolar_pagina_mediana_ms":12.4,"concluido":true}
+00:11 +1: (tearDownAll)
+00:11 +1: All tests passed!
 == Cenário V3: usuário=10000 outros=0 ==
 00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
 00:00 +0: (setUpAll)
 00:00 +0: desempenho do app — cenário V3
-RESULTADO V3 {"cenario":"V3","medido_em":"2026-11-22T22:51:04.175259","entrar_ms":631.3,"lancamentos_no_app":10000,"recarga_mediana_ms":457.5,"recarga_ms":[461.6,457.5,486.6,455.8,440.3],"rede_mediana_ms":110.3,"processamento_mediana_ms":333.3,"kb_baixados_por_recarga":2455.7,"abrir_inicio_primeiro_quadro_ms":1825.3,"abrir_inicio_ate_saldo_ms":2204.4,"troca_aba_ms":[312.7,170.2,160.3,142.9,136.3,153.8],"troca_aba_primeiro_quadro_mediana_ms":160.3,"troca_aba_ate_atualizar_mediana_ms":160.3,"historico_tudo_ms":[385.9,352.4,335.9],"historico_tudo_mediana_ms":352.4,"concluido":true}
-00:17 +1: (tearDownAll)
-00:17 +1: All tests passed!
+RESULTADO V3 {"cenario":"V3","medido_em":"2026-11-23T09:41:38.060698","entrar_ms":238.6,"lancamentos_no_app":951,"lancamentos_do_usuario":10000,"recarga_mediana_ms":61.9,"recarga_ms":[69.2,61.9,60.9,62.6,57.4],"rede_mediana_ms":19.2,"processamento_mediana_ms":31.8,"kb_baixados_por_recarga":255.9,"abrir_inicio_primeiro_quadro_ms":1743.0,"abrir_inicio_ate_saldo_ms":2092.2,"troca_aba_ms":[294.5,160.3,130.1,138.2,131.0,136.9],"troca_aba_primeiro_quadro_mediana_ms":138.2,"troca_aba_ate_atualizar_mediana_ms":138.2,"historico_tudo_ms":[171.4,191.4,184.2],"historico_tudo_mediana_ms":184.2,"historico_rolar_pagina_ms":[92.9,13.2,13.0],"historico_rolar_pagina_mediana_ms":13.2,"concluido":true}
+00:13 +1: (tearDownAll)
+00:13 +1: All tests passed!
 == Cenário V4: usuário=50000 outros=0 ==
 00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
 00:00 +0: (setUpAll)
 00:00 +0: desempenho do app — cenário V4
-RESULTADO V4 {"cenario":"V4","medido_em":"2026-11-22T22:52:01.070792","entrar_ms":2554.9,"lancamentos_no_app":50000,"recarga_mediana_ms":2292.9,"recarga_ms":[2324.3,2345.9,2278.9,2292.9,2287.1],"rede_mediana_ms":620.7,"processamento_mediana_ms":1622.1,"kb_baixados_por_recarga":12377.2,"abrir_inicio_primeiro_quadro_ms":4523.7,"abrir_inicio_ate_saldo_ms":4930.7,"troca_aba_ms":[751.2,253.5,170.6,210.8,193.2,196.7],"troca_aba_primeiro_quadro_mediana_ms":210.8,"troca_aba_ate_atualizar_mediana_ms":210.8,"historico_tudo_ms":[1196.2,1187.1,1164.2],"historico_tudo_mediana_ms":1187.1,"concluido":true}
-00:41 +1: (tearDownAll)
-00:41 +1: All tests passed!
+RESULTADO V4 {"cenario":"V4","medido_em":"2026-11-23T09:42:20.879122","entrar_ms":609.7,"lancamentos_no_app":5260,"lancamentos_do_usuario":50000,"recarga_mediana_ms":396.7,"recarga_ms":[404.1,396.7,391.9,389.6,396.7],"rede_mediana_ms":191.3,"processamento_mediana_ms":176.6,"kb_baixados_por_recarga":1425.5,"abrir_inicio_primeiro_quadro_ms":4814.1,"abrir_inicio_ate_saldo_ms":5129.7,"troca_aba_ms":[735.2,251.3,155.1,210.2,146.4,208.4],"troca_aba_primeiro_quadro_mediana_ms":210.2,"troca_aba_ate_atualizar_mediana_ms":210.2,"historico_tudo_ms":[249.3,206.2,157.6],"historico_tudo_mediana_ms":206.2,"historico_rolar_pagina_ms":[116.3,124.0,23.8],"historico_rolar_pagina_mediana_ms":116.3,"concluido":true}
+00:21 +1: (tearDownAll)
+00:21 +1: All tests passed!
 == Cenário C1: usuário=1000 outros=100000 ==
 00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
 00:00 +0: (setUpAll)
 00:00 +0: desempenho do app — cenário C1
-RESULTADO C1 {"cenario":"C1","medido_em":"2026-11-22T22:52:58.840503","entrar_ms":227.3,"lancamentos_no_app":1000,"recarga_mediana_ms":56.7,"recarga_ms":[78.6,56.7,61.5,52.2,51.6],"rede_mediana_ms":15.8,"processamento_mediana_ms":34.0,"kb_baixados_por_recarga":243.2,"abrir_inicio_primeiro_quadro_ms":1068.2,"abrir_inicio_ate_saldo_ms":1452.3,"troca_aba_ms":[240.3,234.7,227.8,131.5,134.4,131.3],"troca_aba_primeiro_quadro_mediana_ms":227.8,"troca_aba_ate_atualizar_mediana_ms":227.8,"historico_tudo_ms":[175.4,145.2,148.5],"historico_tudo_mediana_ms":148.5,"concluido":true}
-00:11 +1: (tearDownAll)
+RESULTADO C1 {"cenario":"C1","medido_em":"2026-11-23T09:42:58.840942","entrar_ms":158.5,"lancamentos_no_app":96,"lancamentos_do_usuario":1000,"recarga_mediana_ms":22.1,"recarga_ms":[32.1,21.2,33.2,20.4,22.1],"rede_mediana_ms":7.2,"processamento_mediana_ms":4.4,"kb_baixados_por_recarga":26.2,"abrir_inicio_primeiro_quadro_ms":1392.5,"abrir_inicio_ate_saldo_ms":1795.3,"troca_aba_ms":[272.6,146.3,125.5,149.3,125.0,140.1],"troca_aba_primeiro_quadro_mediana_ms":146.3,"troca_aba_ate_atualizar_mediana_ms":146.3,"historico_tudo_ms":[231.4,201.0,302.3],"historico_tudo_mediana_ms":231.4,"historico_rolar_pagina_ms":[94.8,10.9,10.5],"historico_rolar_pagina_mediana_ms":10.9,"concluido":true}
+00:12 +1: (tearDownAll)
 00:12 +1: All tests passed!
 == Cenário C2: usuário=1000 outros=500000 ==
 00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
 00:00 +0: (setUpAll)
 00:00 +0: desempenho do app — cenário C2
-RESULTADO C2 {"cenario":"C2","medido_em":"2026-11-22T22:53:45.104749","entrar_ms":210.9,"lancamentos_no_app":1000,"recarga_mediana_ms":56.8,"recarga_ms":[70.0,56.8,53.4,58.7,51.3],"rede_mediana_ms":15.8,"processamento_mediana_ms":34.1,"kb_baixados_por_recarga":243.2,"abrir_inicio_primeiro_quadro_ms":1012.6,"abrir_inicio_ate_saldo_ms":1372.3,"troca_aba_ms":[205.2,136.6,133.0,131.7,133.5,129.5],"troca_aba_primeiro_quadro_mediana_ms":133.5,"troca_aba_ate_atualizar_mediana_ms":133.5,"historico_tudo_ms":[174.2,143.3,148.7],"historico_tudo_mediana_ms":148.7,"concluido":true}
+RESULTADO C2 {"cenario":"C2","medido_em":"2026-11-23T09:43:48.265945","entrar_ms":150.9,"lancamentos_no_app":96,"lancamentos_do_usuario":1000,"recarga_mediana_ms":22.0,"recarga_ms":[26.7,22.0,31.4,18.6,17.6],"rede_mediana_ms":6.3,"processamento_mediana_ms":4.0,"kb_baixados_por_recarga":26.2,"abrir_inicio_primeiro_quadro_ms":1045.7,"abrir_inicio_ate_saldo_ms":1439.1,"troca_aba_ms":[221.1,145.8,127.2,137.1,125.9,141.4],"troca_aba_primeiro_quadro_mediana_ms":141.4,"troca_aba_ate_atualizar_mediana_ms":141.4,"historico_tudo_ms":[229.9,330.1,203.1],"historico_tudo_mediana_ms":229.9,"historico_rolar_pagina_ms":[93.9,10.4,12.6],"historico_rolar_pagina_mediana_ms":12.6,"concluido":true}
 00:11 +1: (tearDownAll)
 00:11 +1: All tests passed!
+--- reexecução do cenário V3 em 2026-11-23 09:44:45 -0300 ---
+== Cenário V3: usuário=10000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V3
+RESULTADO V3 {"cenario":"V3","medido_em":"2026-11-23T09:44:58.065990","entrar_ms":220.3,"lancamentos_no_app":951,"lancamentos_do_usuario":10000,"recarga_mediana_ms":62.5,"recarga_ms":[77.9,74.7,62.3,61.3,62.5],"rede_mediana_ms":19.6,"processamento_mediana_ms":32.8,"kb_baixados_por_recarga":255.9,"abrir_inicio_primeiro_quadro_ms":1406.0,"abrir_inicio_ate_saldo_ms":2284.5,"troca_aba_ms":[812.4,138.1,149.8,136.1,127.2,137.1],"troca_aba_primeiro_quadro_mediana_ms":138.1,"troca_aba_ate_atualizar_mediana_ms":138.1,"historico_tudo_ms":[159.1,274.9,185.2],"historico_tudo_mediana_ms":185.2,"historico_rolar_pagina_ms":[93.4,14.2,13.0],"historico_rolar_pagina_mediana_ms":14.2,"concluido":true}
+00:13 +1: (tearDownAll)
+00:13 +1: All tests passed!
+--- reexecução do cenário V4 em 2026-11-23 09:45:14 -0300 ---
+== Cenário V4: usuário=50000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V4
+RESULTADO V4 {"cenario":"V4","medido_em":"2026-11-23T09:45:42.494018","entrar_ms":582.2,"lancamentos_no_app":5260,"lancamentos_do_usuario":50000,"recarga_mediana_ms":387.7,"recarga_ms":[387.7,389.1,408.4,383.4,384.2],"rede_mediana_ms":184.6,"processamento_mediana_ms":173.3,"kb_baixados_por_recarga":1425.5,"abrir_inicio_primeiro_quadro_ms":1599.3,"abrir_inicio_ate_saldo_ms":2551.0,"troca_aba_ms":[913.1,601.6,667.8,873.5,976.6,214.1],"troca_aba_primeiro_quadro_mediana_ms":873.5,"troca_aba_ate_atualizar_mediana_ms":873.5,"historico_tudo_ms":[222.8,278.1,141.9],"historico_tudo_mediana_ms":222.8,"historico_rolar_pagina_ms":[100.9,17.5,17.5],"historico_rolar_pagina_mediana_ms":17.5,"concluido":true}
+00:23 +1: (tearDownAll)
+00:23 +1: All tests passed!
+--- reexecução do cenário V3 em 2026-11-23 09:46:28 -0300 ---
+== Cenário V3: usuário=10000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V3
+RESULTADO V3 {"cenario":"V3","medido_em":"2026-11-23T09:46:39.934652","entrar_ms":236.7,"lancamentos_no_app":951,"lancamentos_do_usuario":10000,"recarga_mediana_ms":65.9,"recarga_ms":[78.0,63.5,65.9,63.7,66.1],"rede_mediana_ms":20.1,"processamento_mediana_ms":32.5,"kb_baixados_por_recarga":255.9,"abrir_inicio_primeiro_quadro_ms":1064.9,"abrir_inicio_ate_saldo_ms":1680.6,"troca_aba_ms":[451.9,337.0,153.0,135.0,125.1,135.1],"troca_aba_primeiro_quadro_mediana_ms":153.0,"troca_aba_ate_atualizar_mediana_ms":153.0,"historico_tudo_ms":[153.5,179.2,177.4],"historico_tudo_mediana_ms":177.4,"historico_rolar_pagina_ms":[10.3,95.2,12.2],"historico_rolar_pagina_mediana_ms":12.2,"concluido":true}
+00:13 +1: (tearDownAll)
+00:13 +1: All tests passed!
+--- reexecução do cenário V4 em 2026-11-23 09:46:56 -0300 ---
+== Cenário V4: usuário=50000 outros=0 ==
+00:00 +0: loading C:/Users/Pingo/Desktop/FableFinUp/testes/05-desempenho/flutter/medir_app_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: desempenho do app — cenário V4
+RESULTADO V4 {"cenario":"V4","medido_em":"2026-11-23T09:47:22.861908","entrar_ms":571.3,"lancamentos_no_app":5260,"lancamentos_do_usuario":50000,"recarga_mediana_ms":384.6,"recarga_ms":[394.0,385.8,382.2,381.6,384.6],"rede_mediana_ms":180.6,"processamento_mediana_ms":173.3,"kb_baixados_por_recarga":1425.5,"abrir_inicio_primeiro_quadro_ms":1248.1,"abrir_inicio_ate_saldo_ms":1845.8,"troca_aba_ms":[489.3,435.8,436.0,368.0,378.0,496.9],"troca_aba_primeiro_quadro_mediana_ms":436.0,"troca_aba_ate_atualizar_mediana_ms":436.0,"historico_tudo_ms":[977.4,532.5,596.9],"historico_tudo_mediana_ms":596.9,"historico_rolar_pagina_ms":[712.2,750.3,19.0],"historico_rolar_pagina_mediana_ms":712.2,"concluido":true}
+00:25 +1: (tearDownAll)
+00:25 +1: All tests passed!

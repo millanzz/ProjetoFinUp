@@ -1,6 +1,6 @@
 # CT-INT-05 — editar perfil no app atualiza o SQLite e o novo e-mail passa a valer no login
 
-Gerado em 2026-11-22T23:01:55.593896
+Gerado em 2026-11-23T09:15:31.764066
 
 ### 01. Flutter → API: `POST /users` → **201**
 

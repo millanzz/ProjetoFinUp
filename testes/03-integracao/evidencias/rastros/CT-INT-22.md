@@ -1,6 +1,6 @@
 # CT-INT-22 — integridade referencial do SQLite está ativa (foreign_keys e RESTRICT)
 
-Gerado em 2026-11-22T23:01:57.797041
+Gerado em 2026-11-23T09:15:35.145554
 
 ### 01. Conferência no SQLite
 

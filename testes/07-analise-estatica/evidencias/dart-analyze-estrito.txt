@@ -7,13 +7,13 @@ Analyzing lib...
    info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/esqueci_senha_screen.dart:86:7 - avoid_catches_without_on_clauses
    info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/esqueci_senha_screen.dart:121:7 - avoid_catches_without_on_clauses
    info - 'Future'-returning calls in a non-'async' function - lib/screens/esqueci_senha_screen.dart:144:29 - discarded_futures
-   info - The value of the argument is redundant because it matches the default value - lib/screens/historico_screen.dart:31:62 - avoid_redundant_argument_values
-   info - The value of the argument is redundant because it matches the default value - lib/screens/historico_screen.dart:34:62 - avoid_redundant_argument_values
-   info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/historico_screen.dart:44:7 - avoid_catches_without_on_clauses
+   info - The value of the argument is redundant because it matches the default value - lib/screens/historico_screen.dart:33:54 - avoid_redundant_argument_values
+   info - The value of the argument is redundant because it matches the default value - lib/screens/historico_screen.dart:35:54 - avoid_redundant_argument_values
+   info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/historico_screen.dart:61:7 - avoid_catches_without_on_clauses
    info - 'Future'-returning calls in a non-'async' function - lib/screens/home_screen.dart:36:28 - discarded_futures
    info - 'Future'-returning calls in a non-'async' function - lib/screens/home_screen.dart:51:19 - discarded_futures
    info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/lancamento_form_screen.dart:164:7 - avoid_catches_without_on_clauses
-   info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/lancamentos_screen.dart:33:7 - avoid_catches_without_on_clauses
+   info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/lancamentos_screen.dart:67:7 - avoid_catches_without_on_clauses
    info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/login_screen.dart:68:9 - avoid_catches_without_on_clauses
    info - Missing an 'await' for the 'Future' computed by this expression - lib/screens/login_screen.dart:73:17 - unawaited_futures
    info - Catch clause should use 'on' to specify the type of exception being caught - lib/screens/login_screen.dart:76:7 - avoid_catches_without_on_clauses
@@ -50,15 +50,23 @@ Analyzing lib...
    info - Method invocation or property access on a 'dynamic' target - lib/services/categoria_service.dart:27:18 - avoid_dynamic_calls
    info - Method invocation or property access on a 'dynamic' target - lib/services/categoria_service.dart:28:11 - avoid_dynamic_calls
    info - Method invocation or property access on a 'dynamic' target - lib/services/categoria_service.dart:51:18 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:135:9 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:136:21 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:137:22 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:139:25 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:141:17 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:143:21 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:144:34 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:149:29 - avoid_dynamic_calls
-   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:161:11 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/consulta_lancamentos.dart:90:24 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/consulta_lancamentos.dart:90:71 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/consulta_lancamentos.dart:91:24 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/consulta_lancamentos.dart:92:45 - avoid_dynamic_calls
+   info - 'Future'-returning calls in a non-'async' function - lib/services/consulta_lancamentos.dart:121:5 - discarded_futures
+warning - The generic type 'Map<dynamic, dynamic>' should have explicit type arguments but doesn't - lib/services/lancamento_service.dart:85:36 - strict_raw_type
+warning - The generic type 'Map<dynamic, dynamic>' should have explicit type arguments but doesn't - lib/services/lancamento_service.dart:124:30 - strict_raw_type
+   info - Catch clause should use 'on' to specify the type of exception being caught - lib/services/lancamento_service.dart:141:7 - avoid_catches_without_on_clauses
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:203:9 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:204:21 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:205:22 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:207:25 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:209:17 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:211:21 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:212:34 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:217:29 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target - lib/services/lancamento_service.dart:230:11 - avoid_dynamic_calls
    info - Closure should be a tearoff - lib/widgets/fin_controls.dart:246:16 - unnecessary_lambdas
    info - 'Future'-returning calls in a non-'async' function - lib/widgets/fin_controls.dart:464:24 - discarded_futures
    info - The value of the argument is redundant because it matches the default value - lib/widgets/fin_surface.dart:118:35 - avoid_redundant_argument_values
@@ -71,4 +79,4 @@ Analyzing lib...
    info - 'Future'-returning calls in a non-'async' function - lib/widgets/lancamento_acoes.dart:155:17 - discarded_futures
    info - 'Future'-returning calls in a non-'async' function - lib/widgets/lancamento_acoes.dart:164:17 - discarded_futures
 
-70 issues found. (ran in 2.6s)
+78 issues found. (ran in 2.2s)

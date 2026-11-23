@@ -211,14 +211,24 @@ class CategoriasCard extends StatelessWidget {
   final List<LancamentoModel> lancamentos;
   final FinTone tone;
 
-  const CategoriasCard({super.key, required this.lancamentos, required this.tone});
+  /// Somas por categoria já calculadas (pela API, num período que não está
+  /// todo no aparelho). Quando informado, [lancamentos] é ignorado.
+  final Map<String, double>? totais;
+
+  const CategoriasCard({super.key, required this.lancamentos, required this.tone})
+      : totais = null;
+
+  const CategoriasCard.totais({super.key, required Map<String, double> this.totais, required this.tone})
+      : lancamentos = const [];
 
   @override
   Widget build(BuildContext context) {
-    final somas = <String, double>{};
-    for (final l in lancamentos) {
-      final k = l.categoria ?? 'Outros';
-      somas[k] = (somas[k] ?? 0) + l.valor;
+    final somas = <String, double>{...?totais};
+    if (totais == null) {
+      for (final l in lancamentos) {
+        final k = l.categoria ?? 'Outros';
+        somas[k] = (somas[k] ?? 0) + l.valor;
+      }
     }
     final itens = somas.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     final total = itens.fold<double>(0, (s, e) => s + e.value);
@@ -538,6 +548,46 @@ class FinNavBar extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Fim de uma lista paginada: mostra o indicador de carregamento e, assim que
+/// aparece na tela, pede a próxima página ([aoAparecer]).
+class CarregandoMais extends StatefulWidget {
+  final VoidCallback? aoAparecer;
+
+  const CarregandoMais({super.key, this.aoAparecer});
+
+  @override
+  State<CarregandoMais> createState() => _CarregandoMaisState();
+}
+
+class _CarregandoMaisState extends State<CarregandoMais> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.aoAparecer?.call();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.fin;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Center(
+        child: SizedBox(
+          width: 26,
+          height: 26,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.6,
+            color: c.primary,
+            semanticsLabel: 'Carregando lançamentos',
+          ),
         ),
       ),
     );

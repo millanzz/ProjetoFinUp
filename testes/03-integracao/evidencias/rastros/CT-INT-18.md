@@ -1,6 +1,6 @@
 # CT-INT-18 — categoria excluída em outro aparelho: o app ainda consegue lançar nessa categoria
 
-Gerado em 2026-11-22T23:01:57.464669
+Gerado em 2026-11-23T09:15:34.677658
 
 ### 01. Conferência no SQLite
 
@@ -59,98 +59,98 @@ Resposta da API:
     "name": "Alimentação",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 32,
     "name": "Bônus",
     "type": "income",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 39,
     "name": "Compras",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 30,
     "name": "Freelance",
     "type": "income",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 41,
     "name": "Impostos",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 31,
     "name": "Investimentos",
     "type": "income",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 38,
     "name": "Lazer",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 36,
     "name": "Moradia",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 42,
     "name": "Outros",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 33,
     "name": "Outros",
     "type": "income",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 43,
     "name": "Pets",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:33"
   },
   {
     "id": 29,
     "name": "Salário",
     "type": "income",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 37,
     "name": "Saúde",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   },
   {
     "id": 35,
     "name": "Transporte",
     "type": "expense",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:56"
+    "created_at": "2026-11-23 12:15:32"
   }
 ]
 ```
@@ -199,7 +199,68 @@ Resposta da API:
 }
 ```
 
-### 07. Conferência no SQLite
+### 07. Flutter → API: `GET /lancamentos?limit=0` → **200**
+
+Resposta da API:
+```json
+{
+  "itens": [],
+  "total": 16,
+  "proximo_offset": null,
+  "receitas": 1000005701.25,
+  "despesas": 1798.15,
+  "saldo": 1000003903.1,
+  "categorias": [
+    {
+      "tipo": "receita",
+      "categoria": "Outros",
+      "total": 1000000000
+    },
+    {
+      "tipo": "receita",
+      "categoria": "Salário",
+      "total": 4500.75
+    },
+    {
+      "tipo": "receita",
+      "categoria": "Freelance",
+      "total": 1200.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Compras",
+      "total": 1000
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Pets",
+      "total": 370
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Moradia",
+      "total": 250.25
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Alimentação",
+      "total": 95.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Outros",
+      "total": 42.5
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Assinaturas",
+      "total": 39.9
+    }
+  ]
+}
+```
+
+### 08. Conferência no SQLite
 
 ```sql
 SELECT c.name FROM expenses e JOIN categories c ON c.id = e.category_id WHERE e.id = ?   -- params: [19]

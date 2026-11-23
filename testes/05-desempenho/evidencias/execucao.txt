@@ -1,7 +1,7 @@
-2026-11-22 22:49:59 -0300
+2026-11-23 09:40:38 -0300
 v24.11.0
 Flutter 3.41.1 • channel stable • https://github.com/flutter/flutter.git
-e1376b8
+41409a1
 redesign-fusao-tema-escuro
 CPU: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 RAM: 15.9 GB
@@ -18,3 +18,15 @@ exit api C1: 0
 exit app C1: 0
 exit api C2: 0
 exit app C2: 0
+--- reexecução do cenário V3 em 2026-11-23 09:44:45 -0300 ---
+exit api V3: 0
+exit app V3: 0
+--- reexecução do cenário V4 em 2026-11-23 09:45:14 -0300 ---
+exit api V4: 0
+exit app V4: 0
+--- reexecução do cenário V3 em 2026-11-23 09:46:28 -0300 ---
+exit api V3: 0
+exit app V3: 0
+--- reexecução do cenário V4 em 2026-11-23 09:46:56 -0300 ---
+exit api V4: 0
+exit app V4: 0

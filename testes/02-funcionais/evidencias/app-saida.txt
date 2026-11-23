@@ -3,18 +3,18 @@
 00:00 +0: Login CT-UI-LOG-01 login válido abre a tela inicial com o nome do usuário
 00:05 +1: Login CT-UI-LOG-02 campos vazios mostram aviso e não saem da tela
 00:07 +2: Login CT-UI-LOG-03 senha errada mostra a mensagem da API e não entra
-00:09 +3: Login CT-UI-LOG-04 sair da conta volta para o login
-00:16 +4: Cadastro CT-UI-CAD-01 cadastro completo entra no app e a conta existe na API
-00:20 +5: Cadastro CT-UI-CAD-02 senha com menos de 6 caracteres é barrada na tela
-00:24 +6: Cadastro CT-UI-CAD-03 sem aceitar os termos o cadastro não continua
+00:10 +3: Login CT-UI-LOG-04 sair da conta volta para o login
+00:17 +4: Cadastro CT-UI-CAD-01 cadastro completo entra no app e a conta existe na API
+00:21 +5: Cadastro CT-UI-CAD-02 senha com menos de 6 caracteres é barrada na tela
+00:25 +6: Cadastro CT-UI-CAD-03 sem aceitar os termos o cadastro não continua
 00:28 +7: Cadastro CT-UI-CAD-04 e-mail já cadastrado mostra a mensagem da API
 00:32 +8: Cadastro CT-UI-CAD-05 cadastrar despesa pelo formulário atualiza o saldo e grava na API
 00:39 +9: Cadastro CT-UI-CAD-06 formulário sem valor ou sem categoria não salva
-00:46 +10: Edição CT-UI-EDI-01 editar nome no perfil atualiza a tela e a API
-00:53 +11: Edição CT-UI-EDI-02 alterar senha: a nova passa a valer no login
-01:00 +12: Edição CT-UI-EDI-03 editar despesa pela lista atualiza o valor na tela e na API
-01:08 +13: Exclusão CT-UI-EXC-01 excluir despesa com confirmação remove da tela e da API
-01:15 +14: Exclusão CT-UI-EXC-02 cancelar a exclusão mantém o lançamento
+00:45 +10: Edição CT-UI-EDI-01 editar nome no perfil atualiza a tela e a API
+00:52 +11: Edição CT-UI-EDI-02 alterar senha: a nova passa a valer no login
+00:59 +12: Edição CT-UI-EDI-03 editar despesa pela lista atualiza o valor na tela e na API
+01:07 +13: Exclusão CT-UI-EXC-01 excluir despesa com confirmação remove da tela e da API
+01:14 +14: Exclusão CT-UI-EXC-02 cancelar a exclusão mantém o lançamento
 01:22 +15: Exclusão CT-UI-EXC-03 excluir meta (tocar e segurar) remove da tela e da API
-01:30 +16: (tearDownAll)
-01:30 +16: All tests passed!
+01:31 +16: (tearDownAll)
+01:31 +16: All tests passed!

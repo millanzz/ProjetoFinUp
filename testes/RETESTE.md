@@ -6,7 +6,8 @@
 | 1º ciclo (falhas encontradas) | 07 a 09/11/2026 — evidências em `evidencias-ciclo1/` de cada pasta |
 | Correções e reteste (2º ciclo) | 22/11/2026, 21:39 a 23:25 (UTC−3) — evidências em `evidencias/` de cada pasta e em [reteste/](reteste/) |
 | Versão testada | branch `redesign-fusao-tema-escuro`, commit `e1376b8` + alterações locais (nada foi commitado) |
-| Resultado | **Os 18 defeitos foram corrigidos e confirmados por teste.** Os testes de desempenho ainda têm **6 medições acima do limite** nos cenários de estresse (10 mil e 50 mil lançamentos de um só usuário); a causa e o que falta estão na seção 4 |
+| Paginação (3º ciclo) | 23/11/2026 (UTC−3): paginação das listas implementada e baterias 01–06 executadas de novo; ver a [seção 4.1](#41-paginação-3º-ciclo-23112026) |
+| Resultado | **Os 18 defeitos foram corrigidos e confirmados por teste.** Depois da paginação (3º ciclo), resta **1 medição de desempenho acima do limite**: 20 acessos simultâneos ao `/dashboard` com 50 mil lançamentos, rota que o app não usa (seção 4.1) |
 
 ---
 
@@ -18,12 +19,13 @@
 | 02 Funcional | 67/70 | **70/70** | +3 |
 | 03 Integração | 24/25 | **25/25** | +1 |
 | 04 Persistência | 14/14 | **14/14** | = |
-| 05 Desempenho | 89/102 | **96/102** | +7 |
+| 05 Desempenho | 89/102 | **101/102** (3º ciclo; 96/102 antes da paginação) | +12 |
 | 06 Compatibilidade | 201/222 | **222/222** | +21 |
-| **Total (01–06)** | **450/492 (91,5%)** | **486/492 (98,8%)** | **+36** |
+| **Total (01–06)** | **450/492 (91,5%)** | **491/492 (99,8%)** | **+41** |
 | 07 Estático: vulnerabilidades (`npm audit`) | 7 (2 críticas) | **0** | −7 |
 | 07 Estático: provas de conceito | 2 falhas confirmadas | **0** | −2 |
-| Reteste: testes novos ([reteste/](reteste/)) | — | **18 + 2 + 5 passaram**; APK e Web conferidos | novo |
+| Reteste: testes novos ([reteste/](reteste/)) | — | **26 (API) + 2 + 5 + 2 (telas) passaram**; APK e Web conferidos | novo |
+| 05: medições novas da paginação | — | **35/35** | novo |
 
 Execução registrada em [reteste.log](reteste.log) (4ª passada) e [reteste-passadas-1-e-2.log](reteste-passadas-1-e-2.log).
 
@@ -62,34 +64,53 @@ Execução registrada em [reteste.log](reteste.log) (4ª passada) e [reteste-pas
 
 ## 4. O que ainda não está resolvido
 
-### 4.1 Cenários de estresse de desempenho (6 medições)
+### 4.1 Paginação (3º ciclo, 23/11/2026)
 
-Todas no usuário com **10 mil (V3) ou 50 mil (V4) lançamentos**:
+No 2º ciclo restavam 6 medições acima do limite, todas no usuário com **10 mil (V3) ou 50 mil (V4) lançamentos**. A causa: o app **baixava todos os lançamentos a cada recarga** (12 MB em V4) e montava listas inteiras na tela. O que foi feito:
 
-- abrir a Início (2,2 s e 4,9 s);
-- recarregar tudo (2,3 s em V4);
-- `GET /expenses` (560 ms em V4);
-- 20 acessos simultâneos ao resumo (1,4 s em V4);
-- Histórico “Tudo” (1,2 s em V4).
+| Onde | Mudança |
+|---|---|
+| API `GET /incomes` e `/expenses` | Paginadas: no máximo **500 por padrão** (`?limit=` até 1.000, `?offset=`), total no cabeçalho `X-Total-Count` e próxima página em `X-Next-Offset`. Filtros `?from=`/`?to=`; o `?month=` passou a usar faixa de datas (aproveita o índice) |
+| API `GET /lancamentos` (nova) | Extrato de receitas **e** despesas juntas, paginado, com **totais, quantidade e soma por categoria do período inteiro** calculados no banco. `GET /lancamentos/meses` lista os meses com dados |
+| App: cache | Guarda só o **mês atual em diante** (inclui parcelas futuras). Totais gerais vêm da API |
+| App: Histórico "3 meses", "6 meses", "Tudo" e meses antigos em Entradas/Despesas | Buscados página por página (100 itens) com os totais do período vindos da API; a próxima página vem quando o fim da lista aparece |
+| App: Entradas/Despesas do mês | Monta 30 linhas por vez (a aba fica viva desde a abertura do app) |
 
-A causa é a mesma: o app **baixa todos os lançamentos de uma vez** (12 MB em V4), e a API usa **uma única conexão** com o SQLite. A correção exige **paginação**: o app buscar por mês e a API paginar as listas. É uma mudança de arquitetura, fora desta rodada. No uso típico (até 1.000 lançamentos) todas as medições estão no limite.
+Resultado (evidências em [05-desempenho/evidencias/](05-desempenho/evidencias/resultados.md)):
+
+| Medição que falhava | Antes (2º ciclo) | Depois |
+|---|---:|---:|
+| Abrir a Início, V3 / V4 | 2.204 / 4.931 ms ❌ | **1.681 / 1.846 ms** ✅ |
+| Recarregar, V4 | 2.293 ms ❌ | **388 ms** ✅ (baixa 1,4 MB em vez de 12 MB) |
+| `GET /expenses`, V4 | 560 ms ❌ | **11 ms** ✅ (agora devolve a 1ª página, até 500) |
+| Histórico "Tudo", V4 | 1.187 ms ❌ | **223 ms** ✅ (até mostrar a 1ª página e os totais) |
+| `GET /dashboard` 20 simultâneos, V4 | 1.411 ms ❌ | **1.330 ms ❌** |
+
+Testes novos: **PAG-01 a 08** (API: limite padrão, percorrer páginas sem repetir, totais do período, filtros, parâmetros inválidos, isolamento entre usuários) e **UI-PAG-01/02** (telas reais: o Histórico "Tudo" com 289 lançamentos antigos mostra o total certo e carrega as páginas ao rolar até o fim; Despesas de um mês antigo mostra lista e total vindos da API). Capturas em [reteste/evidencias/telas/](reteste/evidencias/telas/).
+
+**Ajustes em testes antigos, por causa da mudança de comportamento:** o CT-INT-25 lia do cache lançamentos de 12/2025 e agora os lê pela consulta paginada; a imitação do `res` do Express nos testes unitários ganhou `set()`, que a API passou a usar para os cabeçalhos; a medição de desempenho do app passou a medir o que o app faz agora (recarregar o cache do mês e o "Tudo" até a 1ª página aparecer), e as rotas `/incomes` e `/expenses` sem parâmetros aparecem como "1ª página, até 500".
+
+**O que continua pendente:**
+- **20 acessos simultâneos ao `/dashboard` com 50 mil lançamentos (1,3 s).** O resumo soma todos os lançamentos do usuário a cada chamada, numa única conexão SQLite. O app não usa essa rota: calcula a partir do cache e de `/lancamentos`. Resolver exige guardar o resumo pronto (cache por usuário) ou trocar o SQLite por um banco com várias conexões.
+- **V4 ficou perto do limite** ao abrir a Início (1,85 s de 2 s, em modo debug): quem lança cerca de 2 mil itens **por mês** ainda baixa o mês inteiro ao abrir o app.
+- A última página de uma lista longa demora mais que a primeira (V4: 257 ms contra 28 ms), porque a paginação é por `offset`. Ainda está dentro do limite.
 
 ### 4.2 Outros pontos
 
 - **DEF-01:** os valores continuam gravados como número decimal (`REAL`). O arredondamento resolve o sintoma; a solução definitiva é guardar em centavos inteiros (migração de banco).
-- **Infraestrutura (depende da equipe):** certificado real e hospedagem; e-mail de contato na política (`PRIVACIDADE_CONTATO`); `JWT_SECRET` forte; backup do banco; teste num celular físico; **versionar no git** os arquivos que ainda estão fora dele (nada foi commitado).
+- **Infraestrutura (depende da equipe):** certificado real e hospedagem; e-mail de contato na política (`PRIVACIDADE_CONTATO`); `JWT_SECRET` forte; backup do banco; teste num celular físico.
 - **Melhorias registradas, não feitas:** token guardado sem criptografia no aparelho (`flutter_secure_storage`); layout próprio para telas grandes; fonte embutida na versão Web; testes automatizados e integração contínua dentro do projeto.
 
 ## 5. Avaliação
 
 | | 1º ciclo | Depois das correções |
 |---|---|---|
-| Verificações aprovadas (01–06) | 91,5% | **98,8%** |
-| Defeitos abertos | 18 | **0** (6 medições de estresse pendentes de paginação) |
+| Verificações aprovadas (01–06) | 91,5% | **99,8%** (98,8% antes da paginação) |
+| Defeitos abertos | 18 | **0** (1 medição de estresse pendente: `/dashboard` simultâneo em V4) |
 | Vulnerabilidades em dependências | 7 | **0** |
 | Requisitos de loja/LGPD | sem exclusão de conta, sem política, sem HTTPS | **implementados** |
 
-Do ponto de vista do software, o FinUp está apto para produção com **uso típico** (centenas de usuários, até alguns milhares de lançamentos por pessoa). Para publicar, faltam os itens de infraestrutura da seção 4.2. Para usuários com dezenas de milhares de lançamentos, falta a paginação da seção 4.1.
+Do ponto de vista do software, o FinUp está apto para produção, inclusive para quem tem dezenas de milhares de lançamentos: com a paginação, o app guarda e baixa só o mês atual. Para publicar, faltam os itens de infraestrutura da seção 4.2.
 
 ## 6. Como reexecutar
 

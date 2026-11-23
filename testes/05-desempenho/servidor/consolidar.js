@@ -54,13 +54,15 @@ for (const rota of rotas) {
 out.push('\n## App (Flutter, modo debug) — mediana (ms)\n');
 const medidas = [
   ['entrar_ms', 'Entrar (login + carregar dados)', 3000],
-  ['recarga_mediana_ms', 'Recarregar todos os lançamentos', 2000],
-  ['rede_mediana_ms', '  ↳ parte de rede (download)', null],
+  ['recarga_mediana_ms', 'Recarregar o cache do app (mês atual em diante)', 2000],
+  ['rede_mediana_ms', '  ↳ parte de rede (download do cache)', null],
   ['processamento_mediana_ms', '  ↳ parte de processamento (JSON → modelos)', null],
   ['abrir_inicio_ate_saldo_ms', 'Abrir a Início até mostrar o saldo', 2000],
   ['troca_aba_ate_atualizar_mediana_ms', 'Trocar de aba (até recarregar e redesenhar)', 1000],
-  ['historico_tudo_mediana_ms', 'Histórico → filtro "Tudo"', 1000],
-  ['kb_baixados_por_recarga', 'KB baixados a cada recarga', null],
+  ['historico_tudo_mediana_ms', 'Histórico → filtro "Tudo" (até mostrar a 1ª página e os totais)', 1000],
+  ['historico_rolar_pagina_mediana_ms', 'Histórico "Tudo" → carregar mais uma página', 1000],
+  ['lancamentos_no_app', 'Lançamentos guardados no aparelho', null],
+  ['kb_baixados_por_recarga', 'KB baixados a cada recarga do cache', null],
 ];
 out.push(`| Medida | Limite | ${CENARIOS.join(' | ')} |`, `|---|---:|${CENARIOS.map(() => '---:').join('|')}|`);
 for (const [k, nome, lim] of medidas) {

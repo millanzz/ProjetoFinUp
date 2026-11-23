@@ -1,6 +1,6 @@
 # CT-INT-09 — despesa sem categoria: o app usa "Outros" e o SQLite liga à categoria de despesa
 
-Gerado em 2026-11-22T23:01:56.497011
+Gerado em 2026-11-23T09:15:32.879796
 
 ### 01. Flutter → API: `POST /expenses` → **201**
 
@@ -27,7 +27,33 @@ Resposta da API:
 }
 ```
 
-### 02. Conferência no SQLite
+### 02. Flutter → API: `GET /lancamentos?limit=0` → **200**
+
+Resposta da API:
+```json
+{
+  "itens": [],
+  "total": 2,
+  "proximo_offset": null,
+  "receitas": 4500.75,
+  "despesas": 12.5,
+  "saldo": 4488.25,
+  "categorias": [
+    {
+      "tipo": "receita",
+      "categoria": "Salário",
+      "total": 4500.75
+    },
+    {
+      "tipo": "despesa",
+      "categoria": "Outros",
+      "total": 12.5
+    }
+  ]
+}
+```
+
+### 03. Conferência no SQLite
 
 ```sql
 SELECT c.name, c.type FROM expenses e JOIN categories c ON c.id = e.category_id WHERE e.id = ?   -- params: [1]

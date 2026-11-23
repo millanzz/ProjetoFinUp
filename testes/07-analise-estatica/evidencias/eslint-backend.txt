@@ -1,7 +1,7 @@
 
 backend\src\app.js
   13:26  warning  Expected to return a value at the end of arrow function  consistent-return
-  64:31  warning  Expected to return a value at the end of arrow function  consistent-return
+  67:31  warning  Expected to return a value at the end of arrow function  consistent-return
 
 backend\src\controllers\authController.js
    7:28  warning  Expected to return a value at the end of arrow function        consistent-return
@@ -11,26 +11,26 @@ backend\src\controllers\categoryController.js
   49:35  warning  Expected to return a value at the end of arrow function  consistent-return
 
 backend\src\controllers\dashboardController.js
-  12:19  warning  Arrow function has too many lines (92). Maximum allowed is 60  max-lines-per-function
-  12:30  warning  Expected to return a value at the end of arrow function        consistent-return
-  83:29  warning  Variable Assigned to Object Injection Sink                     security/detect-object-injection
-  86:38  warning  Expected to return a value at the end of arrow function        consistent-return
-  88:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
-  92:39  warning  Expected to return a value at the end of arrow function        consistent-return
-  94:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
+  13:19  warning  Arrow function has too many lines (92). Maximum allowed is 60  max-lines-per-function
+  13:30  warning  Expected to return a value at the end of arrow function        consistent-return
+  84:29  warning  Variable Assigned to Object Injection Sink                     security/detect-object-injection
+  87:38  warning  Expected to return a value at the end of arrow function        consistent-return
+  89:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
+  93:39  warning  Expected to return a value at the end of arrow function        consistent-return
+  95:9   warning  Generic Object Injection Sink                                  security/detect-object-injection
 
 backend\src\controllers\goalController.js
   20:35  warning  Async arrow function has a complexity of 11. Maximum allowed is 10  complexity
   71:35  warning  Async arrow function has a complexity of 13. Maximum allowed is 10  complexity
 
 backend\src\controllers\lancamentoController.js
-   29:18  warning  Function 'lancamentoController' has too many lines (194). Maximum allowed is 60  max-lines-per-function
+   29:18  warning  Function 'lancamentoController' has too many lines (195). Maximum allowed is 60  max-lines-per-function
    58:31  warning  Generic Object Injection Sink                                                    security/detect-object-injection
    72:25  warning  Generic Object Injection Sink                                                    security/detect-object-injection
    72:43  warning  Generic Object Injection Sink                                                    security/detect-object-injection
    90:3   warning  Async function 'create' has a complexity of 23. Maximum allowed is 10            complexity
    90:18  warning  Expected to return a value at the end of async function 'create'                 consistent-return
-  175:3   warning  Async function 'update' has a complexity of 15. Maximum allowed is 10            complexity
+  182:3   warning  Async function 'update' has a complexity of 15. Maximum allowed is 10            complexity
 
 backend\src\controllers\passwordResetController.js
    31:43  warning  Expected to return a value at the end of async arrow function       consistent-return

@@ -1,6 +1,6 @@
 # CT-INT-03 — token expirado: a sessão não é restaurada e o token é apagado do aparelho
 
-Gerado em 2026-11-22T23:01:55.501429
+Gerado em 2026-11-23T09:15:31.662895
 
 ### 01. Conferência no SQLite
 

@@ -7,23 +7,56 @@ import 'categoria_service.dart';
 
 /// Serviço de lançamentos (receitas e despesas) integrado ao backend.
 ///
-/// Os dados ficam em um cache local sincronizado com a API, então as
-/// telas continuam lendo de forma síncrona (getReceitas, saldo, etc.)
-/// e chamam [carregar] / [adicionar] / [editar] / [remover] para sincronizar.
+/// **Janela recente.** O cache local guarda só os lançamentos do MÊS ATUAL em
+/// diante (inclui as parcelas futuras). É o que a tela Início, o Histórico
+/// "Este mês" e as listas do mês corrente leem de forma síncrona
+/// ([getAll], [getReceitas], [getDespesas]).
+///
+/// Períodos mais antigos (Histórico "3 meses", "6 meses", "Tudo" e meses
+/// anteriores em Entradas/Despesas) não ficam no aparelho: são buscados
+/// página por página com `ConsultaLancamentos`, e os totais desses períodos
+/// vêm calculados pela API. Antes, o app baixava TODOS os lançamentos a cada
+/// recarga (12 MB para quem tem 50 mil), o que deixava a abertura e a troca
+/// de abas lentas para usuários com muitos registros.
+///
+/// [totalReceitas], [totalDespesas] e [saldo] continuam sendo de TODOS os
+/// lançamentos do usuário: vêm somados pela API (GET /lancamentos?limit=0).
 class LancamentoService {
   LancamentoService._();
+
+  /// Tamanho das páginas usadas para preencher a janela.
+  static const tamanhoPaginaJanela = 1000;
 
   static List<LancamentoModel> _lancamentos = [];
   static bool _carregado = false;
   static DateTime? _carregadoEm;
+  static DateTime _desde = _inicioDoMesAtual();
+  static double _totalReceitas = 0;
+  static double _totalDespesas = 0;
+  static List<DateTime> _meses = [];
+
+  static DateTime _inicioDoMesAtual() {
+    final agora = DateTime.now();
+    return DateTime(agora.year, agora.month);
+  }
 
   /// Incrementado a cada mudança no cache. As abas (que ficam vivas num
-  /// IndexedStack) escutam isto para se redesenhar.
+  /// IndexedStack) escutam isto para se redesenhar; as consultas paginadas
+  /// também, para recarregar depois de uma inclusão, edição ou exclusão.
   static final ValueNotifier<int> revisao = ValueNotifier<int>(0);
   static void _notificar() => revisao.value++;
 
   // ── Leitura (síncrona, a partir do cache) ─────────────────────
 
+  /// Primeiro dia coberto pelo cache local (início do mês atual).
+  static DateTime get janelaDesde => _desde;
+
+  /// Se o período que começa em [inicio] está inteiro no cache local.
+  static bool cobre(DateTime inicio) => !inicio.isBefore(_desde);
+
+  static bool _naJanela(LancamentoModel l) => !l.data.isBefore(_desde);
+
+  /// Lançamentos da janela recente (mês atual em diante).
   static List<LancamentoModel> getAll() => List.unmodifiable(_lancamentos);
 
   static List<LancamentoModel> getReceitas() =>
@@ -32,45 +65,80 @@ class LancamentoService {
   static List<LancamentoModel> getDespesas() =>
       _lancamentos.where((l) => !l.isReceita).toList();
 
-  // Totais arredondados para centavos (sem resíduo de ponto flutuante, DEF-01/02).
-  static double get totalReceitas =>
-      Fmt.centavos(getReceitas().fold(0, (sum, l) => sum + l.valor));
+  /// Meses (dia 1) que têm algum lançamento, do mais recente ao mais antigo.
+  static List<DateTime> get meses => List.unmodifiable(_meses);
 
-  static double get totalDespesas =>
-      Fmt.centavos(getDespesas().fold(0, (sum, l) => sum + l.valor));
+  // Totais de TODOS os lançamentos, somados pela API e arredondados (DEF-01/02).
+  static double get totalReceitas => _totalReceitas;
 
-  static double get saldo => Fmt.centavos(totalReceitas - totalDespesas);
+  static double get totalDespesas => _totalDespesas;
+
+  static double get saldo => Fmt.centavos(_totalReceitas - _totalDespesas);
 
   // ── Sincronização com a API ───────────────────────────────────
 
-  /// Busca receitas e despesas no backend e atualiza o cache.
+  /// Data no formato da API (AAAA-MM-DD).
+  static String dia(DateTime d) =>
+      '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+  /// Converte um item de GET /lancamentos (que traz o campo `tipo`).
+  static LancamentoModel doExtrato(Map m) => LancamentoModel.fromApi(
+        Map<String, dynamic>.from(m),
+        m['tipo'] == 'receita' ? TipoLancamento.receita : TipoLancamento.despesa,
+      );
+
+  /// Busca no backend a janela recente (página por página), os totais gerais
+  /// e a lista de meses, e atualiza o cache.
   static Future<void> carregar({bool force = false}) async {
     if (_carregado && !force) return;
 
+    final desde = _inicioDoMesAtual();
+    final rota = '/lancamentos?from=${dia(desde)}&limit=$tamanhoPaginaJanela';
     final resultados = await Future.wait([
-      ApiClient.get('/incomes'),
-      ApiClient.get('/expenses'),
+      ApiClient.get('$rota&offset=0'),
+      ApiClient.get('/lancamentos?limit=0'),
+      ApiClient.get('/lancamentos/meses'),
     ]);
 
-    final receitas = (resultados[0] as List).map(
-      (m) => LancamentoModel.fromApi(
-        Map<String, dynamic>.from(m as Map),
-        TipoLancamento.receita,
-      ),
-    );
-    final despesas = (resultados[1] as List).map(
-      (m) => LancamentoModel.fromApi(
-        Map<String, dynamic>.from(m as Map),
-        TipoLancamento.despesa,
-      ),
-    );
+    final itens = <LancamentoModel>[];
+    var pagina = resultados[0] as Map;
+    while (true) {
+      itens.addAll((pagina['itens'] as List).map((m) => doExtrato(m as Map)));
+      final proximo = pagina['proximo_offset'];
+      if (proximo == null) break;
+      pagina = await ApiClient.get('$rota&offset=$proximo') as Map;
+    }
 
-    _lancamentos = [...receitas, ...despesas]
-      ..sort((a, b) => b.data.compareTo(a.data));
+    _desde = desde;
+    _lancamentos = itens..sort((a, b) => b.data.compareTo(a.data));
+    _aplicarResumo(resultados[1] as Map);
+    _meses = [
+      for (final m in resultados[2] as List) DateTime.parse('$m-01'),
+    ];
 
     _carregado = true;
     _carregadoEm = DateTime.now();
     _notificar();
+  }
+
+  static void _aplicarResumo(Map r) {
+    _totalReceitas = Fmt.centavos((r['receitas'] as num).toDouble());
+    _totalDespesas = Fmt.centavos((r['despesas'] as num).toDouble());
+  }
+
+  /// Depois de uma inclusão, edição ou exclusão: atualiza os totais gerais
+  /// (somados pela API) e a lista de meses. Uma falha aqui não desfaz a
+  /// operação, que já foi gravada; os totais se acertam na próxima recarga.
+  static Future<void> _atualizarResumo(Iterable<DateTime> datas) async {
+    for (final d in datas) {
+      final mes = DateTime(d.year, d.month);
+      if (!_meses.contains(mes)) {
+        _meses = [..._meses, mes]..sort((a, b) => b.compareTo(a));
+      }
+    }
+    try {
+      _aplicarResumo(await ApiClient.get('/lancamentos?limit=0') as Map);
+    } catch (_) {}
   }
 
   /// Recarrega só se o cache tiver mais de [idadeMaxima]. Usado na troca de
@@ -151,8 +219,9 @@ class LancamentoService {
           ),
       ];
       _lancamentos
-        ..addAll(criadas)
+        ..addAll(criadas.where(_naJanela))
         ..sort((a, b) => b.data.compareTo(a.data));
+      await _atualizarResumo(criadas.map((l) => l.data));
       _notificar();
       return criadas.first;
     }
@@ -167,9 +236,12 @@ class LancamentoService {
       parcelado: lancamento.parcelado,
     );
 
-    _lancamentos
-      ..add(criado)
-      ..sort((a, b) => b.data.compareTo(a.data));
+    if (_naJanela(criado)) {
+      _lancamentos
+        ..add(criado)
+        ..sort((a, b) => b.data.compareTo(a.data));
+    }
+    await _atualizarResumo([criado.data]);
     _notificar();
     return criado;
   }
@@ -210,13 +282,12 @@ class LancamentoService {
       (l) => l.id == lancamento.id && l.tipo == lancamento.tipo,
     );
 
-    if (indice >= 0) {
-      _lancamentos[indice] = atualizado;
-    } else {
-      _lancamentos.add(atualizado);
-    }
+    // A data pode ter mudado: o lançamento entra, continua ou sai da janela.
+    if (indice >= 0) _lancamentos.removeAt(indice);
+    if (_naJanela(atualizado)) _lancamentos.add(atualizado);
 
     _lancamentos.sort((a, b) => b.data.compareTo(a.data));
+    await _atualizarResumo([atualizado.data]);
     _notificar();
   }
 
@@ -231,6 +302,7 @@ class LancamentoService {
     _lancamentos.removeWhere(
       (l) => l.id == lancamento.id && l.tipo == lancamento.tipo,
     );
+    await _atualizarResumo(const []);
     _notificar();
   }
 
@@ -248,6 +320,7 @@ class LancamentoService {
     _lancamentos.removeWhere(
       (l) => l.parcelaGrupo == grupo && l.tipo == lancamento.tipo,
     );
+    await _atualizarResumo(const []);
     _notificar();
     return (dados is Map && dados['removidas'] is num)
         ? (dados['removidas'] as num).toInt()
@@ -258,6 +331,9 @@ class LancamentoService {
     _lancamentos = [];
     _carregado = false;
     _carregadoEm = null;
+    _totalReceitas = 0;
+    _totalDespesas = 0;
+    _meses = [];
     _notificar();
   }
 }

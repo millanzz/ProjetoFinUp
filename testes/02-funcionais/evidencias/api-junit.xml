@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
-	<testsuite name="Cadastro (POST /users e criação de lançamentos/metas)" time="1.304422" disabled="0" errors="0" tests="13" failures="0" skipped="0" hostname="GustavoMillan">
-		<testcase name="CT-CAD-01 cadastro válido devolve 201 sem a senha e permite login" time="0.193995" classname="test"/>
-		<testcase name="CT-CAD-02 senha é gravada com hash bcrypt, nunca em texto puro" time="0.001158" classname="test"/>
-		<testcase name="CT-CAD-03 novo usuário recebe as 14 categorias padrão (5 receita, 9 despesa)" time="0.129368" classname="test"/>
-		<testcase name="CT-CAD-04 e-mail já cadastrado é recusado com 409 (inclusive com outra caixa)" time="0.006678" classname="test"/>
-		<testcase name="CT-CAD-05 campos obrigatórios ausentes ou só com espaços são recusados com 400" time="0.007420" classname="test"/>
-		<testcase name="CT-CAD-06 e-mail em formato inválido é recusado com 400" time="0.006334" classname="test"/>
-		<testcase name="CT-CAD-07 senha com menos de 6 caracteres é recusada; 6 é aceita (limite)" time="0.064103" classname="test"/>
-		<testcase name="CT-CAD-08 nome com HTML/SQL é gravado como texto, sem efeito colateral" time="0.127763" classname="test"/>
-		<testcase name="CT-CAD-09 cadastrar receita autenticado: aparece na listagem e no dashboard" time="0.128508" classname="test"/>
-		<testcase name="CT-CAD-10 cadastrar despesa parcelada: gera 3 lançamentos visíveis em meses diferentes" time="0.131640" classname="test"/>
-		<testcase name="CT-CAD-11 cadastrar meta: aparece na listagem do usuário" time="0.123981" classname="test"/>
-		<testcase name="CT-CAD-12 cadastrar categoria personalizada e usá-la numa despesa" time="0.125328" classname="test"/>
-		<testcase name="CT-CAD-13 dados de um usuário não aparecem para outro" time="0.246800" classname="test"/>
+	<testsuite name="Cadastro (POST /users e criação de lançamentos/metas)" time="1.292788" disabled="0" errors="0" tests="13" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-CAD-01 cadastro válido devolve 201 sem a senha e permite login" time="0.191457" classname="test"/>
+		<testcase name="CT-CAD-02 senha é gravada com hash bcrypt, nunca em texto puro" time="0.001264" classname="test"/>
+		<testcase name="CT-CAD-03 novo usuário recebe as 14 categorias padrão (5 receita, 9 despesa)" time="0.131129" classname="test"/>
+		<testcase name="CT-CAD-04 e-mail já cadastrado é recusado com 409 (inclusive com outra caixa)" time="0.006098" classname="test"/>
+		<testcase name="CT-CAD-05 campos obrigatórios ausentes ou só com espaços são recusados com 400" time="0.008520" classname="test"/>
+		<testcase name="CT-CAD-06 e-mail em formato inválido é recusado com 400" time="0.005618" classname="test"/>
+		<testcase name="CT-CAD-07 senha com menos de 6 caracteres é recusada; 6 é aceita (limite)" time="0.061802" classname="test"/>
+		<testcase name="CT-CAD-08 nome com HTML/SQL é gravado como texto, sem efeito colateral" time="0.123466" classname="test"/>
+		<testcase name="CT-CAD-09 cadastrar receita autenticado: aparece na listagem e no dashboard" time="0.125881" classname="test"/>
+		<testcase name="CT-CAD-10 cadastrar despesa parcelada: gera 3 lançamentos visíveis em meses diferentes" time="0.133881" classname="test"/>
+		<testcase name="CT-CAD-11 cadastrar meta: aparece na listagem do usuário" time="0.121978" classname="test"/>
+		<testcase name="CT-CAD-12 cadastrar categoria personalizada e usá-la numa despesa" time="0.123591" classname="test"/>
+		<testcase name="CT-CAD-13 dados de um usuário não aparecem para outro" time="0.248145" classname="test"/>
 	</testsuite>
-	<testsuite name="Edição (perfil, senha, receitas, despesas e metas)" time="2.834596" disabled="0" errors="0" tests="16" failures="0" skipped="0" hostname="GustavoMillan">
-		<testcase name="CT-EDI-01 editar nome do perfil reflete em /users/me" time="0.203381" classname="test"/>
-		<testcase name="CT-EDI-02 editar e-mail: o novo entra no login e o antigo deixa de entrar" time="0.192487" classname="test"/>
-		<testcase name="CT-EDI-03 trocar e-mail para um já usado por outra pessoa é recusado com 409" time="0.251461" classname="test"/>
-		<testcase name="CT-EDI-04 perfil com nome vazio, e-mail inválido ou sem campos é recusado com 400" time="0.128784" classname="test"/>
-		<testcase name="CT-EDI-05 editar perfil sem token é recusado com 401" time="0.001603" classname="test"/>
-		<testcase name="CT-EDI-06 trocar senha: a nova entra no login e a antiga não" time="0.361553" classname="test"/>
-		<testcase name="CT-EDI-07 trocar senha com a senha atual errada é recusado com 401" time="0.243276" classname="test"/>
-		<testcase name="CT-EDI-08 nova senha curta ou campos ausentes são recusados com 400" time="0.127737" classname="test"/>
-		<testcase name="CT-EDI-09 nova senha enviada como número é recusada com erro de cliente (4xx)" time="0.122119" classname="test"/>
-		<testcase name="CT-EDI-10 editar receita (valor, descrição, data, categoria) reflete na listagem" time="0.130509" classname="test"/>
-		<testcase name="CT-EDI-11 editar despesa com dados inválidos é recusado e nada muda" time="0.132357" classname="test"/>
-		<testcase name="CT-EDI-12 editar uma parcela altera só ela, não o parcelamento todo" time="0.134793" classname="test"/>
-		<testcase name="CT-EDI-13 editar lançamento inexistente ou de outro usuário responde 404" time="0.255974" classname="test"/>
-		<testcase name="CT-EDI-14 editar meta (título, alvo, guardado e ícone) reflete na listagem" time="0.130305" classname="test"/>
-		<testcase name="CT-EDI-15 aporte em meta pela API soma ao valor guardado" time="0.132207" classname="test"/>
-		<testcase name="CT-EDI-16 editar meta com dados inválidos ou de outro usuário é recusado" time="0.274977" classname="test"/>
+	<testsuite name="Edição (perfil, senha, receitas, despesas e metas)" time="2.871628" disabled="0" errors="0" tests="16" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-EDI-01 editar nome do perfil reflete em /users/me" time="0.209481" classname="test"/>
+		<testcase name="CT-EDI-02 editar e-mail: o novo entra no login e o antigo deixa de entrar" time="0.194920" classname="test"/>
+		<testcase name="CT-EDI-03 trocar e-mail para um já usado por outra pessoa é recusado com 409" time="0.251126" classname="test"/>
+		<testcase name="CT-EDI-04 perfil com nome vazio, e-mail inválido ou sem campos é recusado com 400" time="0.130641" classname="test"/>
+		<testcase name="CT-EDI-05 editar perfil sem token é recusado com 401" time="0.001832" classname="test"/>
+		<testcase name="CT-EDI-06 trocar senha: a nova entra no login e a antiga não" time="0.414794" classname="test"/>
+		<testcase name="CT-EDI-07 trocar senha com a senha atual errada é recusado com 401" time="0.271666" classname="test"/>
+		<testcase name="CT-EDI-08 nova senha curta ou campos ausentes são recusados com 400" time="0.129659" classname="test"/>
+		<testcase name="CT-EDI-09 nova senha enviada como número é recusada com erro de cliente (4xx)" time="0.124886" classname="test"/>
+		<testcase name="CT-EDI-10 editar receita (valor, descrição, data, categoria) reflete na listagem" time="0.127321" classname="test"/>
+		<testcase name="CT-EDI-11 editar despesa com dados inválidos é recusado e nada muda" time="0.129553" classname="test"/>
+		<testcase name="CT-EDI-12 editar uma parcela altera só ela, não o parcelamento todo" time="0.124551" classname="test"/>
+		<testcase name="CT-EDI-13 editar lançamento inexistente ou de outro usuário responde 404" time="0.252796" classname="test"/>
+		<testcase name="CT-EDI-14 editar meta (título, alvo, guardado e ícone) reflete na listagem" time="0.126726" classname="test"/>
+		<testcase name="CT-EDI-15 aporte em meta pela API soma ao valor guardado" time="0.123535" classname="test"/>
+		<testcase name="CT-EDI-16 editar meta com dados inválidos ou de outro usuário é recusado" time="0.248008" classname="test"/>
 	</testsuite>
-	<testsuite name="Exclusão (receitas, despesas, parcelamentos, metas e categorias)" time="2.140459" disabled="0" errors="0" tests="13" failures="0" skipped="0" hostname="GustavoMillan">
-		<testcase name="CT-EXC-01 excluir receita: 204, some da listagem e do saldo" time="0.217891" classname="test"/>
-		<testcase name="CT-EXC-02 excluir a mesma receita duas vezes: a segunda responde 404" time="0.132012" classname="test"/>
-		<testcase name="CT-EXC-03 excluir despesa: 204 e o saldo volta a subir" time="0.132544" classname="test"/>
-		<testcase name="CT-EXC-04 usuário não consegue excluir lançamento de outro (404) e o dado continua" time="0.250438" classname="test"/>
-		<testcase name="CT-EXC-05 excluir sem token responde 401" time="0.002130" classname="test"/>
-		<testcase name="CT-EXC-06 excluir uma parcela mantém as outras" time="0.127340" classname="test"/>
-		<testcase name="CT-EXC-07 excluir parcelamento inteiro (DELETE /grupo) remove todas as parcelas" time="0.134494" classname="test"/>
-		<testcase name="CT-EXC-08 excluir parcelamento de outro usuário responde 404 e nada é removido" time="0.248107" classname="test"/>
-		<testcase name="CT-EXC-09 excluir meta: 204, some da listagem; repetir responde 404" time="0.129676" classname="test"/>
-		<testcase name="CT-EXC-10 excluir meta de outro usuário responde 404 e ela continua" time="0.247383" classname="test"/>
-		<testcase name="CT-EXC-11 categoria em uso não pode ser excluída (409); sem uso é excluída (204)" time="0.129846" classname="test"/>
-		<testcase name="CT-EXC-12 excluir categoria de receita sem lançamentos e de outro usuário" time="0.248533" classname="test"/>
-		<testcase name="CT-EXC-13 id inexistente ou não numérico responde 404" time="0.129820" classname="test"/>
+	<testsuite name="Exclusão (receitas, despesas, parcelamentos, metas e categorias)" time="2.271458" disabled="0" errors="0" tests="13" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-EXC-01 excluir receita: 204, some da listagem e do saldo" time="0.242650" classname="test"/>
+		<testcase name="CT-EXC-02 excluir a mesma receita duas vezes: a segunda responde 404" time="0.151300" classname="test"/>
+		<testcase name="CT-EXC-03 excluir despesa: 204 e o saldo volta a subir" time="0.148700" classname="test"/>
+		<testcase name="CT-EXC-04 usuário não consegue excluir lançamento de outro (404) e o dado continua" time="0.268624" classname="test"/>
+		<testcase name="CT-EXC-05 excluir sem token responde 401" time="0.002506" classname="test"/>
+		<testcase name="CT-EXC-06 excluir uma parcela mantém as outras" time="0.141306" classname="test"/>
+		<testcase name="CT-EXC-07 excluir parcelamento inteiro (DELETE /grupo) remove todas as parcelas" time="0.135066" classname="test"/>
+		<testcase name="CT-EXC-08 excluir parcelamento de outro usuário responde 404 e nada é removido" time="0.253361" classname="test"/>
+		<testcase name="CT-EXC-09 excluir meta: 204, some da listagem; repetir responde 404" time="0.134410" classname="test"/>
+		<testcase name="CT-EXC-10 excluir meta de outro usuário responde 404 e ela continua" time="0.262794" classname="test"/>
+		<testcase name="CT-EXC-11 categoria em uso não pode ser excluída (409); sem uso é excluída (204)" time="0.133822" classname="test"/>
+		<testcase name="CT-EXC-12 excluir categoria de receita sem lançamentos e de outro usuário" time="0.251752" classname="test"/>
+		<testcase name="CT-EXC-13 id inexistente ou não numérico responde 404" time="0.127643" classname="test"/>
 	</testsuite>
-	<testsuite name="Login (POST /auth/login) e acesso autenticado" time="0.535734" disabled="0" errors="0" tests="12" failures="0" skipped="0" hostname="GustavoMillan">
-		<testcase name="CT-LOG-01 login com e-mail e senha corretos devolve token e dados do usuário" time="0.064107" classname="test"/>
-		<testcase name="CT-LOG-02 e-mail com maiúsculas e espaços é aceito (não diferencia)" time="0.060799" classname="test"/>
-		<testcase name="CT-LOG-03 senha errada é recusada com 401" time="0.060445" classname="test"/>
-		<testcase name="CT-LOG-04 e-mail não cadastrado recebe a mesma mensagem (não revela quem tem conta)" time="0.002587" classname="test"/>
-		<testcase name="CT-LOG-05 senha diferencia maiúsculas" time="0.060394" classname="test"/>
-		<testcase name="CT-LOG-06 campos vazios ou ausentes são recusados com 400" time="0.007246" classname="test"/>
-		<testcase name="CT-LOG-07 senha enviada como número é recusada com erro de cliente (4xx)" time="0.001819" classname="test"/>
-		<testcase name="CT-LOG-08 corpo JSON malformado é recusado com 400" time="0.002487" classname="test"/>
-		<testcase name="CT-LOG-09 o token do login dá acesso a GET /users/me" time="0.002707" classname="test"/>
-		<testcase name="CT-LOG-10 rotas protegidas sem token respondem 401" time="0.005691" classname="test"/>
-		<testcase name="CT-LOG-11 token mal formatado, adulterado ou expirado responde 401" time="0.005121" classname="test"/>
-		<testcase name="CT-LOG-12 token expira no prazo configurado (JWT_EXPIRES_IN)" time="0.060451" classname="test"/>
+	<testsuite name="Login (POST /auth/login) e acesso autenticado" time="0.577510" disabled="0" errors="0" tests="12" failures="0" skipped="0" hostname="GustavoMillan">
+		<testcase name="CT-LOG-01 login com e-mail e senha corretos devolve token e dados do usuário" time="0.073473" classname="test"/>
+		<testcase name="CT-LOG-02 e-mail com maiúsculas e espaços é aceito (não diferencia)" time="0.062077" classname="test"/>
+		<testcase name="CT-LOG-03 senha errada é recusada com 401" time="0.060956" classname="test"/>
+		<testcase name="CT-LOG-04 e-mail não cadastrado recebe a mesma mensagem (não revela quem tem conta)" time="0.002419" classname="test"/>
+		<testcase name="CT-LOG-05 senha diferencia maiúsculas" time="0.061624" classname="test"/>
+		<testcase name="CT-LOG-06 campos vazios ou ausentes são recusados com 400" time="0.007136" classname="test"/>
+		<testcase name="CT-LOG-07 senha enviada como número é recusada com erro de cliente (4xx)" time="0.001914" classname="test"/>
+		<testcase name="CT-LOG-08 corpo JSON malformado é recusado com 400" time="0.002824" classname="test"/>
+		<testcase name="CT-LOG-09 o token do login dá acesso a GET /users/me" time="0.003141" classname="test"/>
+		<testcase name="CT-LOG-10 rotas protegidas sem token respondem 401" time="0.009426" classname="test"/>
+		<testcase name="CT-LOG-11 token mal formatado, adulterado ou expirado responde 401" time="0.005344" classname="test"/>
+		<testcase name="CT-LOG-12 token expira no prazo configurado (JWT_EXPIRES_IN)" time="0.060500" classname="test"/>
 	</testsuite>
 	<!-- tests 54 -->
 	<!-- suites 4 -->
@@ -69,5 +69,5 @@
 	<!-- cancelled 0 -->
 	<!-- skipped 0 -->
 	<!-- todo 0 -->
-	<!-- duration_ms 8685.1581 -->
+	<!-- duration_ms 8995.4864 -->
 </testsuites>

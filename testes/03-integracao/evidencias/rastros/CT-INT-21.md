@@ -1,6 +1,6 @@
 # CT-INT-21 — excluir meta no app apaga a linha do SQLite
 
-Gerado em 2026-11-22T23:01:57.778178
+Gerado em 2026-11-23T09:15:35.125664
 
 ### 01. Flutter → API: `GET /goals` → **200**
 
@@ -14,7 +14,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```

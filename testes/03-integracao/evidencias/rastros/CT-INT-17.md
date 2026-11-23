@@ -1,6 +1,6 @@
 # CT-INT-17 — erro de validação da API chega ao app como ApiException e nada é gravado
 
-Gerado em 2026-11-22T23:01:57.380310
+Gerado em 2026-11-23T09:15:34.541041
 
 ### 01. Conferência no SQLite
 

@@ -15,7 +15,9 @@ import 'package:FinUp/core/api_config.dart';
 import 'package:FinUp/main.dart';
 import 'package:FinUp/models/lancamento_model.dart';
 import 'package:FinUp/services/auth_service.dart';
+import 'package:FinUp/services/api_client.dart';
 import 'package:FinUp/services/categoria_service.dart';
+import 'package:FinUp/services/consulta_lancamentos.dart';
 import 'package:FinUp/services/lancamento_service.dart';
 import '../../02-funcionais/app/suporte.dart' show prepararAmbiente, telaDeCelular, comTela, esperar;
 
@@ -42,10 +44,14 @@ void main() {
     await AuthService.login(email: 'perf@teste.local', senha: 'senha123');
     await Future.wait([LancamentoService.carregar(force: true), CategoriaService.carregar(force: true)]);
     r['entrar_ms'] = _ms(sw);
+    // Desde a paginação o aparelho guarda só o mês atual em diante
     r['lancamentos_no_app'] = LancamentoService.getAll().length;
+    final totalUsuario = ((await ApiClient.get('/lancamentos?limit=0')) as Map)['total'] as int;
+    r['lancamentos_do_usuario'] = totalUsuario;
     salvar();
 
-    // 2) Recarregar todos os lançamentos (o que acontece a cada troca de aba)
+    // 2) Recarregar o cache (mês atual em diante; o que a troca de aba faz se o
+    //    cache tiver mais de 1 min)
     final cargas = <double>[];
     for (var i = 0; i < 5; i++) {
       sw = Stopwatch()..start();
@@ -56,26 +62,30 @@ void main() {
     r['recarga_ms'] = cargas;
     salvar();
 
-    // 3) Separar rede × processamento no app (JSON → modelos)
+    // 3) Separar rede × processamento no app (JSON → modelos), para o cache
     final token = (await SharedPreferences.getInstance()).getString('auth_token')!;
     final rede = <double>[], proc = <double>[];
     var bytes = 0;
+    final base = '${ApiConfig.baseUrl}/lancamentos?from=${LancamentoService.dia(LancamentoService.janelaDesde)}'
+        '&limit=${LancamentoService.tamanhoPaginaJanela}';
     for (var i = 0; i < 3; i++) {
       sw = Stopwatch()..start();
       final cli = IOClient();
       final h = {'Authorization': 'Bearer $token'};
-      final rs = await Future.wait([
-        cli.get(Uri.parse('${ApiConfig.baseUrl}/incomes'), headers: h),
-        cli.get(Uri.parse('${ApiConfig.baseUrl}/expenses'), headers: h),
-      ]);
+      final corpos = <List<int>>[];
+      Object? proximo = 0;
+      while (proximo != null) {
+        final resp = await cli.get(Uri.parse('$base&offset=$proximo'), headers: h);
+        corpos.add(resp.bodyBytes);
+        proximo = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map)['proximo_offset'];
+      }
       rede.add(_ms(sw));
-      bytes = rs[0].bodyBytes.length + rs[1].bodyBytes.length;
+      bytes = corpos.fold(0, (s, c) => s + c.length);
       sw = Stopwatch()..start();
-      final rec = (jsonDecode(utf8.decode(rs[0].bodyBytes)) as List)
-          .map((m) => LancamentoModel.fromApi(Map<String, dynamic>.from(m as Map), TipoLancamento.receita));
-      final des = (jsonDecode(utf8.decode(rs[1].bodyBytes)) as List)
-          .map((m) => LancamentoModel.fromApi(Map<String, dynamic>.from(m as Map), TipoLancamento.despesa));
-      final todos = [...rec, ...des]..sort((a, b) => b.data.compareTo(a.data));
+      final todos = [
+        for (final c in corpos)
+          for (final m in (jsonDecode(utf8.decode(c)) as Map)['itens'] as List) LancamentoService.doExtrato(m as Map),
+      ]..sort((a, b) => b.data.compareTo(a.data));
       proc.add(_ms(sw));
       expect(todos.length, LancamentoService.getAll().length);
       cli.close();
@@ -129,6 +139,8 @@ void main() {
       await t.pump(const Duration(milliseconds: 5));
     }
     await t.pump();
+    // Mede até a tela mostrar a quantidade total (1ª página + totais da API).
+    final contagem = find.text('$totalUsuario ${totalUsuario == 1 ? 'lançamento' : 'lançamentos'}');
     final tudo = <double>[];
     for (var i = 0; i < 3; i++) {
       for (final filtro in ['Tudo', 'Este mês']) {
@@ -136,6 +148,10 @@ void main() {
         await t.tap(find.text(filtro).last, warnIfMissed: false);
         await t.pump();
         if (filtro == 'Tudo') {
+          while (contagem.evaluate().isEmpty && sw.elapsedMilliseconds < 60000) {
+            await t.pump(const Duration(milliseconds: 5));
+          }
+          expect(contagem, findsOneWidget);
           tudo.add(_ms(sw));
           r['historico_tudo_ms'] = tudo;
           r['historico_tudo_mediana_ms'] = _mediana(tudo);
@@ -143,6 +159,22 @@ void main() {
         }
       }
       if (tudo.first > lento) break;
+    }
+
+    // 7) "Carregar mais" no Histórico "Tudo": tempo de buscar e converter uma
+    //    página (o que acontece quando o fim da lista aparece)
+    final consulta = ConsultaLancamentos();
+    await consulta.primeiraPagina;
+    final paginas = <double>[];
+    for (var i = 0; i < 3 && consulta.temMais; i++) {
+      sw = Stopwatch()..start();
+      await consulta.carregarMais();
+      paginas.add(_ms(sw));
+    }
+    consulta.dispose();
+    if (paginas.isNotEmpty) {
+      r['historico_rolar_pagina_ms'] = paginas;
+      r['historico_rolar_pagina_mediana_ms'] = _mediana(paginas);
     }
     r['historico_tudo_mediana_ms'] = _mediana(tudo);
     r['historico_tudo_ms'] = tudo;

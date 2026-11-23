@@ -58,7 +58,23 @@ async function medir(nome, fazer, { aquecimento = 3, n = MEDICOES } = {}) {
   const cat = (await chamar('GET', '/categories?type=expense', { token })).json[0].id;
 
   for (const rota of ['/dashboard', `/dashboard?month=${mes}`, '/incomes', '/expenses', `/expenses?month=${mes}`, '/goals', '/categories']) {
-    resultados.push(await medir(`GET ${rota.replace(mes, 'AAAA-MM')}`, () => chamar('GET', rota, { token })));
+    // Desde a paginação, /incomes e /expenses sem parâmetros devolvem a 1ª página (até 500)
+    const nome = ['/incomes', '/expenses'].includes(rota) ? `GET ${rota} (1ª página, até 500)` : `GET ${rota.replace(mes, 'AAAA-MM')}`;
+    resultados.push(await medir(nome, () => chamar('GET', rota, { token })));
+  }
+
+  // Paginação: o que o app baixa agora
+  const inicioMes = `${mes}-01`;
+  const totalUsuario = (await chamar("GET", "/lancamentos?limit=0", { token })).json.total;
+  const ultima = Math.max(0, totalUsuario - 100);
+  for (const [nome, rota] of [
+    ['GET /lancamentos?from=<mês atual> (cache do app)', `/lancamentos?from=${inicioMes}&limit=1000`],
+    ['GET /lancamentos?limit=0 (só totais)', '/lancamentos?limit=0'],
+    ['GET /lancamentos?limit=100 (1ª página do "Tudo")', '/lancamentos?limit=100'],
+    ['GET /lancamentos?limit=100 (última página)', `/lancamentos?limit=100&offset=${ultima}`],
+    ['GET /lancamentos/meses', '/lancamentos/meses'],
+  ]) {
+    resultados.push(await medir(nome, () => chamar('GET', rota, { token })));
   }
 
   // Escrita: cria, edita e exclui (o volume do cenário não muda no fim)

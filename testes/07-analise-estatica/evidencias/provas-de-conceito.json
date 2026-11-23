@@ -2,7 +2,7 @@
   "poc1": {
     "descricao": "40 palpites simultâneos para um código com limite de 5 tentativas",
     "palpites_enviados": 40,
-    "palpites_conferidos_pelo_servidor": 1,
+    "palpites_conferidos_pelo_servidor": 3,
     "tentativas_registradas_no_banco": 5,
     "limite_esperado": 5,
     "limite_ultrapassado": false

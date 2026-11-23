@@ -3,7 +3,6 @@ const {
   HttpError,
   isPositiveNumber,
   isValidDate,
-  isValidMonth,
   assertCategory,
   handleError,
 } = require('../utils/validators');
@@ -14,6 +13,7 @@ const {
   datasParcelas,
   novoGrupo,
 } = require('../utils/parcelas');
+const { periodo, pagina } = require('../utils/paginacao');
 
 /**
  * Fábrica dos controllers de receitas (/incomes) e despesas (/expenses).
@@ -142,29 +142,36 @@ module.exports = function lancamentoController({ table, type, categoryRequired, 
     }
   }
 
-  // GET /   (aceita ?month=AAAA-MM)
+  // GET /   aceita ?month=AAAA-MM, ?from=, ?to= (AAAA-MM-DD), ?limit= e ?offset=
+  //
+  // A lista é PAGINADA: devolve no máximo `limit` itens (padrão 500, máximo
+  // 1000), do mais recente para o mais antigo. O total de itens do filtro vai no
+  // cabeçalho X-Total-Count e, quando há mais páginas, X-Next-Offset traz o
+  // offset da próxima. Antes a rota devolvia todos os lançamentos do usuário de
+  // uma vez (12 MB para quem tem 50 mil).
   async function list(req, res) {
     try {
-      const { month } = req.query;
-      const params = [req.userId];
-      let filtro = '';
+      const filtro = periodo(req.query, 't.date');
+      const { limit, offset } = pagina(req.query);
+      const params = [req.userId, ...filtro.params];
 
-      if (month !== undefined) {
-        if (!isValidMonth(month)) {
-          throw new HttpError(400, 'month deve estar no formato AAAA-MM');
-        }
-        filtro = ` AND strftime('%Y-%m', t.date) = ?`;
-        params.push(month);
-      }
+      const [{ n }, rows] = await Promise.all([
+        dbAsync.get(`SELECT COUNT(*) AS n FROM ${table} t WHERE t.user_id = ?${filtro.sql}`, params),
+        limit === 0
+          ? Promise.resolve([])
+          : dbAsync.all(
+            `SELECT t.*, c.name AS category_name
+             FROM ${table} t
+             LEFT JOIN categories c ON c.id = t.category_id
+             WHERE t.user_id = ?${filtro.sql}
+             ORDER BY t.date DESC, t.id DESC
+             LIMIT ? OFFSET ?`,
+            [...params, limit, offset]
+          ),
+      ]);
 
-      const rows = await dbAsync.all(
-        `SELECT t.*, c.name AS category_name
-         FROM ${table} t
-         LEFT JOIN categories c ON c.id = t.category_id
-         WHERE t.user_id = ?${filtro}
-         ORDER BY t.date DESC, t.id DESC`,
-        params
-      );
+      res.set('X-Total-Count', String(n));
+      if (offset + rows.length < n && limit > 0) res.set('X-Next-Offset', String(offset + rows.length));
       res.json(rows);
     } catch (err) {
       handleError(res, err);

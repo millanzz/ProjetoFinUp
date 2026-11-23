@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../core/formatters.dart';
 import '../models/lancamento_model.dart';
+import '../services/consulta_lancamentos.dart';
 import '../services/lancamento_service.dart';
 import '../widgets/fin_controls.dart';
 import '../widgets/fin_feedback.dart';
@@ -27,9 +28,42 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
   bool get _isReceita => widget.tipo == TipoLancamento.receita;
   FinTone get _tone => _isReceita ? FinTone.primary : FinTone.coral;
 
+  /// Meses anteriores ao atual e "Tudo" não estão no cache: são buscados
+  /// página por página, com os totais calculados pela API.
+  ConsultaLancamentos? _consulta;
+
+  /// Linhas montadas por vez quando o mês está no cache. O mês corrente de
+  /// quem lança muito pode ter milhares de itens; montar todos de uma vez
+  /// atrasava a abertura do app, já que esta aba fica viva desde o início.
+  static const _lote = 30;
+  int _visiveis = _lote;
+
+  void _definirMes(DateTime? mes) {
+    _consulta?.dispose();
+    _consulta = (mes != null && LancamentoService.cobre(mes))
+        ? null
+        : ConsultaLancamentos(
+            tipo: widget.tipo,
+            de: mes,
+            ate: mes == null ? null : DateTime(mes.year, mes.month + 1, 0),
+          );
+    _mes = mes;
+    _visiveis = _lote;
+  }
+
+  @override
+  void dispose() {
+    _consulta?.dispose();
+    super.dispose();
+  }
+
   Future<void> _recarregar() async {
     try {
-      await LancamentoService.carregar(force: true);
+      if (_consulta != null) {
+        await _consulta!.recarregar();
+      } else {
+        await LancamentoService.carregar(force: true);
+      }
     } catch (_) {}
   }
 
@@ -37,6 +71,7 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
     final agora = DateTime.now();
     final opcoes = <DateTime>{
       for (var i = 0; i < 12; i++) DateTime(agora.year, agora.month - i),
+      ...LancamentoService.meses,
       for (final l in LancamentoService.getAll()) DateTime(l.data.year, l.data.month),
     }.toList()
       ..sort((a, b) => b.compareTo(a));
@@ -75,24 +110,36 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
       },
     );
     if (escolhido == null) return;
-    setState(() => _mes = escolhido is DateTime ? escolhido : null);
+    setState(() => _definirMes(escolhido is DateTime ? escolhido : null));
   }
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: LancamentoService.revisao,
+      listenable: Listenable.merge([LancamentoService.revisao, _consulta]),
       builder: (context, _) => _build(context),
     );
   }
 
   Widget _build(BuildContext context) {
     final c = context.fin;
-    final todos = _isReceita ? LancamentoService.getReceitas() : LancamentoService.getDespesas();
-    final lista = _mes == null
-        ? todos
-        : todos.where((l) => Fmt.mesmoMes(l.data, _mes!)).toList();
-    final total = lista.fold<double>(0, (s, l) => s + l.valor);
+    final consulta = _consulta;
+    final List<LancamentoModel> lista;
+    final double total;
+    final int quantidade;
+    if (consulta == null) {
+      final todos = _isReceita ? LancamentoService.getReceitas() : LancamentoService.getDespesas();
+      lista = todos.where((l) => Fmt.mesmoMes(l.data, _mes!)).toList();
+      total = lista.fold<double>(0, (s, l) => s + l.valor);
+      quantidade = lista.length;
+    } else {
+      lista = consulta.itens;
+      total = _isReceita ? consulta.receitas : consulta.despesas;
+      quantidade = consulta.total;
+    }
+    final aguardando = consulta != null && !consulta.pronta;
+    final temMais = consulta != null ? consulta.temMais : lista.length > _visiveis;
+    final linhas = consulta != null ? lista : lista.take(_visiveis);
     final periodo = _mes == null ? 'no total' : 'em ${Fmt.meses[_mes!.month - 1]}';
 
     return FinScaffold(
@@ -145,7 +192,9 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${lista.length} ${lista.length == 1 ? 'lançamento' : 'lançamentos'}',
+                          aguardando
+                              ? 'Carregando…'
+                              : '$quantidade ${quantidade == 1 ? 'lançamento' : 'lançamentos'}',
                           style: FinType.bodyS.copyWith(
                             color: Colors.white.withValues(alpha: 0.85),
                           ),
@@ -154,7 +203,19 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  if (lista.isEmpty)
+                  if (aguardando)
+                    const CarregandoMais()
+                  else if (consulta?.erro != null && lista.isEmpty)
+                    EmptyCard(
+                      icon: Icons.cloud_off,
+                      texto: consulta!.erro!.message,
+                      acao: FinButton.text(
+                        label: 'Tentar de novo',
+                        icon: Icons.refresh,
+                        onPressed: _recarregar,
+                      ),
+                    )
+                  else if (lista.isEmpty)
                     EmptyCard(
                       icon: _isReceita ? Icons.savings : Icons.receipt_long,
                       texto: _isReceita
@@ -164,7 +225,13 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                   else ...[
                     const SectionHead(title: 'Por categoria'),
                     const SizedBox(height: 10),
-                    CategoriasCard(lancamentos: lista, tone: _tone),
+                    if (consulta == null)
+                      CategoriasCard(lancamentos: lista, tone: _tone)
+                    else
+                      CategoriasCard.totais(
+                        totais: _isReceita ? consulta.categoriasReceita : consulta.categoriasDespesa,
+                        tone: _tone,
+                      ),
                     const SizedBox(height: 24),
                     SectionHead(
                       title: 'Lançamentos',
@@ -176,7 +243,7 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                     const SizedBox(height: 10),
                     ListCard(
                       rows: [
-                        for (final l in lista)
+                        for (final l in linhas)
                           LancRow(
                             lancamento: l,
                             onTap: () => LancamentoAcoes.menu(context, l),
@@ -184,6 +251,14 @@ class _LancamentosScreenState extends State<LancamentosScreen> {
                           ),
                       ],
                     ),
+                    // Próxima página quando o fim da lista aparece
+                    if (temMais)
+                      CarregandoMais(
+                        key: ValueKey(consulta?.itens.length ?? _visiveis),
+                        aoAparecer: consulta != null
+                            ? consulta.carregarMais
+                            : () => setState(() => _visiveis += _lote),
+                      ),
                   ],
                 ],
               ),

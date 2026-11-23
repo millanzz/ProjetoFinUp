@@ -12,6 +12,8 @@
 
 
 > **Reteste após as correções (2º ciclo).** Este relatório registra o **1º ciclo** de testes, com as falhas como foram encontradas; as evidências dele estão em [evidencias-ciclo1/](evidencias-ciclo1/). Os defeitos foram corrigidos e as baterias foram executadas de novo: os resultados novos estão em [evidencias/](evidencias/) e o comparativo antes × depois, em [../RETESTE.md](../RETESTE.md).
+>
+> **Paginação (3º ciclo, 23/11/2026).** As listas foram paginadas e o app passou a guardar só o mês atual. Esta bateria foi executada de novo: **136 de 137 medições dentro do limite** (101/102 das originais e 35/35 novas). A única acima do limite é `GET /dashboard` com 20 acessos simultâneos em V4. Os resultados em [evidencias/](evidencias/resultados.md) são os do 3º ciclo; os do 2º ciclo estão no histórico do git (commit `41409a1`). Detalhes em [../RETESTE.md, seção 4.1](../RETESTE.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # CT-INT-01 — cadastro pelo app grava usuário (senha com hash) e categorias no SQLite e salva o token no aparelho
 
-Gerado em 2026-11-22T23:01:55.211721
+Gerado em 2026-11-23T09:15:31.330878
 
 ### 01. Flutter → API: `POST /users` → **201**
 

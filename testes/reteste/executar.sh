@@ -3,7 +3,8 @@
 # Uso (na raiz do repositório):  bash testes/reteste/executar.sh
 #   1. API: DEF-14, DEF-17, X-Powered-By, política, exclusão de conta, sessões e HTTPS
 #   2. App: DEF-18 (logout) e arredondamento
-#   3. Telas reais: excluir conta, política, trocar senha sem cair
+#   1b. API: paginação das listas (PAG-01 a 08)
+#   3. Telas reais: excluir conta, política, trocar senha sem cair; paginação (UI-PAG-01/02)
 #   4. DEF-10: permissão de Internet no APK de release
 #   5. DEF-11 + HTTPS: build Web release falando com a API em HTTPS, no Chrome e no Edge
 set -u
@@ -14,7 +15,7 @@ TMPD="${TEMP:-/tmp}/finup-reteste"
 mkdir -p "$EV" "$TMPD"
 date '+%Y-%m-%d %H:%M:%S %z' > "$EV/execucao.txt"
 
-(cd "$AQUI" && node --test --test-reporter=spec verificacoes.test.js conta-https.test.js > "$EV/api-saida.txt" 2>&1)
+(cd "$AQUI" && node --test --test-reporter=spec verificacoes.test.js conta-https.test.js paginacao.test.js > "$EV/api-saida.txt" 2>&1)
 echo "exit api: $?" >> "$EV/execucao.txt"
 
 (cd "$RAIZ/frontend" && flutter test ../testes/reteste/logout_test.dart -r expanded > "$EV/app-saida.txt" 2>&1)
@@ -27,6 +28,9 @@ for _ in $(seq 1 40); do grep -q PRONTO "$TMPD/api-ui.log" && break; sleep 0.5; 
 (cd "$RAIZ/frontend" && flutter test ../testes/reteste/fluxos_novos_test.dart --dart-define=API_URL=http://127.0.0.1:3999 \
    --update-goldens -r expanded > "$EV/telas-saida.txt" 2>&1)
 echo "exit telas: $?" >> "$EV/execucao.txt"
+(cd "$RAIZ/frontend" && flutter test ../testes/reteste/paginacao_ui_test.dart --dart-define=API_URL=http://127.0.0.1:3999 \
+   --update-goldens -r expanded > "$EV/paginacao-telas-saida.txt" 2>&1)
+echo "exit paginacao-telas: $?" >> "$EV/execucao.txt"
 kill -9 $PID 2>/dev/null
 
 (cd "$RAIZ/frontend" && flutter build apk --release > "$EV/build-apk.txt" 2>&1)

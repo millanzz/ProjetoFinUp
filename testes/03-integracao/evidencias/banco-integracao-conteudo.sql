@@ -60,77 +60,77 @@ CREATE TABLE users (
     , sessoes_desde INTEGER NOT NULL DEFAULT 0);
 
 -- categories: 43 linha(s)
-{"id":1,"name":"Salário","type":"income","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":2,"name":"Freelance","type":"income","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":3,"name":"Investimentos","type":"income","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":4,"name":"Bônus","type":"income","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":5,"name":"Outros","type":"income","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":6,"name":"Alimentação","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":7,"name":"Transporte","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":8,"name":"Moradia","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":9,"name":"Saúde","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":10,"name":"Lazer","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":11,"name":"Compras","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":12,"name":"Assinaturas","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":13,"name":"Impostos","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":14,"name":"Outros","type":"expense","user_id":1,"created_at":"2026-11-23 02:01:55"}
-{"id":15,"name":"Salário","type":"income","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":16,"name":"Freelance","type":"income","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":17,"name":"Investimentos","type":"income","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":18,"name":"Bônus","type":"income","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":19,"name":"Outros","type":"income","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":20,"name":"Alimentação","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":21,"name":"Transporte","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":22,"name":"Moradia","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":23,"name":"Saúde","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":24,"name":"Lazer","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":25,"name":"Compras","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":26,"name":"Assinaturas","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":27,"name":"Impostos","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":28,"name":"Outros","type":"expense","user_id":2,"created_at":"2026-11-23 02:01:55"}
-{"id":29,"name":"Salário","type":"income","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":30,"name":"Freelance","type":"income","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":31,"name":"Investimentos","type":"income","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":32,"name":"Bônus","type":"income","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":33,"name":"Outros","type":"income","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":34,"name":"Alimentação","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":35,"name":"Transporte","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":36,"name":"Moradia","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":37,"name":"Saúde","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":38,"name":"Lazer","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":39,"name":"Compras","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":41,"name":"Impostos","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":42,"name":"Outros","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":43,"name":"Pets","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:56"}
-{"id":44,"name":"Assinaturas","type":"expense","user_id":3,"created_at":"2026-11-23 02:01:57"}
+{"id":1,"name":"Salário","type":"income","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":2,"name":"Freelance","type":"income","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":3,"name":"Investimentos","type":"income","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":4,"name":"Bônus","type":"income","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":5,"name":"Outros","type":"income","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":6,"name":"Alimentação","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":7,"name":"Transporte","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":8,"name":"Moradia","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":9,"name":"Saúde","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":10,"name":"Lazer","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":11,"name":"Compras","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":12,"name":"Assinaturas","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":13,"name":"Impostos","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":14,"name":"Outros","type":"expense","user_id":1,"created_at":"2026-11-23 12:15:31"}
+{"id":15,"name":"Salário","type":"income","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":16,"name":"Freelance","type":"income","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":17,"name":"Investimentos","type":"income","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":18,"name":"Bônus","type":"income","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":19,"name":"Outros","type":"income","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":20,"name":"Alimentação","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":21,"name":"Transporte","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":22,"name":"Moradia","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":23,"name":"Saúde","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":24,"name":"Lazer","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":25,"name":"Compras","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":26,"name":"Assinaturas","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":27,"name":"Impostos","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":28,"name":"Outros","type":"expense","user_id":2,"created_at":"2026-11-23 12:15:31"}
+{"id":29,"name":"Salário","type":"income","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":30,"name":"Freelance","type":"income","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":31,"name":"Investimentos","type":"income","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":32,"name":"Bônus","type":"income","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":33,"name":"Outros","type":"income","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":34,"name":"Alimentação","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":35,"name":"Transporte","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":36,"name":"Moradia","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":37,"name":"Saúde","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":38,"name":"Lazer","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":39,"name":"Compras","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":41,"name":"Impostos","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":42,"name":"Outros","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:32"}
+{"id":43,"name":"Pets","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:33"}
+{"id":44,"name":"Assinaturas","type":"expense","user_id":3,"created_at":"2026-11-23 12:15:34"}
 
 -- expenses: 12 linha(s)
-{"id":1,"amount":12.5,"description":"Sem categoria","date":"2026-11-08","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":2,"amount":120,"description":"Ração","date":"2026-11-08","category_id":43,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":3,"amount":250,"description":"Veterinário","date":"2026-11-09","category_id":43,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":4,"amount":333.34,"description":"Geladeira","date":"2026-11-30","category_id":39,"parcelado":1,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":"2010b031-556a-4af9-8ff0-cfd67f66eafe","parcela_numero":1,"parcela_total":3}
-{"id":5,"amount":333.33,"description":"Geladeira","date":"2026-12-30","category_id":39,"parcelado":1,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":"2010b031-556a-4af9-8ff0-cfd67f66eafe","parcela_numero":2,"parcela_total":3}
-{"id":6,"amount":333.33,"description":"Geladeira","date":"2027-01-30","category_id":39,"parcelado":1,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":"2010b031-556a-4af9-8ff0-cfd67f66eafe","parcela_numero":3,"parcela_total":3}
-{"id":7,"amount":95.5,"description":"Mercado do mês","date":"2026-11-12","category_id":34,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":15,"amount":250.25,"description":"Luz","date":"2026-11-21","category_id":36,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":16,"amount":10,"description":"Data 2028-02-29","date":"2028-02-29","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":17,"amount":10,"description":"Data 2026-12-31","date":"2026-12-31","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":18,"amount":10,"description":"Data 2027-01-01","date":"2027-01-01","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":19,"amount":39.9,"description":"Streaming","date":"2026-11-08","category_id":44,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":1,"amount":12.5,"description":"Sem categoria","date":"2026-11-08","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:32","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":2,"amount":120,"description":"Ração","date":"2026-11-08","category_id":43,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":3,"amount":250,"description":"Veterinário","date":"2026-11-09","category_id":43,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":4,"amount":333.34,"description":"Geladeira","date":"2026-11-30","category_id":39,"parcelado":1,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":"d6d2002a-9421-4d98-a447-a23dce88d482","parcela_numero":1,"parcela_total":3}
+{"id":5,"amount":333.33,"description":"Geladeira","date":"2026-12-30","category_id":39,"parcelado":1,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":"d6d2002a-9421-4d98-a447-a23dce88d482","parcela_numero":2,"parcela_total":3}
+{"id":6,"amount":333.33,"description":"Geladeira","date":"2027-01-30","category_id":39,"parcelado":1,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":"d6d2002a-9421-4d98-a447-a23dce88d482","parcela_numero":3,"parcela_total":3}
+{"id":7,"amount":95.5,"description":"Mercado do mês","date":"2026-11-12","category_id":34,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":15,"amount":250.25,"description":"Luz","date":"2026-11-21","category_id":36,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":16,"amount":10,"description":"Data 2028-02-29","date":"2028-02-29","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:34","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":17,"amount":10,"description":"Data 2026-12-31","date":"2026-12-31","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:34","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":18,"amount":10,"description":"Data 2027-01-01","date":"2027-01-01","category_id":42,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:34","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":19,"amount":39.9,"description":"Streaming","date":"2026-11-08","category_id":44,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:34","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
 
 -- goals: 0 linha(s)
 
 -- incomes: 5 linha(s)
-{"id":1,"amount":4000,"description":"Salário da Ana","date":"2026-11-05","category_id":1,"parcelado":0,"user_id":1,"created_at":"2026-11-23 02:01:56","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":2,"amount":4500.75,"description":"Salário de novembro — açaí, pão & café ☕🍇","date":"2026-11-08","category_id":29,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:56","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":3,"amount":1200.5,"description":"Freela","date":"2026-11-20","category_id":30,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":4,"amount":0.01,"description":"Centavo","date":"2026-11-01","category_id":33,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
-{"id":5,"amount":999999999.99,"description":"Prêmio","date":"2026-11-01","category_id":33,"parcelado":0,"user_id":3,"created_at":"2026-11-23 02:01:57","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":1,"amount":4000,"description":"Salário da Ana","date":"2026-11-05","category_id":1,"parcelado":0,"user_id":1,"created_at":"2026-11-23 12:15:32","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":2,"amount":4500.75,"description":"Salário de novembro — açaí, pão & café ☕🍇","date":"2026-11-08","category_id":29,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:32","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":3,"amount":1200.5,"description":"Freela","date":"2026-11-20","category_id":30,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":4,"amount":0.01,"description":"Centavo","date":"2026-11-01","category_id":33,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:33","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
+{"id":5,"amount":999999999.99,"description":"Prêmio","date":"2026-11-01","category_id":33,"parcelado":0,"user_id":3,"created_at":"2026-11-23 12:15:34","parcela_grupo":null,"parcela_numero":null,"parcela_total":null}
 
 -- password_resets: 0 linha(s)
 
 -- users: 3 linha(s)
-{"id":1,"name":"Ana Souza","email":"ana@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 02:01:55","sessoes_desde":0}
-{"id":2,"name":"Bruno Lima","email":"bruno.lima@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 02:01:55","sessoes_desde":1795399315}
-{"id":3,"name":"Carla","email":"carla@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 02:01:56","sessoes_desde":0}
+{"id":1,"name":"Ana Souza","email":"ana@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 12:15:31","sessoes_desde":0}
+{"id":2,"name":"Bruno Lima","email":"bruno.lima@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 12:15:31","sessoes_desde":1795436132}
+{"id":3,"name":"Carla","email":"carla@teste.local","password":"$2b$10$…(hash bcrypt)","created_at":"2026-11-23 12:15:32","sessoes_desde":0}
 

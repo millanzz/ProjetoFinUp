@@ -25,6 +25,7 @@ import 'package:FinUp/models/lancamento_model.dart';
 import 'package:FinUp/services/api_client.dart';
 import 'package:FinUp/services/auth_service.dart';
 import 'package:FinUp/services/categoria_service.dart';
+import 'package:FinUp/services/consulta_lancamentos.dart';
 import 'package:FinUp/services/lancamento_service.dart';
 import 'package:FinUp/services/meta_service.dart';
 
@@ -444,7 +445,12 @@ void main() {
         expect(cols, containsAll(['parcelado', 'parcela_grupo', 'parcela_numero', 'parcela_total']));
         await AuthService.login(email: 'legado@teste.local', senha: 'legado123');
         await LancamentoService.carregar(force: true);
-        final ls = LancamentoService.getAll();
+        // Os lançamentos antigos (12/2025) ficam fora do cache da janela recente
+        // e são lidos pela consulta paginada, como no Histórico "Tudo".
+        final consulta = ConsultaLancamentos();
+        await consulta.primeiraPagina;
+        final ls = consulta.itens;
+        consulta.dispose();
         expect(ls.map((l) => '${l.titulo}|${l.valor}|${l.dataApi}|${l.isParcela}').toList(),
             ['Aluguel antigo|1500.0|2025-12-10|false', 'Salário antigo|5000.0|2025-12-05|false']);
         final metas = await MetaService.carregar();

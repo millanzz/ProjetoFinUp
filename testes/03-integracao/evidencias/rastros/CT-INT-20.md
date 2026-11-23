@@ -1,6 +1,6 @@
 # CT-INT-20 — 5 aportes disparados ao mesmo tempo pelo app somam todos no SQLite
 
-Gerado em 2026-11-22T23:01:57.658494
+Gerado em 2026-11-23T09:15:34.980739
 
 ### 01. Flutter → API: `GET /goals` → **200**
 
@@ -14,7 +14,7 @@ Resposta da API:
     "current_amount": 1250,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```
@@ -46,10 +46,10 @@ Resposta da API:
   "id": 1,
   "title": "Viagem à Bahia",
   "target_amount": 5000,
-  "current_amount": 1450,
+  "current_amount": 1550,
   "icon": "flight",
   "user_id": 3,
-  "created_at": "2026-11-23 02:01:57"
+  "created_at": "2026-11-23 12:15:34"
 }
 ```
 
@@ -67,10 +67,10 @@ Resposta da API:
   "id": 1,
   "title": "Viagem à Bahia",
   "target_amount": 5000,
-  "current_amount": 1450,
+  "current_amount": 1550,
   "icon": "flight",
   "user_id": 3,
-  "created_at": "2026-11-23 02:01:57"
+  "created_at": "2026-11-23 12:15:34"
 }
 ```
 
@@ -88,10 +88,10 @@ Resposta da API:
   "id": 1,
   "title": "Viagem à Bahia",
   "target_amount": 5000,
-  "current_amount": 1750,
+  "current_amount": 1550,
   "icon": "flight",
   "user_id": 3,
-  "created_at": "2026-11-23 02:01:57"
+  "created_at": "2026-11-23 12:15:34"
 }
 ```
 
@@ -112,7 +112,7 @@ Resposta da API:
   "current_amount": 1750,
   "icon": "flight",
   "user_id": 3,
-  "created_at": "2026-11-23 02:01:57"
+  "created_at": "2026-11-23 12:15:34"
 }
 ```
 
@@ -133,7 +133,7 @@ Resposta da API:
   "current_amount": 1750,
   "icon": "flight",
   "user_id": 3,
-  "created_at": "2026-11-23 02:01:57"
+  "created_at": "2026-11-23 12:15:34"
 }
 ```
 
@@ -149,7 +149,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```
@@ -166,7 +166,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```
@@ -183,7 +183,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```
@@ -200,7 +200,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```
@@ -217,7 +217,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```
@@ -247,7 +247,7 @@ Resposta da API:
     "current_amount": 1750,
     "icon": "flight",
     "user_id": 3,
-    "created_at": "2026-11-23 02:01:57"
+    "created_at": "2026-11-23 12:15:34"
   }
 ]
 ```

@@ -1,9 +1,9 @@
 ▶ Durabilidade da API + SQLite
-  ✔ CT-PER-11 cada gravação confirmada sobrevive a uma queda abrupta logo em seguida (10 vezes) (8963.3765ms)
-  ✔ CT-PER-12 queda no meio de 300 gravações simultâneas: nenhuma confirmada se perde e o banco não corrompe (2743.1188ms)
-  ✔ CT-PER-13 reiniciar 3 vezes sem gravar nada não altera nenhum dado (migrações não mexem nos dados) (2042.5253ms)
-  ✔ CT-PER-14 após todas as quedas o arquivo está íntegro e com as proteções ativas (288.3003ms)
-✔ Durabilidade da API + SQLite (15982.8234ms)
+  ✔ CT-PER-11 cada gravação confirmada sobrevive a uma queda abrupta logo em seguida (10 vezes) (9683.2935ms)
+  ✔ CT-PER-12 queda no meio de 300 gravações simultâneas: nenhuma confirmada se perde e o banco não corrompe (1682.5896ms)
+  ✔ CT-PER-13 reiniciar 3 vezes sem gravar nada não altera nenhum dado (migrações não mexem nos dados) (2281.6185ms)
+  ✔ CT-PER-14 após todas as quedas o arquivo está íntegro e com as proteções ativas (291.2774ms)
+✔ Durabilidade da API + SQLite (14963.5341ms)
 ℹ tests 4
 ℹ suites 1
 ℹ pass 4
@@ -11,4 +11,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 16075.0485
+ℹ duration_ms 15066.929

@@ -75,6 +75,8 @@ function chamar(handler, { userId = U1, body = {}, params = {}, query = {} } = {
     const res = {
       statusCode: 200,
       status(c) { this.statusCode = c; return this; },
+      headers: {},
+      set(k, v) { this.headers[k] = v; return this; },
       json(b) { resolve({ status: this.statusCode, body: b }); return this; },
       send(b) { resolve({ status: this.statusCode, body: b }); return this; },
     };

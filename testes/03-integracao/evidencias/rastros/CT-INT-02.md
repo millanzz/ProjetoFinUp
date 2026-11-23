@@ -1,6 +1,6 @@
 # CT-INT-02 — reabrir o app restaura a sessão a partir do token salvo e dos dados do SQLite
 
-Gerado em 2026-11-22T23:01:55.428335
+Gerado em 2026-11-23T09:15:31.581421
 
 ### 01. Flutter → API: `POST /auth/login` → **200**
 
@@ -31,7 +31,7 @@ Resposta da API:
   "id": 1,
   "name": "Ana Souza",
   "email": "ana@teste.local",
-  "created_at": "2026-11-23 02:01:55"
+  "created_at": "2026-11-23 12:15:31"
 }
 ```
 

@@ -69,9 +69,20 @@ Limites de tentativas (respondem `429`): 10 logins errados por IP + e-mail e 10 
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | POST | `/` | Criar (aceita `parcelado: true/false`) |
-| GET | `/` | Listar (inclui `category_name`) |
+| GET | `/` | Listar, paginado (inclui `category_name`). Ver abaixo |
 | PUT | `/:id` | Atualizar |
 | DELETE | `/:id` | Deletar |
+
+A listagem devolve **no máximo 500 itens por padrão**, do mais recente para o mais antigo. Parâmetros: `?limit=` (0 a 1000), `?offset=`, `?month=AAAA-MM`, `?from=` e `?to=` (AAAA-MM-DD, inclusive). O total do filtro vem no cabeçalho `X-Total-Count` e, se houver mais páginas, o offset da próxima vem em `X-Next-Offset`.
+
+### Extrato (`/lancamentos`)
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/` | Receitas e despesas juntas, paginadas. Mesmos parâmetros da listagem acima, mais `?tipo=receita\|despesa` |
+| GET | `/meses` | Meses (`AAAA-MM`) que têm lançamentos, do mais recente ao mais antigo |
+
+Resposta de `GET /lancamentos`: `itens` (cada um com `tipo`), `total`, `proximo_offset` (`null` na última página), `receitas`, `despesas`, `saldo` e, na primeira página, `categorias` (`[{ tipo, categoria, total }]`). Os totais são do **período inteiro**, não só da página. Com `limit=0` vêm só os totais.
 
 ### Metas (`/goals`)
 

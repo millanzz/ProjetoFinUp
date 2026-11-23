@@ -1,6 +1,6 @@
 # CT-INT-06 — trocar senha no app troca o hash no SQLite
 
-Gerado em 2026-11-22T23:01:55.810210
+Gerado em 2026-11-23T09:15:32.003970
 
 ### 01. Flutter → API: `POST /auth/login` → **200**
 
